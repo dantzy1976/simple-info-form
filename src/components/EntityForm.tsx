@@ -6,6 +6,9 @@ import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
 import { entityFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 const EntityForm = () => {
   const {
@@ -31,15 +34,43 @@ const EntityForm = () => {
     loadSavedEntities();
   }, []);
 
-  // Modified to use div instead of form to prevent default form submission
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
+      {/* Entity Selection Controls - Moved above the form */}
+      <div className="mb-4 flex items-center justify-between gap-4 bg-slate-100 p-4 rounded-lg">
+        <div className="flex items-center gap-2 flex-1">
+          {savedEntities.length > 0 && (
+            <>
+              <label className="text-gray-700 text-sm font-medium">Load saved entity:</label>
+              <Select onValueChange={handleLoadEntity} className="flex-1">
+                <SelectTrigger className="bg-white border-gray-300">
+                  <SelectValue placeholder="Select entity" />
+                </SelectTrigger>
+                <SelectContent>
+                  {savedEntities.map((entity) => (
+                    <SelectItem key={entity.name} value={entity.name}>
+                      {entity.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </>
+          )}
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleNewEntity}
+          className="bg-blue-500 text-white hover:bg-blue-600 flex items-center gap-2"
+        >
+          <Plus size={16} />
+          New Entity
+        </Button>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         <EntityFormHeader 
           entityName={entityName}
-          savedEntities={savedEntities}
-          onLoadEntity={handleLoadEntity}
-          onNew={handleNewEntity}
         />
         
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8">
