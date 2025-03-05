@@ -1,11 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import EntityFormField from './EntityFormField';
+import EntityFormHeader from './EntityFormHeader';
+import EntityNameEditor from './EntityNameEditor';
+import EntityFormActions from './EntityFormActions';
 import { entityFormFields } from '../constants/formConstants';
 import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from '../utils/excelExport';
-import { Download, Pencil, Plus, Save } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FormValues {
   [key: string]: any;
@@ -154,74 +155,22 @@ const EntityForm = () => {
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-medium text-white">b_01.01</h1>
-            <p className="text-blue-100">Enter the details of the entity maintaining the register</p>
-            
-            {savedEntities.length > 0 && (
-              <div className="mt-2 bg-white/10 rounded p-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-white text-sm">Load saved entity:</label>
-                  <Select onValueChange={handleLoadEntity}>
-                    <SelectTrigger className="bg-white/10 border-blue-300 text-white w-48">
-                      <SelectValue placeholder="Select entity" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {savedEntities.map((entity) => (
-                        <SelectItem key={entity.name} value={entity.name}>
-                          {entity.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            )}
-            
-            <div className="mt-2 border-t border-blue-400 pt-2 flex items-center justify-between">
-              {isEditingName ? (
-                <div className="flex items-center gap-2 w-full">
-                  <input
-                    type="text"
-                    value={tempEntityName}
-                    onChange={(e) => setTempEntityName(e.target.value)}
-                    className="bg-white/10 text-white border border-blue-300 rounded px-2 py-1 w-full"
-                    placeholder="Enter entity name"
-                  />
-                  <Button
-                    size="sm"
-                    className="bg-green-500 hover:bg-green-600 text-white"
-                    onClick={handleSaveName}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="border-white text-white hover:bg-blue-700"
-                    onClick={handleCancelEdit}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <h2 className="text-xl font-semibold text-white">
-                    {entityName || 'Enter entity name'}
-                  </h2>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    className="bg-white text-black hover:bg-gray-100 text-xs px-2 py-1 h-7"
-                    onClick={handleEditNameClick}
-                  >
-                    <Pencil size={14} className="mr-1" /> Edit
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
+        <EntityFormHeader 
+          entityName={entityName}
+          savedEntities={savedEntities}
+          onLoadEntity={handleLoadEntity}
+        />
+        
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8">
+          <EntityNameEditor 
+            entityName={entityName}
+            isEditingName={isEditingName}
+            tempEntityName={tempEntityName}
+            onEditClick={handleEditNameClick}
+            onSaveName={handleSaveName}
+            onCancelEdit={handleCancelEdit}
+            onTempNameChange={setTempEntityName}
+          />
         </div>
         
         <form onSubmit={handleSubmit} className="px-8 py-6">
@@ -235,47 +184,12 @@ const EntityForm = () => {
             />
           ))}
           
-          <div className="mt-8 flex justify-between items-center">
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleExport}
-                className="flex items-center gap-2"
-              >
-                <Download size={16} />
-                Export to Excel
-              </Button>
-              
-              <Button
-                type="button"
-                variant="outline"
-                onClick={saveEntityData}
-                className="flex items-center gap-2"
-              >
-                <Save size={16} />
-                Save Entity
-              </Button>
-              
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleNewEntity}
-                className="flex items-center gap-2"
-              >
-                <Plus size={16} />
-                New Entity
-              </Button>
-            </div>
-            
-            <button 
-              type="submit" 
-              className="submit-button"
-              disabled={submitting}
-            >
-              {submitting ? 'Submitting...' : 'Submit Information'}
-            </button>
-          </div>
+          <EntityFormActions 
+            onExport={handleExport}
+            onSave={saveEntityData}
+            onNew={handleNewEntity}
+            submitting={submitting}
+          />
         </form>
       </div>
     </div>
