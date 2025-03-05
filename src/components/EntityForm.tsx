@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import EntityFormField from './EntityFormField';
 import { entityFormFields } from '../constants/formConstants';
 import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from '../utils/excelExport';
-import { Download, Pencil, Save } from 'lucide-react';
+import { Download, Pencil, Plus, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -25,7 +24,6 @@ const EntityForm = () => {
   const [tempEntityName, setTempEntityName] = useState("");
   const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
 
-  // Load saved entities from localStorage on component mount
   useEffect(() => {
     const entities = localStorage.getItem('savedEntities');
     if (entities) {
@@ -34,14 +32,10 @@ const EntityForm = () => {
   }, []);
 
   const handleFieldChange = (id: string, value: any) => {
-    // Convert field IDs with dots to underscores for easier handling in export
     const normalizedId = id.replace(/\./g, '_');
-    
-    // If this is the entity name field (b_01.01.0020), update the header
     if (id === 'b_01.01.0020') {
       setEntityName(value || '');
     }
-    
     setFormValues((prev) => ({
       ...prev,
       [normalizedId]: value,
@@ -51,11 +45,7 @@ const EntityForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    
-    // Save the entity data to localStorage
     saveEntityData();
-    
-    // Simulate form submission
     setTimeout(() => {
       console.log('Form submitted with values:', formValues);
       toast({
@@ -76,26 +66,21 @@ const EntityForm = () => {
       return;
     }
 
-    // Create a new entity object
     const entityToSave: SavedEntity = {
       name: entityName,
       data: { ...formValues }
     };
 
-    // Check if this entity already exists
     const existingIndex = savedEntities.findIndex(entity => entity.name === entityName);
     let updatedEntities: SavedEntity[];
 
     if (existingIndex >= 0) {
-      // Update existing entity
       updatedEntities = [...savedEntities];
       updatedEntities[existingIndex] = entityToSave;
     } else {
-      // Add new entity
       updatedEntities = [...savedEntities, entityToSave];
     }
 
-    // Update state and localStorage
     setSavedEntities(updatedEntities);
     localStorage.setItem('savedEntities', JSON.stringify(updatedEntities));
 
@@ -145,7 +130,6 @@ const EntityForm = () => {
     setEntityName(tempEntityName);
     setIsEditingName(false);
     
-    // Update the form value for entity name field as well
     const normalizedId = 'b_01.01.0020'.replace(/\./g, '_');
     setFormValues((prev) => ({
       ...prev,
@@ -157,6 +141,16 @@ const EntityForm = () => {
     setIsEditingName(false);
   };
 
+  const handleNewEntity = () => {
+    setFormValues({});
+    setEntityName("");
+    
+    toast({
+      title: "New entity created",
+      description: "You can now enter information for a new entity.",
+    });
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -165,7 +159,6 @@ const EntityForm = () => {
             <h1 className="text-2xl font-medium text-white">b_01.01</h1>
             <p className="text-blue-100">Enter the details of the entity maintaining the register</p>
             
-            {/* Entity selector */}
             {savedEntities.length > 0 && (
               <div className="mt-2 bg-white/10 rounded p-2">
                 <div className="flex items-center gap-2">
@@ -262,6 +255,16 @@ const EntityForm = () => {
               >
                 <Save size={16} />
                 Save Entity
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleNewEntity}
+                className="flex items-center gap-2"
+              >
+                <Plus size={16} />
+                New Entity
               </Button>
             </div>
             
