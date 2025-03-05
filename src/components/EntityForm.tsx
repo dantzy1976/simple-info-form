@@ -1,14 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EntityFormField from './EntityFormField';
 import { entityFormFields } from '../constants/formConstants';
 import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from '../utils/excelExport';
-import { Download, Pencil } from 'lucide-react';
+import { Download, Pencil, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FormValues {
   [key: string]: any;
+}
+
+interface SavedEntity {
+  name: string;
+  data: FormValues;
 }
 
 const EntityForm = () => {
@@ -17,6 +23,15 @@ const EntityForm = () => {
   const [entityName, setEntityName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempEntityName, setTempEntityName] = useState("");
+  const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
+
+  // Load saved entities from localStorage on component mount
+  useEffect(() => {
+    const entities = localStorage.getItem('savedEntities');
+    if (entities) {
+      setSavedEntities(JSON.parse(entities));
+    }
+  }, []);
 
   const handleFieldChange = (id: string, value: any) => {
     // Convert field IDs with dots to underscores for easier handling in export
@@ -37,15 +52,71 @@ const EntityForm = () => {
     e.preventDefault();
     setSubmitting(true);
     
+    // Save the entity data to localStorage
+    saveEntityData();
+    
     // Simulate form submission
     setTimeout(() => {
       console.log('Form submitted with values:', formValues);
       toast({
         title: "Form submitted successfully",
-        description: "Your entity information has been registered.",
+        description: "Your entity information has been registered and saved.",
       });
       setSubmitting(false);
     }, 1000);
+  };
+
+  const saveEntityData = () => {
+    if (!entityName) {
+      toast({
+        title: "Error saving entity",
+        description: "Entity name is required to save data.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a new entity object
+    const entityToSave: SavedEntity = {
+      name: entityName,
+      data: { ...formValues }
+    };
+
+    // Check if this entity already exists
+    const existingIndex = savedEntities.findIndex(entity => entity.name === entityName);
+    let updatedEntities: SavedEntity[];
+
+    if (existingIndex >= 0) {
+      // Update existing entity
+      updatedEntities = [...savedEntities];
+      updatedEntities[existingIndex] = entityToSave;
+    } else {
+      // Add new entity
+      updatedEntities = [...savedEntities, entityToSave];
+    }
+
+    // Update state and localStorage
+    setSavedEntities(updatedEntities);
+    localStorage.setItem('savedEntities', JSON.stringify(updatedEntities));
+
+    toast({
+      title: "Entity saved",
+      description: `Entity "${entityName}" has been saved successfully.`,
+    });
+  };
+
+  const handleLoadEntity = (entityNameToLoad: string) => {
+    const entityToLoad = savedEntities.find(entity => entity.name === entityNameToLoad);
+    
+    if (entityToLoad) {
+      setFormValues(entityToLoad.data);
+      setEntityName(entityToLoad.name);
+      
+      toast({
+        title: "Entity loaded",
+        description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
+      });
+    }
   };
 
   const handleExport = () => {
@@ -93,6 +164,27 @@ const EntityForm = () => {
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-medium text-white">b_01.01</h1>
             <p className="text-blue-100">Enter the details of the entity maintaining the register</p>
+            
+            {/* Entity selector */}
+            {savedEntities.length > 0 && (
+              <div className="mt-2 bg-white/10 rounded p-2">
+                <div className="flex items-center gap-2">
+                  <label className="text-white text-sm">Load saved entity:</label>
+                  <Select onValueChange={handleLoadEntity}>
+                    <SelectTrigger className="bg-white/10 border-blue-300 text-white w-48">
+                      <SelectValue placeholder="Select entity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {savedEntities.map((entity) => (
+                        <SelectItem key={entity.name} value={entity.name}>
+                          {entity.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
             
             <div className="mt-2 border-t border-blue-400 pt-2 flex items-center justify-between">
               {isEditingName ? (
@@ -151,15 +243,27 @@ const EntityForm = () => {
           ))}
           
           <div className="mt-8 flex justify-between items-center">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleExport}
-              className="flex items-center gap-2"
-            >
-              <Download size={16} />
-              Export to Excel
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleExport}
+                className="flex items-center gap-2"
+              >
+                <Download size={16} />
+                Export to Excel
+              </Button>
+              
+              <Button
+                type="button"
+                variant="outline"
+                onClick={saveEntityData}
+                className="flex items-center gap-2"
+              >
+                <Save size={16} />
+                Save Entity
+              </Button>
+            </div>
             
             <button 
               type="submit" 
