@@ -44,8 +44,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
     onChange(field.id, e.target.value);
   };
 
-  const handleDateChange = (date: Date | undefined) => {
-    onChange(field.id, date);
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(field.id, e.target.value);
   };
 
   const renderInput = () => {
@@ -98,29 +98,14 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
         );
       case 'date':
         return (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "entity-form-input justify-start text-left font-normal",
-                  !value && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {value ? format(value, 'PPP') : <span>Select date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-white" align="start">
-              <Calendar
-                mode="single"
-                selected={value}
-                onSelect={handleDateChange}
-                initialFocus
-                className="p-3 pointer-events-auto"
-              />
-            </PopoverContent>
-          </Popover>
+          <input
+            type="date"
+            id={field.id}
+            value={value || ''}
+            onChange={handleDateChange}
+            className="entity-form-input"
+            required={field.required}
+          />
         );
       default:
         return null;

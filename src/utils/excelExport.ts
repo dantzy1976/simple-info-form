@@ -80,7 +80,7 @@ export const exportToExcel = async (data: ExportData) => {
     data.b_01_01_0030 || '',
     data.b_01_01_0040 || '',
     data.b_01_01_0050 || '',
-    data.b_01_01_0060 ? format(new Date(data.b_01_01_0060), 'yyyy-MM-dd') : ''
+    data.b_01_01_0060 || ''
   ]);
 
   // Style the data row
