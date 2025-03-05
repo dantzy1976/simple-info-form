@@ -124,7 +124,7 @@ export function useEntityForm() {
     handleSaveName(formValues, setFormValues);
   };
 
-  // Update the second form when entityName changes
+  // Update the second form when entityName or country changes
   useEffect(() => {
     if (entityName) {
       setFormValues(prev => ({
@@ -133,7 +133,34 @@ export function useEntityForm() {
         'b_01_02_0020': entityName,
       }));
     }
-  }, [entityName]);
+    
+    // Ensure country is synced between forms whenever form values change
+    const country = formValues['b_01_01_0030'];
+    if (country) {
+      setFormValues(prev => ({
+        ...prev,
+        'b_01_02_0030': country,
+      }));
+    }
+    
+    // Ensure LEI is synced
+    const lei = formValues['b_01_01_0010'];
+    if (lei) {
+      setFormValues(prev => ({
+        ...prev,
+        'b_01_02_0010': lei,
+      }));
+    }
+    
+    // Ensure entity type is synced
+    const entityType = formValues['b_01_01_0040'];
+    if (entityType) {
+      setFormValues(prev => ({
+        ...prev,
+        'b_01_02_0040': entityType,
+      }));
+    }
+  }, [entityName, formValues]);
 
   return {
     formValues,
