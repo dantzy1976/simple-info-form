@@ -61,7 +61,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           >
             <option value="">Select country</option>
-            {countries.map((country) => (
+            {field.options?.map((country) => (
               <option key={country} value={country}>
                 {country}
               </option>
@@ -106,9 +106,9 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           >
             <option value="">Select currency</option>
-            {field.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
+            {field.options?.map((currency) => (
+              <option key={currency} value={currency}>
+                {currency}
               </option>
             ))}
           </select>
@@ -122,8 +122,9 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             value={value || ''}
             onChange={handleChange}
             className="entity-form-input"
-            required={field.required}
+            min="0"
             step="0.01"
+            required={field.required}
           />
         );
       default:
