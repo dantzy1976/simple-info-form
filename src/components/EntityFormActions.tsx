@@ -33,14 +33,6 @@ const EntityFormActions = ({ onExport, onSave, submitting }: EntityFormActionsPr
           Save Entity
         </Button>
       </div>
-      
-      <button 
-        type="submit" 
-        className="submit-button"
-        disabled={submitting}
-      >
-        {submitting ? 'Submitting...' : 'Submit Information'}
-      </button>
     </div>
   );
 };

@@ -31,6 +31,7 @@ const EntityForm = () => {
     loadSavedEntities();
   }, []);
 
+  // Modified to use div instead of form to prevent default form submission
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -53,7 +54,7 @@ const EntityForm = () => {
           />
         </div>
         
-        <form onSubmit={handleSubmit} className="px-8 py-6">
+        <div className="px-8 py-6">
           <EntityFormFields 
             fields={entityFormFields}
             values={formValues}
@@ -68,7 +69,7 @@ const EntityForm = () => {
               submitting={submitting}
             />
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
