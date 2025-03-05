@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
@@ -135,12 +134,12 @@ const EntityForm = () => {
             {showThirdForm ? (
               <>
                 <ArrowUp size={16} />
-                Hide Branch Information
+                b_01.03
               </>
             ) : (
               <>
                 <ArrowDown size={16} />
-                Show Branch Information
+                b_01.03
               </>
             )}
           </Button>
