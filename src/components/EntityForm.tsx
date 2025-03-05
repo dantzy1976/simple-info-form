@@ -107,11 +107,24 @@ const EntityForm = () => {
 
   const handleExport = () => {
     try {
-      exportToExcel(formValues);
-      toast({
-        title: "Export successful",
-        description: "Entity information has been exported to Excel.",
-      });
+      // Export all saved entities
+      const allEntityData = savedEntities.map(entity => entity.data);
+      
+      if (allEntityData.length === 0) {
+        // If no saved entities, export current form values
+        exportToExcel(formValues);
+        toast({
+          title: "Export successful",
+          description: "Current entity information has been exported to Excel.",
+        });
+      } else {
+        // Export all saved entities
+        exportToExcel(allEntityData);
+        toast({
+          title: "Export successful",
+          description: `All ${allEntityData.length} entities have been exported to Excel.`,
+        });
+      }
     } catch (error) {
       console.error('Export error:', error);
       toast({

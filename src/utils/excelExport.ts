@@ -7,7 +7,7 @@ interface ExportData {
   [key: string]: any;
 }
 
-export const exportToExcel = async (data: ExportData) => {
+export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Create a new workbook and worksheet
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Entity Information');
@@ -73,25 +73,23 @@ export const exportToExcel = async (data: ExportData) => {
   worksheet.getRow(2).height = 40;
   worksheet.getRow(3).height = 25;
 
-  // Add the data row
-  const dataRow = worksheet.addRow([
-    data.b_01_01_0010 || '',
-    data.b_01_01_0020 || '',
-    data.b_01_01_0030 || '',
-    data.b_01_01_0040 || '',
-    data.b_01_01_0050 || '',
-    data.b_01_01_0060 || ''
-  ]);
+  // Handle both single entity and multiple entities
+  const dataArray = Array.isArray(entities) ? entities : [entities];
+  
+  // Add data rows for each entity
+  dataArray.forEach((data) => {
+    const dataRow = worksheet.addRow([
+      data.b_01_01_0010 || '',
+      data.b_01_01_0020 || '',
+      data.b_01_01_0030 || '',
+      data.b_01_01_0040 || '',
+      data.b_01_01_0050 || '',
+      data.b_01_01_0060 || ''
+    ]);
 
-  // Style the data row
-  dataRow.eachCell((cell) => {
-    cell.alignment = { vertical: 'middle', horizontal: 'left' };
-  });
-
-  // Add borders to all cells
-  for (let i = 1; i <= 4; i++) {
-    const row = worksheet.getRow(i);
-    row.eachCell((cell) => {
+    // Style the data row
+    dataRow.eachCell((cell) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'left' };
       cell.border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
@@ -99,7 +97,7 @@ export const exportToExcel = async (data: ExportData) => {
         right: { style: 'thin' }
       };
     });
-  }
+  });
 
   // Generate the Excel file
   const buffer = await workbook.xlsx.writeBuffer();
