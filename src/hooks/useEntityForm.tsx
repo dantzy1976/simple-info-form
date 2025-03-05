@@ -1,54 +1,30 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { Json } from '@/integrations/supabase/types';
-
-interface FormValues {
-  [key: string]: any;
-}
-
-interface SavedEntity {
-  name: string;
-  data: FormValues;
-}
+import { FormValues, SavedEntity } from '@/types/entity.types';
+import { loadEntities, saveEntity, loadEntityByName } from '@/services/entityService';
+import { useEntityName } from '@/hooks/useEntityName';
 
 export function useEntityForm() {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
-  const [entityName, setEntityName] = useState("");
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [tempEntityName, setTempEntityName] = useState("");
   const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
+  
+  const {
+    entityName,
+    setEntityName,
+    isEditingName,
+    tempEntityName,
+    setTempEntityName,
+    handleEditNameClick,
+    handleSaveName,
+    handleCancelEdit
+  } = useEntityName();
 
   // Load saved entities from Supabase
   const loadSavedEntities = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('entities')
-        .select('name, data');
-      
-      if (error) {
-        throw error;
-      }
-      
-      if (data) {
-        // Convert Json type to FormValues type
-        const entities: SavedEntity[] = data.map(item => ({
-          name: item.name,
-          // Ensure data is treated as FormValues (it's a record/object structure)
-          data: item.data as FormValues
-        }));
-        setSavedEntities(entities);
-      }
-    } catch (error) {
-      console.error('Error loading entities:', error);
-      toast({
-        title: "Error loading entities",
-        description: "There was a problem loading your saved entities.",
-        variant: "destructive",
-      });
-    }
+    const entities = await loadEntities();
+    setSavedEntities(entities);
   }, []);
 
   // Handle field changes
@@ -80,90 +56,23 @@ export function useEntityForm() {
 
   // Save entity data to Supabase
   const saveEntityData = async () => {
-    if (!entityName) {
-      toast({
-        title: "Error saving entity",
-        description: "Entity name is required to save data.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      // Check if entity with this name already exists
-      const { data: existingEntities } = await supabase
-        .from('entities')
-        .select('id')
-        .eq('name', entityName)
-        .maybeSingle();
-
-      if (existingEntities) {
-        // Update existing entity
-        const { error } = await supabase
-          .from('entities')
-          .update({ 
-            data: formValues,
-            updated_at: new Date().toISOString()
-          })
-          .eq('name', entityName);
-
-        if (error) throw error;
-      } else {
-        // Insert new entity
-        const { error } = await supabase
-          .from('entities')
-          .insert({ 
-            name: entityName, 
-            data: formValues 
-          });
-
-        if (error) throw error;
-      }
-
-      // Refresh the list of saved entities
+    const success = await saveEntity(entityName, formValues);
+    if (success) {
       loadSavedEntities();
-
-      toast({
-        title: "Entity saved",
-        description: `Entity "${entityName}" has been saved successfully.`,
-      });
-    } catch (error) {
-      console.error('Error saving entity:', error);
-      toast({
-        title: "Error saving entity",
-        description: "There was a problem saving your entity data.",
-        variant: "destructive",
-      });
     }
   };
 
   // Handle loading entity from Supabase
   const handleLoadEntity = async (entityNameToLoad: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('entities')
-        .select('name, data')
-        .eq('name', entityNameToLoad)
-        .maybeSingle();
+    const entity = await loadEntityByName(entityNameToLoad);
+    
+    if (entity) {
+      setFormValues(entity.data);
+      setEntityName(entity.name);
       
-      if (error) throw error;
-      
-      if (data) {
-        // Ensure data is treated as FormValues
-        setFormValues(data.data as FormValues);
-        setEntityName(data.name);
-        
-        toast({
-          title: "Entity loaded",
-          description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
-        });
-      }
-    } catch (error) {
-      console.error('Error loading entity:', error);
       toast({
-        title: "Error loading entity",
-        description: "There was a problem loading your entity data.",
-        variant: "destructive",
+        title: "Entity loaded",
+        description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
       });
     }
   };
@@ -179,25 +88,9 @@ export function useEntityForm() {
     });
   };
 
-  // Entity name editing functions
-  const handleEditNameClick = () => {
-    setTempEntityName(entityName);
-    setIsEditingName(true);
-  };
-
-  const handleSaveName = () => {
-    setEntityName(tempEntityName);
-    setIsEditingName(false);
-    
-    const normalizedId = 'b_01.01.0020'.replace(/\./g, '_');
-    setFormValues((prev) => ({
-      ...prev,
-      [normalizedId]: tempEntityName,
-    }));
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditingName(false);
+  // Modified to work with our useEntityName hook
+  const handleSaveEntityName = () => {
+    handleSaveName(formValues, setFormValues);
   };
 
   return {
@@ -213,7 +106,7 @@ export function useEntityForm() {
     handleLoadEntity,
     handleNewEntity,
     handleEditNameClick,
-    handleSaveName,
+    handleSaveName: handleSaveEntityName,
     handleCancelEdit,
     saveEntityData,
     loadSavedEntities
