@@ -31,7 +31,7 @@ export function useEntityForm() {
   const handleFieldChange = (id: string, value: any) => {
     const normalizedId = id.replace(/\./g, '_');
     
-    // Synchronize entity name and LEI between forms
+    // Synchronize fields between forms
     if (id === 'b_01.01.0010' || id === 'b_01.02.0010') {
       // LEI synchronization
       setFormValues((prev) => ({
