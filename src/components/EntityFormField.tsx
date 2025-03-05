@@ -47,7 +47,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             placeholder={field.placeholder}
             value={value || ''}
             onChange={handleChange}
-            className="entity-form-input"
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
             required={field.required}
           />
         );
@@ -57,7 +57,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             id={field.id}
             value={value || ''}
             onChange={handleChange}
-            className="entity-form-input"
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
             required={field.required}
           >
             <option value="">Select country</option>
@@ -74,10 +74,10 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             id={field.id}
             value={value || ''}
             onChange={handleChange}
-            className="entity-form-input"
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
             required={field.required}
           >
-            <option value="">Select type</option>
+            <option value="">Select option</option>
             {field.options?.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -92,8 +92,38 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             id={field.id}
             value={value || ''}
             onChange={handleDateChange}
-            className="entity-form-input"
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
             required={field.required}
+          />
+        );
+      case 'currency':
+        return (
+          <select
+            id={field.id}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
+            required={field.required}
+          >
+            <option value="">Select currency</option>
+            {field.options?.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+      case 'monetary':
+        return (
+          <input
+            type="number"
+            id={field.id}
+            placeholder={field.placeholder}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input w-full p-2 border border-gray-300 rounded"
+            required={field.required}
+            step="0.01"
           />
         );
       default:

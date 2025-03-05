@@ -1,16 +1,19 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
+import EntityFormSecond from './EntityFormSecond';
 import { entityFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowDown, ArrowUp } from 'lucide-react';
 
 const EntityForm = () => {
+  const [showSecondForm, setShowSecondForm] = useState(false);
+  
   const {
     formValues,
     entityName,
@@ -68,7 +71,7 @@ const EntityForm = () => {
         </Button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
         <EntityFormHeader 
           entityName={entityName}
         />
@@ -91,16 +94,43 @@ const EntityForm = () => {
             values={formValues}
             onChange={handleFieldChange}
           />
-          
-          <div className="mt-8">
-            <EntityExportHandler 
-              savedEntities={savedEntities}
-              formValues={formValues}
-              onSave={saveEntityData}
-              submitting={submitting}
-            />
-          </div>
         </div>
+      </div>
+      
+      <div className="flex justify-center mb-8">
+        <Button
+          type="button"
+          onClick={() => setShowSecondForm(!showSecondForm)}
+          className="bg-green-500 text-white hover:bg-green-600 flex items-center gap-2"
+        >
+          {showSecondForm ? (
+            <>
+              <ArrowUp size={16} />
+              Hide Additional Information
+            </>
+          ) : (
+            <>
+              <ArrowDown size={16} />
+              Show Additional Information
+            </>
+          )}
+        </Button>
+      </div>
+      
+      {showSecondForm && (
+        <EntityFormSecond 
+          formValues={formValues}
+          onChange={handleFieldChange}
+        />
+      )}
+      
+      <div className="mt-8">
+        <EntityExportHandler 
+          savedEntities={savedEntities}
+          formValues={formValues}
+          onSave={saveEntityData}
+          submitting={submitting}
+        />
       </div>
     </div>
   );

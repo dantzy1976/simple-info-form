@@ -30,13 +30,44 @@ export function useEntityForm() {
   // Handle field changes
   const handleFieldChange = (id: string, value: any) => {
     const normalizedId = id.replace(/\./g, '_');
-    if (id === 'b_01.01.0020') {
+    
+    // Synchronize entity name and LEI between forms
+    if (id === 'b_01.01.0010' || id === 'b_01.02.0010') {
+      // LEI synchronization
+      setFormValues((prev) => ({
+        ...prev,
+        'b_01_01_0010': value,
+        'b_01_02_0010': value,
+      }));
+    } else if (id === 'b_01.01.0020' || id === 'b_01.02.0020') {
+      // Name synchronization
       setEntityName(value || '');
+      setFormValues((prev) => ({
+        ...prev,
+        'b_01_01_0020': value,
+        'b_01_02_0020': value,
+      }));
+    } else if (id === 'b_01.01.0030' || id === 'b_01.02.0030') {
+      // Country synchronization
+      setFormValues((prev) => ({
+        ...prev,
+        'b_01_01_0030': value,
+        'b_01_02_0030': value,
+      }));
+    } else if (id === 'b_01.01.0040' || id === 'b_01.02.0040') {
+      // Entity type synchronization
+      setFormValues((prev) => ({
+        ...prev,
+        'b_01_01_0040': value,
+        'b_01_02_0040': value,
+      }));
+    } else {
+      // Regular field update
+      setFormValues((prev) => ({
+        ...prev,
+        [normalizedId]: value,
+      }));
     }
-    setFormValues((prev) => ({
-      ...prev,
-      [normalizedId]: value,
-    }));
   };
 
   // Handle form submission
