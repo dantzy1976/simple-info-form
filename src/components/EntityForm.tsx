@@ -25,7 +25,7 @@ const EntityForm = () => {
     handleCancelEdit,
     saveEntityData,
     loadSavedEntities
-  } = useEntityForm('b_01.01');
+  } = useEntityForm();
 
   useEffect(() => {
     loadSavedEntities();
@@ -54,9 +54,6 @@ const EntityForm = () => {
         </div>
         
         <form onSubmit={handleSubmit} className="px-8 py-6">
-          <h2 className="text-xl font-semibold mb-4">b_01.01 - Register Maintainer</h2>
-          <p className="text-gray-600 mb-6">Enter the details of the entity maintaining the register</p>
-          
           <EntityFormFields 
             fields={entityFormFields}
             values={formValues}
@@ -69,7 +66,6 @@ const EntityForm = () => {
               formValues={formValues}
               onSave={saveEntityData}
               submitting={submitting}
-              formType="b_01.01"
             />
           </div>
         </form>
