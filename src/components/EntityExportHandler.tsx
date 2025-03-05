@@ -17,9 +17,14 @@ const EntityExportHandler = ({
   submitting 
 }: EntityExportHandlerProps) => {
   const handleExport = () => {
-    console.log('Exporting form values:', formValues);
-    // Make a copy of formValues to prevent any reference issues
-    const valuesToExport = { ...formValues };
+    console.log('EntityExportHandler - Starting export with values:', formValues);
+    
+    // Make a deep copy of formValues to prevent reference issues
+    const valuesToExport = JSON.parse(JSON.stringify(formValues));
+    
+    // Log the exact structure being passed to the export handler
+    console.log('EntityExportHandler - Exporting values:', valuesToExport);
+    
     handleEntityExport(valuesToExport);
   };
 

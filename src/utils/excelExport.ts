@@ -8,6 +8,8 @@ interface ExportData {
 }
 
 export const exportToExcel = async (entities: ExportData[] | ExportData) => {
+  console.log('exportToExcel - Received data to export:', entities);
+  
   // Create a new workbook and worksheet
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Entity Information');
@@ -76,10 +78,13 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
   
+  console.log('exportToExcel - Processing data array:', dataArray);
+  
   // Add data rows for each entity
-  dataArray.forEach((data) => {
-    // Create a normalized object to convert underscores back to dots 
-    // and ensure all expected fields are present
+  dataArray.forEach((data, index) => {
+    console.log(`exportToExcel - Processing entity ${index}:`, data);
+    
+    // Create a normalized object for the expected column structure
     const normalizedData = {
       'b_01.01.0010': '',
       'b_01.01.0020': '',
@@ -89,16 +94,41 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       'b_01.01.0060': ''
     };
     
-    // Normalize all keys by replacing underscores with dots
+    // Process all keys in the data object
     Object.keys(data).forEach(key => {
-      // Convert keys like b_01_01_0010 to b_01.01.0010 format
-      const normalizedKey = key.replace(/_/g, '.');
+      console.log(`exportToExcel - Processing key "${key}" with value:`, data[key]);
       
-      // Only process keys that match our expected format
-      if (/^b_\d+\.\d+\.\d+$/.test(normalizedKey)) {
+      // Handle keys with underscores that should be dots
+      let normalizedKey = key;
+      
+      // If the key has underscores, try to convert it to the dot format
+      if (key.includes('_')) {
+        const potentialDotKey = key.replace(/_/g, '.');
+        
+        // Check if this converted key is one of our expected columns
+        if (Object.keys(normalizedData).includes(potentialDotKey)) {
+          normalizedKey = potentialDotKey;
+        }
+      }
+      
+      // Check if this is one of our expected fields
+      if (Object.keys(normalizedData).includes(normalizedKey)) {
         normalizedData[normalizedKey] = data[key];
+        console.log(`exportToExcel - Matched field "${normalizedKey}" with value:`, data[key]);
+      } else if (normalizedKey.startsWith('b_')) {
+        // This might be a field with a different format, try to extract the pattern
+        const match = normalizedKey.match(/b_(\d+)_(\d+)_(\d+)/);
+        if (match) {
+          const dotKey = `b_${match[1]}.${match[2]}.${match[3]}`;
+          if (Object.keys(normalizedData).includes(dotKey)) {
+            normalizedData[dotKey] = data[key];
+            console.log(`exportToExcel - Matched field "${dotKey}" from "${normalizedKey}" with value:`, data[key]);
+          }
+        }
       }
     });
+    
+    console.log('exportToExcel - Final normalized data for row:', normalizedData);
     
     // Add the row with explicit field mapping
     const dataRow = worksheet.addRow([
@@ -122,6 +152,8 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
     });
   });
 
+  console.log('exportToExcel - Generating Excel file');
+  
   // Generate the Excel file
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

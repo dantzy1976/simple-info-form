@@ -6,10 +6,12 @@ import { SavedEntity } from '@/types/entity.types';
 
 export const handleEntityExport = async (formValues: Record<string, any>) => {
   try {
-    console.log('handleEntityExport received values:', formValues);
+    console.log('handleEntityExport - Received values:', formValues);
     
     // Check if we have current form values to export
     if (formValues && Object.keys(formValues).length > 0) {
+      console.log('handleEntityExport - Exporting current form values');
+      
       // Export the current form values
       await exportToExcel(formValues);
       
@@ -30,6 +32,8 @@ export const handleEntityExport = async (formValues: Record<string, any>) => {
     }
     
     if (data && data.length > 0) {
+      console.log('handleEntityExport - Exporting from database:', data);
+      
       // Extract just the data portion from each entity
       const allEntityData = data.map(entity => entity.data);
       
