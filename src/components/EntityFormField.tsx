@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormField } from '../constants/formConstants';
 
@@ -105,11 +104,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
     <div className="entity-form-field mb-6" style={style}>
       <label htmlFor={field.id} className="entity-form-label flex items-center">
         <div className="flex-grow">
-          <div className="text-gray-500 text-sm font-bold mb-1">
-            {field.description}
-          </div>
           <div>
-            {field.label}
+            {field.label} <span className="text-gray-500 text-sm">{field.id}</span>
           </div>
         </div>
         <span className="entity-field-type bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
