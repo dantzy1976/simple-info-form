@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Info } from 'lucide-react';
@@ -131,19 +130,14 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
   return (
     <div className="entity-form-field mb-6" style={style}>
       <label htmlFor={field.id} className="entity-form-label flex items-center">
-        <span className="flex-grow">{field.label}</span>
-        {field.description && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="ml-2 inline-flex items-center text-blue-500">
-                <Info size={16} />
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Field ID: {field.description}</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
+        <span className="flex-grow">
+          {field.label}
+          {field.description && (
+            <span className="ml-2 text-sm text-blue-600 font-medium">
+              [{field.description}]
+            </span>
+          )}
+        </span>
         <span className="entity-field-type">{getFieldTypeLabel()}</span>
       </label>
       {renderInput()}
