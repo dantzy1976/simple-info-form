@@ -20,6 +20,10 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
         return 'Closed set of options';
       case 'date':
         return 'Date';
+      case 'currency':
+        return 'Currency';
+      case 'monetary':
+        return 'Monetary';
       default:
         return field.fieldType;
     }
@@ -73,7 +77,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             className="entity-form-input"
             required={field.required}
           >
-            <option value="">Select type</option>
+            <option value="">Select option</option>
             {field.options?.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -90,6 +94,36 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             onChange={handleDateChange}
             className="entity-form-input"
             required={field.required}
+          />
+        );
+      case 'currency':
+        return (
+          <select
+            id={field.id}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input"
+            required={field.required}
+          >
+            <option value="">Select currency</option>
+            {field.options?.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+      case 'monetary':
+        return (
+          <input
+            type="number"
+            id={field.id}
+            placeholder={field.placeholder}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input"
+            required={field.required}
+            step="0.01"
           />
         );
       default:
