@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil } from 'lucide-react';
 
 interface EntityNameEditorProps {
   entityName: string;
@@ -50,19 +49,9 @@ const EntityNameEditor = ({
           </Button>
         </div>
       ) : (
-        <>
-          <h2 className="text-xl font-semibold text-white">
-            {entityName || 'Enter entity name'}
-          </h2>
-          <Button
-            size="sm"
-            variant="secondary"
-            className="bg-white text-black hover:bg-gray-100 text-xs px-2 py-1 h-7"
-            onClick={onEditClick}
-          >
-            <Pencil size={14} className="mr-1" /> Edit
-          </Button>
-        </>
+        <h2 className="text-xl font-semibold text-white w-full">
+          {entityName || 'Enter entity name'}
+        </h2>
       )}
     </div>
   );
