@@ -14,10 +14,16 @@ interface FormValues {
 const EntityForm = () => {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
+  const [entityName, setEntityName] = useState("Central Bank");
 
   const handleFieldChange = (id: string, value: any) => {
     // Convert field IDs with dots to underscores for easier handling in export
     const normalizedId = id.replace(/\./g, '_');
+    
+    // If this is the entity name field (b_01.01.0020), update the header
+    if (id === 'b_01.01.0020') {
+      setEntityName(value || 'Central Bank');
+    }
     
     setFormValues((prev) => ({
       ...prev,
@@ -61,8 +67,13 @@ const EntityForm = () => {
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
-          <h1 className="text-2xl font-medium text-white">b_01.01</h1>
-          <p className="text-blue-100 mt-1">Enter the details of the entity maintaining the register</p>
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-medium text-white">b_01.01</h1>
+            <p className="text-blue-100">Enter the details of the entity maintaining the register</p>
+            <h2 className="text-xl font-semibold text-white mt-2 border-t border-blue-400 pt-2">
+              {entityName}
+            </h2>
+          </div>
         </div>
         
         <form onSubmit={handleSubmit} className="px-8 py-6">
