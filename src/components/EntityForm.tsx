@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
@@ -41,7 +40,6 @@ const EntityForm = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
-      {/* Entity Selection Controls - Moved above the form */}
       <div className="mb-4 flex items-center justify-between gap-4 bg-slate-100 p-4 rounded-lg">
         <div className="flex items-center gap-2 flex-1">
           {savedEntities.length > 0 && (
@@ -108,12 +106,12 @@ const EntityForm = () => {
           {showSecondForm ? (
             <>
               <ArrowUp size={16} />
-              Hide Additional Information
+              b_01.02
             </>
           ) : (
             <>
               <ArrowDown size={16} />
-              Show Additional Information
+              b_01.02
             </>
           )}
         </Button>
