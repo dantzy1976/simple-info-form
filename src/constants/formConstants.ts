@@ -6,6 +6,7 @@ export interface FormField {
   placeholder?: string;
   required?: boolean;
   options?: string[];
+  description?: string;
 }
 
 export const entityFormFields: FormField[] = [
@@ -15,6 +16,7 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     placeholder: 'Enter LEI code',
     required: true,
+    description: 'b_01.01.0010',
   },
   {
     id: 'b_01.01.0020',
@@ -22,18 +24,21 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     placeholder: 'Enter entity name',
     required: true,
+    description: 'b_01.01.0020',
   },
   {
     id: 'b_01.01.0030',
     label: 'Country of the entity',
     fieldType: 'country',
     required: true,
+    description: 'b_01.01.0030',
   },
   {
     id: 'b_01.01.0040',
     label: 'Type of entity',
     fieldType: 'closedOptions',
     required: true,
+    description: 'b_01.01.0040',
     options: [
       '(CT:x12) Credit institutions',
       '(CT:x599) Investment firms',
@@ -65,12 +70,14 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     placeholder: 'Enter competent authority',
     required: true,
+    description: 'b_01.01.0050',
   },
   {
     id: 'b_01.01.0060',
     label: 'Date of the reporting',
     fieldType: 'date',
     required: true,
+    description: 'b_01.01.0060',
   },
 ];
 

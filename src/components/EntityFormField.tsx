@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Info } from 'lucide-react';
 import { FormField } from '../constants/formConstants';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { countries } from '../constants/formConstants';
 
 interface EntityFormFieldProps {
@@ -125,8 +130,20 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
 
   return (
     <div className="entity-form-field mb-6" style={style}>
-      <label htmlFor={field.id} className="entity-form-label">
-        {field.label}
+      <label htmlFor={field.id} className="entity-form-label flex items-center">
+        <span className="flex-grow">{field.label}</span>
+        {field.description && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="ml-2 inline-flex items-center text-blue-500">
+                <Info size={16} />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Field ID: {field.description}</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
         <span className="entity-field-type">{getFieldTypeLabel()}</span>
       </label>
       {renderInput()}
