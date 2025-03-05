@@ -4,6 +4,7 @@ import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
+import EntitySelectionControls from './EntitySelectionControls';
 import { entity2FormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
@@ -25,7 +26,8 @@ const Entity2Form = () => {
     handleCancelEdit,
     saveEntityData,
     loadSavedEntities,
-    setEntityName
+    setEntityName,
+    setFormValues
   } = useEntityForm();
 
   // This function maps fields from form1 to form2 where applicable
@@ -94,38 +96,11 @@ const Entity2Form = () => {
             <h1 className="text-2xl font-medium text-white">b_01.02</h1>
             <p className="text-blue-100">Enter the details of the entity participating in the central counterparty</p>
             
-            <div className="mt-2 bg-white/10 rounded p-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  {savedEntities.length > 0 && (
-                    <>
-                      <label className="text-white text-sm">Load saved entity:</label>
-                      <select 
-                        className="bg-white/10 border-blue-300 text-white rounded px-2 py-1"
-                        onChange={(e) => {
-                          if (e.target.value) handleEntity2Load(e.target.value);
-                        }}
-                      >
-                        <option value="">Select entity</option>
-                        {savedEntities.map((entity) => (
-                          <option key={entity.name} value={entity.name}>
-                            {entity.name}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={handleNewEntity}
-                  className="bg-white/10 border border-blue-300 text-white hover:bg-white/20 px-3 py-1 rounded flex items-center gap-2"
-                >
-                  <span className="text-lg">+</span>
-                  New Entity
-                </button>
-              </div>
-            </div>
+            <EntitySelectionControls 
+              savedEntities={savedEntities}
+              onLoadEntity={handleEntity2Load}
+              onNewEntity={handleNewEntity}
+            />
           </div>
         </div>
         

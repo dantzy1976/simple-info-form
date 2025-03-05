@@ -4,6 +4,7 @@ import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
+import EntitySelectionControls from './EntitySelectionControls';
 import { entityFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
@@ -34,12 +35,18 @@ const EntityForm = () => {
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <EntityFormHeader 
-          entityName={entityName}
-          savedEntities={savedEntities}
-          onLoadEntity={handleLoadEntity}
-          onNew={handleNewEntity}
-        />
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-medium text-white">b_01.01</h1>
+            <p className="text-blue-100">Enter the details of the entity participating in the transaction</p>
+            
+            <EntitySelectionControls 
+              savedEntities={savedEntities}
+              onLoadEntity={handleLoadEntity}
+              onNewEntity={handleNewEntity}
+            />
+          </div>
+        </div>
         
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8">
           <EntityNameEditor 
