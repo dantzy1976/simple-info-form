@@ -16,7 +16,10 @@ const EntityExportHandler = ({
   onSave, 
   submitting 
 }: EntityExportHandlerProps) => {
-  const handleExport = () => handleEntityExport(formValues);
+  const handleExport = () => {
+    // Ensure we're passing the current form values to the export handler
+    handleEntityExport(formValues);
+  };
 
   return (
     <EntityFormActions 

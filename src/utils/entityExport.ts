@@ -6,7 +6,18 @@ import { SavedEntity } from '@/types/entity.types';
 
 export const handleEntityExport = async (formValues: Record<string, any>) => {
   try {
-    // Get fresh data from Supabase to ensure we have the latest
+    // Check if we have current form values to export
+    if (formValues && Object.keys(formValues).length > 0) {
+      // Export the current form values
+      exportToExcel(formValues);
+      toast({
+        title: "Export successful",
+        description: "Current entity information has been exported to Excel.",
+      });
+      return;
+    }
+    
+    // If no current form values, try to export from database
     const { data, error } = await supabase
       .from('entities')
       .select('data');
@@ -26,11 +37,10 @@ export const handleEntityExport = async (formValues: Record<string, any>) => {
         description: `All ${allEntityData.length} entities have been exported to Excel.`,
       });
     } else {
-      // If no saved entities in database, export current form values
-      exportToExcel(formValues);
       toast({
-        title: "Export successful",
-        description: "Current entity information has been exported to Excel.",
+        title: "Export failed",
+        description: "No data available to export. Please fill out the form first.",
+        variant: "destructive",
       });
     }
   } catch (error) {
