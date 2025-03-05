@@ -34,7 +34,9 @@ const EntityExportHandler = ({
       
       if (!alreadySaved) {
         console.log('EntityExportHandler - Adding current form to export dataset');
-        entitiesToExport.push(JSON.parse(JSON.stringify(formValues)));
+        // Ensure all form data, including third form, is included
+        const formDataToExport = JSON.parse(JSON.stringify(formValues));
+        entitiesToExport.push(formDataToExport);
       }
     }
     
