@@ -50,6 +50,8 @@ export function useEntityForm() {
     if (id === 'b_01.01.0020') {
       setEntityName(value || '');
     }
+    
+    return normalizedId;
   };
 
   // Custom handler for loading entities
@@ -63,7 +65,10 @@ export function useEntityForm() {
         title: "Entity loaded",
         description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
       });
+      
+      return loadedEntity;
     }
+    return null;
   };
 
   // Custom handler for new entities
@@ -93,6 +98,7 @@ export function useEntityForm() {
     tempEntityName,
     savedEntities,
     submitting,
+    setEntityName,
     setTempEntityName,
     handleFieldChange,
     handleSubmit,
@@ -102,7 +108,8 @@ export function useEntityForm() {
     handleSaveName: customHandleSaveName,
     handleCancelEdit,
     saveEntityData,
-    loadSavedEntities
+    loadSavedEntities,
+    setFormValues
   };
 }
 

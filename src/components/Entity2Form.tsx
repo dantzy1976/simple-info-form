@@ -1,10 +1,10 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
-import { entity2FormFields, entityFormFields } from '../constants/formConstants';
+import { entity2FormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
 const Entity2Form = () => {
@@ -24,48 +24,48 @@ const Entity2Form = () => {
     handleSaveName,
     handleCancelEdit,
     saveEntityData,
-    loadSavedEntities
+    loadSavedEntities,
+    setEntityName
   } = useEntityForm();
 
   // This function maps fields from form1 to form2 where applicable
   const mapForm1FieldsToForm2 = async (entityNameToLoad: string) => {
     const loadedEntity = await handleLoadEntity(entityNameToLoad);
-    if (loadedEntity) {
-      // Map fields that have the same meaning but different IDs
-      // For example, map b_01.01.0010 to b_01.02.0010
-      const mappedValues = { ...loadedEntity.data };
-      
-      // Map b_01.01.0010 (LEI) to b_01.02.0010
-      if (mappedValues['b_01_01_0010']) {
-        mappedValues['b_01_02_0010'] = mappedValues['b_01_01_0010'];
-      }
-      
-      // Map b_01.01.0020 (Name) to b_01.02.0020
-      if (mappedValues['b_01_01_0020']) {
-        mappedValues['b_01_02_0020'] = mappedValues['b_01_01_0020'];
-      }
-      
-      // Map b_01.01.0030 (Country) to b_01.02.0030
-      if (mappedValues['b_01_01_0030']) {
-        mappedValues['b_01_02_0030'] = mappedValues['b_01_01_0030'];
-      }
-      
-      // Map b_01.01.0040 (Type) to b_01.02.0040
-      if (mappedValues['b_01_01_0040']) {
-        mappedValues['b_01_02_0040'] = mappedValues['b_01_01_0040'];
-      }
-      
-      // Map b_01.01.0050 (Date of last update) to b_01.02.0070
-      if (mappedValues['b_01_01_0050']) {
-        mappedValues['b_01_02_0070'] = mappedValues['b_01_01_0050'];
-      }
-      
-      return {
-        name: loadedEntity.name,
-        data: mappedValues
-      };
+    if (!loadedEntity) return null;
+    
+    // Map fields that have the same meaning but different IDs
+    // For example, map b_01.01.0010 to b_01.02.0010
+    const mappedValues = { ...loadedEntity.data };
+    
+    // Map b_01.01.0010 (LEI) to b_01.02.0010
+    if (mappedValues['b_01_01_0010']) {
+      mappedValues['b_01_02_0010'] = mappedValues['b_01_01_0010'];
     }
-    return null;
+    
+    // Map b_01.01.0020 (Name) to b_01.02.0020
+    if (mappedValues['b_01_01_0020']) {
+      mappedValues['b_01_02_0020'] = mappedValues['b_01_01_0020'];
+    }
+    
+    // Map b_01.01.0030 (Country) to b_01.02.0030
+    if (mappedValues['b_01_01_0030']) {
+      mappedValues['b_01_02_0030'] = mappedValues['b_01_01_0030'];
+    }
+    
+    // Map b_01.01.0040 (Type) to b_01.02.0040
+    if (mappedValues['b_01_01_0040']) {
+      mappedValues['b_01_02_0040'] = mappedValues['b_01_01_0040'];
+    }
+    
+    // Map b_01.01.0050 (Date of last update) to b_01.02.0070
+    if (mappedValues['b_01_01_0050']) {
+      mappedValues['b_01_02_0070'] = mappedValues['b_01_01_0050'];
+    }
+    
+    return {
+      name: loadedEntity.name,
+      data: mappedValues
+    };
   };
 
   // Custom handler for loading entities with field mapping
