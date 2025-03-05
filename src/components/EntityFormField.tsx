@@ -62,8 +62,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
           >
             <option value="">Select country</option>
             {countries.map((country) => (
-              <option key={country} value={country}>
-                {country}
+              <option key={country.id} value={country.id}>
+                {country.id} - {country.label}
               </option>
             ))}
           </select>
