@@ -1,7 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import { exportToExcel } from './excelExport';
+import { exportToExcel } from './excel';
 import { SavedEntity } from '@/types/entity.types';
 
 export const handleEntityExport = async (data: Record<string, any>[] | Record<string, any>) => {
