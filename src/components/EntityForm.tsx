@@ -159,6 +159,7 @@ const EntityForm = () => {
           entityName={entityName}
           savedEntities={savedEntities}
           onLoadEntity={handleLoadEntity}
+          onNew={handleNewEntity}
         />
         
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8">
@@ -187,7 +188,6 @@ const EntityForm = () => {
           <EntityFormActions 
             onExport={handleExport}
             onSave={saveEntityData}
-            onNew={handleNewEntity}
             submitting={submitting}
           />
         </form>

@@ -1,16 +1,15 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Save, Plus } from 'lucide-react';
+import { Download, Save } from 'lucide-react';
 
 interface EntityFormActionsProps {
   onExport: () => void;
   onSave: () => void;
-  onNew: () => void;
   submitting: boolean;
 }
 
-const EntityFormActions = ({ onExport, onSave, onNew, submitting }: EntityFormActionsProps) => {
+const EntityFormActions = ({ onExport, onSave, submitting }: EntityFormActionsProps) => {
   return (
     <div className="mt-8 flex justify-between items-center">
       <div className="flex gap-2">
@@ -32,16 +31,6 @@ const EntityFormActions = ({ onExport, onSave, onNew, submitting }: EntityFormAc
         >
           <Save size={16} />
           Save Entity
-        </Button>
-        
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onNew}
-          className="flex items-center gap-2"
-        >
-          <Plus size={16} />
-          New Entity
         </Button>
       </div>
       
