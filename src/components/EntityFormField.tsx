@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { FormField } from '../constants/formConstants';
+import { countries } from '../constants/countries';
 
 interface EntityFormFieldProps {
   field: FormField;
@@ -70,7 +70,6 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
         );
       case 'closedOptions':
         if (field.options && Array.isArray(field.options)) {
-          // Check if options are objects with id and label
           const isObjectOptions = field.options.length > 0 && typeof field.options[0] === 'object';
           
           return (
@@ -83,16 +82,13 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             >
               <option value="">Select option</option>
               {isObjectOptions ? (
-                // If options are objects with id and label
                 (field.options as { id: string; label: string }[]).map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.id} - {option.label}
                   </option>
                 ))
               ) : (
-                // If options are strings (legacy format)
                 (field.options as string[]).map((option) => {
-                  // For string format like "eba_RP:x53\tUltimate parent"
                   const parts = option.split('\t');
                   const id = parts[0];
                   const label = parts.length > 1 ? parts[1] : option;
@@ -130,7 +126,6 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
           >
             <option value="">Select currency</option>
             {field.options?.map((option) => {
-              // For string format like "eba_CU:EUR\tEuro"
               const parts = typeof option === 'string' ? option.split('\t') : [];
               const id = typeof option === 'object' ? option.id : parts[0];
               const label = typeof option === 'object' ? option.label : (parts.length > 1 ? parts[1] : option);
@@ -177,8 +172,5 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
     </div>
   );
 };
-
-// Import the countries array from formConstants
-import { countries } from '../constants/formConstants';
 
 export default EntityFormField;
