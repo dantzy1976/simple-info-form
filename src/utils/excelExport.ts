@@ -78,13 +78,21 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   
   // Add data rows for each entity
   dataArray.forEach((data) => {
+    const normalizedData = {};
+    
+    // Normalize the keys - replace underscores with dots for Excel output
+    Object.keys(data).forEach(key => {
+      const normalizedKey = key.replace(/_/g, '.');
+      normalizedData[normalizedKey] = data[key];
+    });
+    
     const dataRow = worksheet.addRow([
-      data.b_01_01_0010 || '',
-      data.b_01_01_0020 || '',
-      data.b_01_01_0030 || '',
-      data.b_01_01_0040 || '',
-      data.b_01_01_0050 || '',
-      data.b_01_01_0060 || ''
+      normalizedData['b_01.01.0010'] || '',
+      normalizedData['b_01.01.0020'] || '',
+      normalizedData['b_01.01.0030'] || '',
+      normalizedData['b_01.01.0040'] || '',
+      normalizedData['b_01.01.0050'] || '',
+      normalizedData['b_01.01.0060'] || ''
     ]);
 
     // Style the data row

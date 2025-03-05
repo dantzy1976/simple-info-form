@@ -20,6 +20,10 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
         return 'Closed set of options';
       case 'date':
         return 'Date';
+      case 'currency':
+        return 'Currency';
+      case 'monetary':
+        return 'Monetary';
       default:
         return field.fieldType;
     }
@@ -100,15 +104,17 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
   return (
     <div className="entity-form-field mb-6" style={style}>
       <label htmlFor={field.id} className="entity-form-label flex items-center">
-        <span className="flex-grow">
-          {field.label}
-          {field.description && (
-            <span className="ml-2 text-sm text-blue-600 font-medium">
-              [{field.description}]
-            </span>
-          )}
+        <div className="flex-grow">
+          <div className="text-gray-500 text-sm font-bold mb-1">
+            {field.description}
+          </div>
+          <div>
+            {field.label}
+          </div>
+        </div>
+        <span className="entity-field-type bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
+          {getFieldTypeLabel()}
         </span>
-        <span className="entity-field-type">{getFieldTypeLabel()}</span>
       </label>
       {renderInput()}
     </div>
