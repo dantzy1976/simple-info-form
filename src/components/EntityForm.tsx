@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import EntityFormField from './EntityFormField';
 import { entityFormFields } from '../constants/formConstants';
 import { toast } from '@/hooks/use-toast';
+import { exportToExcel } from '../utils/excelExport';
+import { Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface FormValues {
   [key: string]: any;
@@ -13,9 +16,12 @@ const EntityForm = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const handleFieldChange = (id: string, value: any) => {
+    // Convert field IDs with dots to underscores for easier handling in export
+    const normalizedId = id.replace(/\./g, '_');
+    
     setFormValues((prev) => ({
       ...prev,
-      [id]: value,
+      [normalizedId]: value,
     }));
   };
 
@@ -34,6 +40,23 @@ const EntityForm = () => {
     }, 1000);
   };
 
+  const handleExport = () => {
+    try {
+      exportToExcel(formValues);
+      toast({
+        title: "Export successful",
+        description: "Entity information has been exported to Excel.",
+      });
+    } catch (error) {
+      console.error('Export error:', error);
+      toast({
+        title: "Export failed",
+        description: "There was an error exporting the data.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -47,13 +70,23 @@ const EntityForm = () => {
             <EntityFormField
               key={field.id}
               field={field}
-              value={formValues[field.id]}
+              value={formValues[field.id.replace(/\./g, '_')]}
               onChange={handleFieldChange}
               style={{ animationDelay: `${index * 0.1}s` }}
             />
           ))}
           
-          <div className="mt-8 text-right">
+          <div className="mt-8 flex justify-between items-center">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleExport}
+              className="flex items-center gap-2"
+            >
+              <Download size={16} />
+              Export to Excel
+            </Button>
+            
             <button 
               type="submit" 
               className="submit-button"
