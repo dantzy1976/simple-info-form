@@ -61,7 +61,7 @@ const EntityForm = () => {
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
-          <h1 className="text-2xl font-medium text-white">Entity Information Form</h1>
+          <h1 className="text-2xl font-medium text-white">b_01.01</h1>
           <p className="text-blue-100 mt-1">Enter the details of the entity maintaining the register</p>
         </div>
         
