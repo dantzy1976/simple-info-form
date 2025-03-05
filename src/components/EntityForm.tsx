@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
@@ -115,8 +116,17 @@ const EntityForm = () => {
             </>
           )}
         </Button>
-        
-        {showSecondForm && (
+      </div>
+      
+      {showSecondForm && (
+        <EntityFormSecond 
+          formValues={formValues}
+          onChange={handleFieldChange}
+        />
+      )}
+      
+      {showSecondForm && (
+        <div className="mt-4 mb-8">
           <Button
             type="button"
             onClick={() => setShowThirdForm(!showThirdForm)}
@@ -134,14 +144,7 @@ const EntityForm = () => {
               </>
             )}
           </Button>
-        )}
-      </div>
-      
-      {showSecondForm && (
-        <EntityFormSecond 
-          formValues={formValues}
-          onChange={handleFieldChange}
-        />
+        </div>
       )}
       
       {showSecondForm && showThirdForm && (
