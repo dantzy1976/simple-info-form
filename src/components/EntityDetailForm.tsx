@@ -4,10 +4,10 @@ import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
-import { entityFormFields } from '../constants/formConstants';
+import { entityDetailFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
-const EntityForm = () => {
+const EntityDetailForm = () => {
   const {
     formValues,
     entityName,
@@ -25,7 +25,7 @@ const EntityForm = () => {
     handleCancelEdit,
     saveEntityData,
     loadSavedEntities
-  } = useEntityForm('b_01.01');
+  } = useEntityForm('b_01.02');
 
   useEffect(() => {
     loadSavedEntities();
@@ -34,14 +34,29 @@ const EntityForm = () => {
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <EntityFormHeader 
-          entityName={entityName}
-          savedEntities={savedEntities}
-          onLoadEntity={handleLoadEntity}
-          onNew={handleNewEntity}
-        />
+        <div className="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-medium text-white">b_01.02</h1>
+            <p className="text-green-100">Enter the details of the individual entity</p>
+            
+            <div className="mt-2 bg-white/10 rounded p-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  {savedEntities.length > 0 && (
+                    <EntityFormHeader 
+                      entityName={entityName}
+                      savedEntities={savedEntities}
+                      onLoadEntity={handleLoadEntity}
+                      onNew={handleNewEntity}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8">
+        <div className="bg-gradient-to-r from-green-500 to-green-600 px-8">
           <EntityNameEditor 
             entityName={entityName}
             isEditingName={isEditingName}
@@ -54,11 +69,8 @@ const EntityForm = () => {
         </div>
         
         <form onSubmit={handleSubmit} className="px-8 py-6">
-          <h2 className="text-xl font-semibold mb-4">b_01.01 - Register Maintainer</h2>
-          <p className="text-gray-600 mb-6">Enter the details of the entity maintaining the register</p>
-          
           <EntityFormFields 
-            fields={entityFormFields}
+            fields={entityDetailFormFields}
             values={formValues}
             onChange={handleFieldChange}
           />
@@ -69,7 +81,7 @@ const EntityForm = () => {
               formValues={formValues}
               onSave={saveEntityData}
               submitting={submitting}
-              formType="b_01.01"
+              formType="b_01.02"
             />
           </div>
         </form>
@@ -78,4 +90,4 @@ const EntityForm = () => {
   );
 };
 
-export default EntityForm;
+export default EntityDetailForm;

@@ -9,9 +9,10 @@ interface FormValues {
 interface SavedEntity {
   name: string;
   data: FormValues;
+  formType: 'b_01.01' | 'b_01.02';
 }
 
-export function useEntityForm() {
+export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
   const [entityName, setEntityName] = useState("");
@@ -19,9 +20,11 @@ export function useEntityForm() {
   const [tempEntityName, setTempEntityName] = useState("");
   const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
 
+  const storageKey = `savedEntities_${formType}`;
+
   // Load saved entities from localStorage
   const loadSavedEntities = () => {
-    const entities = localStorage.getItem('savedEntities');
+    const entities = localStorage.getItem(storageKey);
     if (entities) {
       setSavedEntities(JSON.parse(entities));
     }
@@ -30,9 +33,12 @@ export function useEntityForm() {
   // Handle field changes
   const handleFieldChange = (id: string, value: any) => {
     const normalizedId = id.replace(/\./g, '_');
-    if (id === 'b_01.01.0020') {
+    // For form 1, set entity name if it's the name field
+    if ((formType === 'b_01.01' && id === 'b_01.01.0020') || 
+        (formType === 'b_01.02' && id === 'b_01.02.0020')) {
       setEntityName(value || '');
     }
+    
     setFormValues((prev) => ({
       ...prev,
       [normalizedId]: value,
@@ -45,7 +51,7 @@ export function useEntityForm() {
     setSubmitting(true);
     saveEntityData();
     setTimeout(() => {
-      console.log('Form submitted with values:', formValues);
+      console.log(`Form ${formType} submitted with values:`, formValues);
       toast({
         title: "Form submitted successfully",
         description: "Your entity information has been registered and saved.",
@@ -67,10 +73,11 @@ export function useEntityForm() {
 
     const entityToSave: SavedEntity = {
       name: entityName,
-      data: { ...formValues }
+      data: { ...formValues },
+      formType
     };
 
-    const existingIndex = savedEntities.findIndex(entity => entity.name === entityName);
+    const existingIndex = savedEntities.findIndex(entity => entity.name === entityName && entity.formType === formType);
     let updatedEntities: SavedEntity[];
 
     if (existingIndex >= 0) {
@@ -81,7 +88,7 @@ export function useEntityForm() {
     }
 
     setSavedEntities(updatedEntities);
-    localStorage.setItem('savedEntities', JSON.stringify(updatedEntities));
+    localStorage.setItem(storageKey, JSON.stringify(updatedEntities));
 
     toast({
       title: "Entity saved",
@@ -91,7 +98,7 @@ export function useEntityForm() {
 
   // Handle loading entity
   const handleLoadEntity = (entityNameToLoad: string) => {
-    const entityToLoad = savedEntities.find(entity => entity.name === entityNameToLoad);
+    const entityToLoad = savedEntities.find(entity => entity.name === entityNameToLoad && entity.formType === formType);
     
     if (entityToLoad) {
       setFormValues(entityToLoad.data);
@@ -125,7 +132,8 @@ export function useEntityForm() {
     setEntityName(tempEntityName);
     setIsEditingName(false);
     
-    const normalizedId = 'b_01.01.0020'.replace(/\./g, '_');
+    const fieldId = formType === 'b_01.01' ? 'b_01.01.0020' : 'b_01.02.0020';
+    const normalizedId = fieldId.replace(/\./g, '_');
     setFormValues((prev) => ({
       ...prev,
       [normalizedId]: tempEntityName,
@@ -143,6 +151,7 @@ export function useEntityForm() {
     tempEntityName,
     savedEntities,
     submitting,
+    formType,
     setTempEntityName,
     handleFieldChange,
     handleSubmit,

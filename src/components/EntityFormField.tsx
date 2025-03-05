@@ -20,6 +20,10 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
         return 'Closed set of options';
       case 'date':
         return 'Date';
+      case 'currency':
+        return 'Currency';
+      case 'monetary':
+        return 'Monetary';
       default:
         return field.fieldType;
     }
@@ -57,7 +61,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           >
             <option value="">Select country</option>
-            {countries.map((country) => (
+            {field.options?.map((country) => (
               <option key={country} value={country}>
                 {country}
               </option>
@@ -73,7 +77,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             className="entity-form-input"
             required={field.required}
           >
-            <option value="">Select type</option>
+            <option value="">Select option</option>
             {field.options?.map((option) => (
               <option key={option} value={option}>
                 {option}
@@ -89,6 +93,37 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             value={value || ''}
             onChange={handleDateChange}
             className="entity-form-input"
+            required={field.required}
+          />
+        );
+      case 'currency':
+        return (
+          <select
+            id={field.id}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input"
+            required={field.required}
+          >
+            <option value="">Select currency</option>
+            {field.options?.map((currency) => (
+              <option key={currency} value={currency}>
+                {currency}
+              </option>
+            ))}
+          </select>
+        );
+      case 'monetary':
+        return (
+          <input
+            type="number"
+            id={field.id}
+            placeholder={field.placeholder}
+            value={value || ''}
+            onChange={handleChange}
+            className="entity-form-input"
+            min="0"
+            step="0.01"
             required={field.required}
           />
         );
