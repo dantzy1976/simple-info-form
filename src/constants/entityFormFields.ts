@@ -1,61 +1,44 @@
 
 import { FormField } from './types';
 import { countries } from './countries';
-import { currencies } from './currencies';
 
 export const entityFormFields: FormField[] = [
   {
     id: 'b_01.01.0010',
-    label: 'Name of the entity maintaining the register',
-    description: '',
+    label: 'LEI of the entity',
+    fieldType: 'alphanumerical',
+    required: true,
+    placeholder: 'Enter LEI code'
+  },
+  {
+    id: 'b_01.01.0020',
+    label: 'Name of the entity',
     fieldType: 'alphanumerical',
     required: true,
     placeholder: 'Enter entity name'
   },
   {
-    id: 'b_01.01.0020',
-    label: 'Country of the entity maintaining the register',
-    description: '',
-    fieldType: 'country',
-    required: true,
-    options: countries
-  },
-  {
     id: 'b_01.01.0030',
-    label: 'Legal Entity Identifier (LEI) of the entity maintaining the register',
-    description: '',
-    fieldType: 'alphanumerical',
-    required: false,
-    placeholder: 'Enter LEI code'
+    label: 'Country of the entity',
+    fieldType: 'country',
+    required: true
   },
   {
     id: 'b_01.01.0040',
-    label: 'Competent authority name',
-    description: '',
-    fieldType: 'alphanumerical',
+    label: 'Type of entity',
+    fieldType: 'closedOptions',
     required: true,
-    placeholder: 'Enter authority name'
+    options: [
+      'Credit institution',
+      'Investment firm',
+      'Insurance company',
+      'Pension fund',
+      'Other financial entity'
+    ]
   },
   {
     id: 'b_01.01.0050',
-    label: 'Competent authority country',
-    description: '',
-    fieldType: 'country',
-    required: true,
-    options: countries
-  },
-  {
-    id: 'b_01.01.0060',
-    label: 'Reporting currency',
-    description: '',
-    fieldType: 'currency',
-    required: true,
-    options: currencies
-  },
-  {
-    id: 'b_01.01.0070',
-    label: 'Reporting date',
-    description: '',
+    label: 'Date of last update',
     fieldType: 'date',
     required: true
   }

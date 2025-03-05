@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FormValues {
   [key: string]: any;
@@ -9,10 +10,9 @@ interface FormValues {
 interface SavedEntity {
   name: string;
   data: FormValues;
-  formType: 'b_01.01' | 'b_01.02';
 }
 
-export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
+export function useEntityForm() {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
   const [entityName, setEntityName] = useState("");
@@ -20,25 +20,40 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
   const [tempEntityName, setTempEntityName] = useState("");
   const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
 
-  const storageKey = `savedEntities_${formType}`;
-
-  // Load saved entities from localStorage
-  const loadSavedEntities = () => {
-    const entities = localStorage.getItem(storageKey);
-    if (entities) {
-      setSavedEntities(JSON.parse(entities));
+  // Load saved entities from Supabase
+  const loadSavedEntities = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('entities')
+        .select('name, data');
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (data) {
+        const entities: SavedEntity[] = data.map(item => ({
+          name: item.name,
+          data: item.data
+        }));
+        setSavedEntities(entities);
+      }
+    } catch (error) {
+      console.error('Error loading entities:', error);
+      toast({
+        title: "Error loading entities",
+        description: "There was a problem loading your saved entities.",
+        variant: "destructive",
+      });
     }
-  };
+  }, []);
 
   // Handle field changes
   const handleFieldChange = (id: string, value: any) => {
     const normalizedId = id.replace(/\./g, '_');
-    // For form 1, set entity name if it's the name field
-    if ((formType === 'b_01.01' && id === 'b_01.01.0020') || 
-        (formType === 'b_01.02' && id === 'b_01.02.0020')) {
+    if (id === 'b_01.01.0020') {
       setEntityName(value || '');
     }
-    
     setFormValues((prev) => ({
       ...prev,
       [normalizedId]: value,
@@ -51,7 +66,7 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
     setSubmitting(true);
     saveEntityData();
     setTimeout(() => {
-      console.log(`Form ${formType} submitted with values:`, formValues);
+      console.log('Form submitted with values:', formValues);
       toast({
         title: "Form submitted successfully",
         description: "Your entity information has been registered and saved.",
@@ -60,8 +75,8 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
     }, 1000);
   };
 
-  // Save entity data
-  const saveEntityData = () => {
+  // Save entity data to Supabase
+  const saveEntityData = async () => {
     if (!entityName) {
       toast({
         title: "Error saving entity",
@@ -71,42 +86,80 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
       return;
     }
 
-    const entityToSave: SavedEntity = {
-      name: entityName,
-      data: { ...formValues },
-      formType
-    };
+    try {
+      // Check if entity with this name already exists
+      const { data: existingEntities } = await supabase
+        .from('entities')
+        .select('id')
+        .eq('name', entityName)
+        .maybeSingle();
 
-    const existingIndex = savedEntities.findIndex(entity => entity.name === entityName && entity.formType === formType);
-    let updatedEntities: SavedEntity[];
+      if (existingEntities) {
+        // Update existing entity
+        const { error } = await supabase
+          .from('entities')
+          .update({ 
+            data: formValues,
+            updated_at: new Date().toISOString()
+          })
+          .eq('name', entityName);
 
-    if (existingIndex >= 0) {
-      updatedEntities = [...savedEntities];
-      updatedEntities[existingIndex] = entityToSave;
-    } else {
-      updatedEntities = [...savedEntities, entityToSave];
+        if (error) throw error;
+      } else {
+        // Insert new entity
+        const { error } = await supabase
+          .from('entities')
+          .insert({ 
+            name: entityName, 
+            data: formValues 
+          });
+
+        if (error) throw error;
+      }
+
+      // Refresh the list of saved entities
+      loadSavedEntities();
+
+      toast({
+        title: "Entity saved",
+        description: `Entity "${entityName}" has been saved successfully.`,
+      });
+    } catch (error) {
+      console.error('Error saving entity:', error);
+      toast({
+        title: "Error saving entity",
+        description: "There was a problem saving your entity data.",
+        variant: "destructive",
+      });
     }
-
-    setSavedEntities(updatedEntities);
-    localStorage.setItem(storageKey, JSON.stringify(updatedEntities));
-
-    toast({
-      title: "Entity saved",
-      description: `Entity "${entityName}" has been saved successfully.`,
-    });
   };
 
-  // Handle loading entity
-  const handleLoadEntity = (entityNameToLoad: string) => {
-    const entityToLoad = savedEntities.find(entity => entity.name === entityNameToLoad && entity.formType === formType);
-    
-    if (entityToLoad) {
-      setFormValues(entityToLoad.data);
-      setEntityName(entityToLoad.name);
+  // Handle loading entity from Supabase
+  const handleLoadEntity = async (entityNameToLoad: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('entities')
+        .select('name, data')
+        .eq('name', entityNameToLoad)
+        .maybeSingle();
       
+      if (error) throw error;
+      
+      if (data) {
+        setFormValues(data.data);
+        setEntityName(data.name);
+        
+        toast({
+          title: "Entity loaded",
+          description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error loading entity:', error);
       toast({
-        title: "Entity loaded",
-        description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
+        title: "Error loading entity",
+        description: "There was a problem loading your entity data.",
+        variant: "destructive",
       });
     }
   };
@@ -132,8 +185,7 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
     setEntityName(tempEntityName);
     setIsEditingName(false);
     
-    const fieldId = formType === 'b_01.01' ? 'b_01.01.0020' : 'b_01.02.0020';
-    const normalizedId = fieldId.replace(/\./g, '_');
+    const normalizedId = 'b_01.01.0020'.replace(/\./g, '_');
     setFormValues((prev) => ({
       ...prev,
       [normalizedId]: tempEntityName,
@@ -151,7 +203,6 @@ export function useEntityForm(formType: 'b_01.01' | 'b_01.02' = 'b_01.01') {
     tempEntityName,
     savedEntities,
     submitting,
-    formType,
     setTempEntityName,
     handleFieldChange,
     handleSubmit,
