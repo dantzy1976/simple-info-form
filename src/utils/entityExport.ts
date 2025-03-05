@@ -4,26 +4,36 @@ import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from './excelExport';
 import { SavedEntity } from '@/types/entity.types';
 
-export const handleEntityExport = async (formValues: Record<string, any>) => {
+export const handleEntityExport = async (data: Record<string, any>[] | Record<string, any>) => {
   try {
-    console.log('handleEntityExport - Received values:', formValues);
+    console.log('handleEntityExport - Received data:', data);
     
-    // Check if we have current form values to export
-    if (formValues && Object.keys(formValues).length > 0) {
-      console.log('handleEntityExport - Exporting current form values');
-      
-      // Export the current form values
-      await exportToExcel(formValues);
-      
-      toast({
-        title: "Export successful",
-        description: "Current entity information has been exported to Excel.",
-      });
-      return;
+    // If we received data to export directly
+    if (data) {
+      if (Array.isArray(data) && data.length > 0) {
+        console.log(`handleEntityExport - Exporting array of ${data.length} entities`);
+        await exportToExcel(data);
+        
+        toast({
+          title: "Export successful",
+          description: `All ${data.length} entities have been exported to Excel.`,
+        });
+        return;
+      } else if (!Array.isArray(data) && Object.keys(data).length > 0) {
+        console.log('handleEntityExport - Exporting single entity');
+        await exportToExcel(data);
+        
+        toast({
+          title: "Export successful",
+          description: "Current entity information has been exported to Excel.",
+        });
+        return;
+      }
     }
     
-    // If no current form values, try to export from database
-    const { data, error } = await supabase
+    // If no data provided or empty data, try to load from database
+    console.log('handleEntityExport - No valid data provided, fetching from database');
+    const { data: dbData, error } = await supabase
       .from('entities')
       .select('data');
       
@@ -31,11 +41,11 @@ export const handleEntityExport = async (formValues: Record<string, any>) => {
       throw error;
     }
     
-    if (data && data.length > 0) {
-      console.log('handleEntityExport - Exporting from database:', data);
+    if (dbData && dbData.length > 0) {
+      console.log(`handleEntityExport - Loaded ${dbData.length} entities from database`);
       
       // Extract just the data portion from each entity
-      const allEntityData = data.map(entity => entity.data);
+      const allEntityData = dbData.map(entity => entity.data);
       
       // Export all entity data
       await exportToExcel(allEntityData);

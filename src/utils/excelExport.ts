@@ -78,7 +78,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
   
-  console.log('exportToExcel - Processing data array:', dataArray);
+  console.log('exportToExcel - Processing data array with length:', dataArray.length);
   
   // Add data rows for each entity
   dataArray.forEach((data, index) => {
@@ -98,32 +98,31 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
     Object.keys(data).forEach(key => {
       console.log(`exportToExcel - Processing key "${key}" with value:`, data[key]);
       
-      // Handle keys with underscores that should be dots
-      let normalizedKey = key;
+      // Convert key formats for field matching
+      let columnKey = '';
       
-      // If the key has underscores, try to convert it to the dot format
+      // Handle keys with underscores (from form input)
       if (key.includes('_')) {
-        const potentialDotKey = key.replace(/_/g, '.');
-        
-        // Check if this converted key is one of our expected columns
-        if (Object.keys(normalizedData).includes(potentialDotKey)) {
-          normalizedKey = potentialDotKey;
-        }
+        // Try converting underscores to dots (b_01_01_0010 -> b_01.01.0010)
+        columnKey = key.replace(/(_)(\d+)(_)(\d+)(_)(\d+)/g, '$1$2.$4.$6');
+      } 
+      // Handle direct dot notation keys
+      else if (key.includes('.')) {
+        columnKey = key;
       }
       
+      console.log(`exportToExcel - Converted key "${key}" to "${columnKey}"`);
+      
       // Check if this is one of our expected fields
-      if (Object.keys(normalizedData).includes(normalizedKey)) {
-        normalizedData[normalizedKey] = data[key];
-        console.log(`exportToExcel - Matched field "${normalizedKey}" with value:`, data[key]);
-      } else if (normalizedKey.startsWith('b_')) {
-        // This might be a field with a different format, try to extract the pattern
-        const match = normalizedKey.match(/b_(\d+)_(\d+)_(\d+)/);
-        if (match) {
-          const dotKey = `b_${match[1]}.${match[2]}.${match[3]}`;
-          if (Object.keys(normalizedData).includes(dotKey)) {
-            normalizedData[dotKey] = data[key];
-            console.log(`exportToExcel - Matched field "${dotKey}" from "${normalizedKey}" with value:`, data[key]);
-          }
+      if (columnKey && Object.keys(normalizedData).includes(columnKey)) {
+        normalizedData[columnKey] = data[key];
+        console.log(`exportToExcel - Matched field "${columnKey}" with value:`, data[key]);
+      } else {
+        // Try direct mapping for keys that weren't converted properly
+        const directKey = `b_01.01.${key.split('_').pop()}`;
+        if (Object.keys(normalizedData).includes(directKey)) {
+          normalizedData[directKey] = data[key];
+          console.log(`exportToExcel - Direct matched field "${directKey}" with value:`, data[key]);
         }
       }
     });

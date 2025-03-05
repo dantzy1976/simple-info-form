@@ -12,20 +12,36 @@ interface EntityExportHandlerProps {
 }
 
 const EntityExportHandler = ({ 
+  savedEntities,
   formValues, 
   onSave, 
   submitting 
 }: EntityExportHandlerProps) => {
   const handleExport = () => {
-    console.log('EntityExportHandler - Starting export with values:', formValues);
+    console.log('EntityExportHandler - Starting export with current form values:', formValues);
+    console.log('EntityExportHandler - Total saved entities:', savedEntities.length);
     
-    // Make a deep copy of formValues to prevent reference issues
-    const valuesToExport = JSON.parse(JSON.stringify(formValues));
+    // Make a deep copy of the data to prevent reference issues
+    const entitiesToExport = savedEntities.map(entity => {
+      return JSON.parse(JSON.stringify(entity.data));
+    });
     
-    // Log the exact structure being passed to the export handler
-    console.log('EntityExportHandler - Exporting values:', valuesToExport);
+    // Add current form values if they exist and have content
+    if (formValues && Object.keys(formValues).length > 0) {
+      // Check if this form is already included in saved entities
+      const formEntityName = formValues['b_01_01_0020'] || formValues['b_01.01.0020'];
+      const alreadySaved = savedEntities.some(entity => entity.name === formEntityName);
+      
+      if (!alreadySaved) {
+        console.log('EntityExportHandler - Adding current form to export dataset');
+        entitiesToExport.push(JSON.parse(JSON.stringify(formValues)));
+      }
+    }
     
-    handleEntityExport(valuesToExport);
+    console.log('EntityExportHandler - Exporting all entities data:', entitiesToExport);
+    
+    // Pass the array of all entities to export
+    handleEntityExport(entitiesToExport);
   };
 
   return (
