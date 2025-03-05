@@ -1,21 +1,6 @@
+
 import React from 'react';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Info } from 'lucide-react';
 import { FormField } from '../constants/formConstants';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { countries } from '../constants/formConstants';
 
 interface EntityFormFieldProps {
   field: FormField;
@@ -129,5 +114,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
     </div>
   );
 };
+
+// Import the countries array from formConstants
+import { countries } from '../constants/formConstants';
 
 export default EntityFormField;
