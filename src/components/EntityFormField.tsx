@@ -69,22 +69,45 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
           </select>
         );
       case 'closedOptions':
-        return (
-          <select
-            id={field.id}
-            value={value || ''}
-            onChange={handleChange}
-            className="entity-form-input w-full p-2 border border-gray-300 rounded"
-            required={field.required}
-          >
-            <option value="">Select option</option>
-            {field.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        );
+        if (field.options && Array.isArray(field.options)) {
+          // Check if options are objects with id and label
+          const isObjectOptions = field.options.length > 0 && typeof field.options[0] === 'object';
+          
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select option</option>
+              {isObjectOptions ? (
+                // If options are objects with id and label
+                (field.options as { id: string; label: string }[]).map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))
+              ) : (
+                // If options are strings (legacy format)
+                (field.options as string[]).map((option) => {
+                  // For string format like "eba_RP:x53\tUltimate parent"
+                  const parts = option.split('\t');
+                  const id = parts[0];
+                  const label = parts.length > 1 ? parts[1] : option;
+                  
+                  return (
+                    <option key={id} value={id}>
+                      {label}
+                    </option>
+                  );
+                })
+              )}
+            </select>
+          );
+        }
+        return null;
       case 'date':
         return (
           <input
@@ -106,11 +129,18 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           >
             <option value="">Select currency</option>
-            {field.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
+            {field.options?.map((option) => {
+              // For string format like "eba_CU:EUR\tEuro"
+              const parts = option.toString().split('\t');
+              const id = parts[0];
+              const label = parts.length > 1 ? parts[1] : option;
+              
+              return (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              );
+            })}
           </select>
         );
       case 'monetary':

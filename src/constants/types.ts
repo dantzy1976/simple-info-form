@@ -6,5 +6,5 @@ export interface FormField {
   required: boolean;
   placeholder?: string;
   description?: string;
-  options?: string[];
+  options?: string[] | { id: string; label: string }[];
 }
