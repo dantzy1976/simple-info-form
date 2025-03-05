@@ -86,7 +86,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
                 // If options are objects with id and label
                 (field.options as { id: string; label: string }[]).map((option) => (
                   <option key={option.id} value={option.id}>
-                    {option.label}
+                    {option.id} - {option.label}
                   </option>
                 ))
               ) : (
@@ -99,7 +99,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
                   
                   return (
                     <option key={id} value={id}>
-                      {label}
+                      {id} - {label}
                     </option>
                   );
                 })
@@ -131,13 +131,13 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             <option value="">Select currency</option>
             {field.options?.map((option) => {
               // For string format like "eba_CU:EUR\tEuro"
-              const parts = option.toString().split('\t');
-              const id = parts[0];
-              const label = parts.length > 1 ? parts[1] : option;
+              const parts = typeof option === 'string' ? option.split('\t') : [];
+              const id = typeof option === 'object' ? option.id : parts[0];
+              const label = typeof option === 'object' ? option.label : (parts.length > 1 ? parts[1] : option);
               
               return (
                 <option key={id} value={id}>
-                  {label}
+                  {id} - {label}
                 </option>
               );
             })}

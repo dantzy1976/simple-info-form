@@ -247,7 +247,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       firstFormData['b_01.01.0010'],
       firstFormData['b_01.01.0020'],
       firstFormData['b_01.01.0030'],
-      firstFormData['b_01.01.0040'],
+      firstFormData['b_01.01.0040'], // Keep ID for entity type
       firstFormData['b_01.01.0050'],
       firstFormData['b_01.01.0060']
     ]);
@@ -268,13 +268,13 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       secondFormData['b_01.02.0010'],
       secondFormData['b_01.02.0020'],
       secondFormData['b_01.02.0030'],
-      secondFormData['b_01.02.0040'],
-      secondFormData['b_01.02.0050'],
+      secondFormData['b_01.02.0040'], // Keep ID for entity type
+      secondFormData['b_01.02.0050'], // Keep ID for hierarchy
       secondFormData['b_01.02.0060'],
       secondFormData['b_01.02.0070'],
       secondFormData['b_01.02.0080'],
       secondFormData['b_01.02.0090'],
-      secondFormData['b_01.02.0100'],
+      secondFormData['b_01.02.0100'], // Keep ID for currency
       secondFormData['b_01.02.0110']
     ]);
 
