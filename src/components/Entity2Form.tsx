@@ -8,7 +8,11 @@ import EntitySelectionControls from './EntitySelectionControls';
 import { entity2FormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
-const Entity2Form = () => {
+interface Entity2FormProps {
+  hideControls?: boolean;
+}
+
+const Entity2Form = ({ hideControls = false }: Entity2FormProps) => {
   const {
     formValues,
     entityName,
@@ -36,7 +40,6 @@ const Entity2Form = () => {
     if (!loadedEntity) return null;
     
     // Map fields that have the same meaning but different IDs
-    // For example, map b_01.01.0010 to b_01.02.0010
     const mappedValues = { ...loadedEntity.data };
     
     // Map b_01.01.0010 (LEI) to b_01.02.0010
@@ -75,10 +78,7 @@ const Entity2Form = () => {
     const mappedEntity = await mapForm1FieldsToForm2(entityNameToLoad);
     if (mappedEntity) {
       // Update the form values with the mapped data
-      for (const [key, value] of Object.entries(mappedEntity.data)) {
-        // Use the handleFieldChange to properly set each field
-        handleFieldChange(key.replace(/_/g, '.'), value);
-      }
+      setFormValues(mappedEntity.data);
       setTempEntityName(mappedEntity.name);
       setEntityName(mappedEntity.name);
     }
@@ -89,18 +89,20 @@ const Entity2Form = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
+    <div className="w-full max-w-3xl mx-auto form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-medium text-white">b_01.02</h1>
             <p className="text-blue-100">Enter the details of the entity participating in the central counterparty</p>
             
-            <EntitySelectionControls 
-              savedEntities={savedEntities}
-              onLoadEntity={handleEntity2Load}
-              onNewEntity={handleNewEntity}
-            />
+            {!hideControls && (
+              <EntitySelectionControls 
+                savedEntities={savedEntities}
+                onLoadEntity={handleEntity2Load}
+                onNewEntity={handleNewEntity}
+              />
+            )}
           </div>
         </div>
         

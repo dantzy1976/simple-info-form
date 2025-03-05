@@ -17,9 +17,9 @@ const EntitySelectionControls = ({
   onNewEntity
 }: EntitySelectionControlsProps) => {
   return (
-    <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white/5 rounded-lg mb-6">
+    <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
       <div className="w-full sm:w-auto flex items-center gap-2">
-        {savedEntities.length > 0 && (
+        {savedEntities.length > 0 ? (
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <span className="text-sm font-medium text-white whitespace-nowrap">Load entity:</span>
             <Select
@@ -39,6 +39,8 @@ const EntitySelectionControls = ({
               </SelectContent>
             </Select>
           </div>
+        ) : (
+          <span className="text-sm text-white">No saved entities</span>
         )}
       </div>
       <Button

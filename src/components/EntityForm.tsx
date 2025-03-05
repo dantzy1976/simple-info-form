@@ -8,7 +8,11 @@ import EntitySelectionControls from './EntitySelectionControls';
 import { entityFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 
-const EntityForm = () => {
+interface EntityFormProps {
+  hideControls?: boolean;
+}
+
+const EntityForm = ({ hideControls = false }: EntityFormProps) => {
   const {
     formValues,
     entityName,
@@ -33,18 +37,20 @@ const EntityForm = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
+    <div className="w-full max-w-3xl mx-auto form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-6">
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-medium text-white">b_01.01</h1>
             <p className="text-blue-100">Enter the details of the entity participating in the transaction</p>
             
-            <EntitySelectionControls 
-              savedEntities={savedEntities}
-              onLoadEntity={handleLoadEntity}
-              onNewEntity={handleNewEntity}
-            />
+            {!hideControls && (
+              <EntitySelectionControls 
+                savedEntities={savedEntities}
+                onLoadEntity={handleLoadEntity}
+                onNewEntity={handleNewEntity}
+              />
+            )}
           </div>
         </div>
         
