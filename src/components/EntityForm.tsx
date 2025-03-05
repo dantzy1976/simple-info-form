@@ -4,7 +4,7 @@ import EntityFormField from './EntityFormField';
 import { entityFormFields } from '../constants/formConstants';
 import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from '../utils/excelExport';
-import { Download } from 'lucide-react';
+import { Download, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface FormValues {
@@ -14,7 +14,9 @@ interface FormValues {
 const EntityForm = () => {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
-  const [entityName, setEntityName] = useState("Central Bank");
+  const [entityName, setEntityName] = useState("");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [tempEntityName, setTempEntityName] = useState("");
 
   const handleFieldChange = (id: string, value: any) => {
     // Convert field IDs with dots to underscores for easier handling in export
@@ -22,7 +24,7 @@ const EntityForm = () => {
     
     // If this is the entity name field (b_01.01.0020), update the header
     if (id === 'b_01.01.0020') {
-      setEntityName(value || 'Central Bank');
+      setEntityName(value || '');
     }
     
     setFormValues((prev) => ({
@@ -63,6 +65,27 @@ const EntityForm = () => {
     }
   };
 
+  const handleEditNameClick = () => {
+    setTempEntityName(entityName);
+    setIsEditingName(true);
+  };
+
+  const handleSaveName = () => {
+    setEntityName(tempEntityName);
+    setIsEditingName(false);
+    
+    // Update the form value for entity name field as well
+    const normalizedId = 'b_01.01.0020'.replace(/\./g, '_');
+    setFormValues((prev) => ({
+      ...prev,
+      [normalizedId]: tempEntityName,
+    }));
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingName(false);
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -70,9 +93,49 @@ const EntityForm = () => {
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-medium text-white">b_01.01</h1>
             <p className="text-blue-100">Enter the details of the entity maintaining the register</p>
-            <h2 className="text-xl font-semibold text-white mt-2 border-t border-blue-400 pt-2">
-              {entityName}
-            </h2>
+            
+            <div className="mt-2 border-t border-blue-400 pt-2 flex items-center justify-between">
+              {isEditingName ? (
+                <div className="flex items-center gap-2 w-full">
+                  <input
+                    type="text"
+                    value={tempEntityName}
+                    onChange={(e) => setTempEntityName(e.target.value)}
+                    className="bg-white/10 text-white border border-blue-300 rounded px-2 py-1 w-full"
+                    placeholder="Enter entity name"
+                  />
+                  <Button
+                    size="sm"
+                    className="bg-green-500 hover:bg-green-600 text-white"
+                    onClick={handleSaveName}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-white text-white hover:bg-blue-700"
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-xl font-semibold text-white">
+                    {entityName || 'Enter entity name'}
+                  </h2>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-white text-white hover:bg-blue-700"
+                    onClick={handleEditNameClick}
+                  >
+                    <Pencil size={16} className="mr-1" /> Edit Name
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
         
