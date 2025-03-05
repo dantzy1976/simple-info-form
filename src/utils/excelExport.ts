@@ -155,6 +155,64 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   worksheet2.getRow(1).height = 25;
   worksheet2.getRow(2).height = 40;
   worksheet2.getRow(3).height = 25;
+  
+  // Create the third worksheet for b_01.03 data
+  const worksheet3 = workbook.addWorksheet('Branch Form Data');
+
+  // Define the header structure for the third form
+  worksheet3.columns = [
+    { header: 'b_01.03.0010', key: 'b_01.03.0010', width: 50 },
+    { header: 'b_01.03.0020', key: 'b_01.03.0020', width: 50 },
+    { header: 'b_01.03.0030', key: 'b_01.03.0030', width: 30 },
+    { header: 'b_01.03.0040', key: 'b_01.03.0040', width: 20 },
+  ];
+
+  // Add the second header row with descriptions for third form
+  worksheet3.addRow([
+    'Identification code of the branch',
+    'LEI of the financial entity head office of the branch',
+    'Name of the branch',
+    'Country of the branch'
+  ]);
+
+  // Add the field type row for third form
+  worksheet3.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Country'
+  ]);
+
+  // Format the header rows for third form
+  for (let i = 1; i <= 3; i++) {
+    const row = worksheet3.getRow(i);
+    row.eachCell((cell) => {
+      cell.font = { bold: true };
+      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      
+      // Set background colors based on row
+      if (i === 1) {
+        // Header row - light purple
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFE0D1EB' }
+        };
+      } else if (i === 3) {
+        // Field type row - light yellow
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFF2CC' }
+        };
+      }
+    });
+  }
+
+  // Set row heights for better readability for third form
+  worksheet3.getRow(1).height = 25;
+  worksheet3.getRow(2).height = 40;
+  worksheet3.getRow(3).height = 25;
 
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
@@ -189,6 +247,13 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       'b_01.02.0110': ''
     };
     
+    const thirdFormData = {
+      'b_01.03.0010': '',
+      'b_01.03.0020': '',
+      'b_01.03.0030': '',
+      'b_01.03.0040': ''
+    };
+    
     // Process all keys in the data object
     Object.keys(data).forEach(key => {
       console.log(`exportToExcel - Processing key "${key}" with value:`, data[key]);
@@ -218,6 +283,11 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
         secondFormData[normalizedKey] = data[key];
         console.log(`exportToExcel - Matched second form field "${normalizedKey}" with value:`, data[key]);
       }
+      // Check if this belongs to third form
+      else if (normalizedKey && normalizedKey.includes('01.03') && Object.keys(thirdFormData).includes(normalizedKey)) {
+        thirdFormData[normalizedKey] = data[key];
+        console.log(`exportToExcel - Matched third form field "${normalizedKey}" with value:`, data[key]);
+      }
       // Try direct mapping for keys that weren't converted properly
       else {
         // First form direct mapping
@@ -236,11 +306,20 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
             console.log(`exportToExcel - Direct matched second form field "${directKey}" with value:`, data[key]);
           }
         }
+        // Third form direct mapping
+        else if (key.includes('01_03')) {
+          const directKey = `b_01.03.${key.split('_').pop()}`;
+          if (Object.keys(thirdFormData).includes(directKey)) {
+            thirdFormData[directKey] = data[key];
+            console.log(`exportToExcel - Direct matched third form field "${directKey}" with value:`, data[key]);
+          }
+        }
       }
     });
     
     console.log('exportToExcel - Final normalized data for first form:', firstFormData);
     console.log('exportToExcel - Final normalized data for second form:', secondFormData);
+    console.log('exportToExcel - Final normalized data for third form:', thirdFormData);
     
     // Add the row with explicit field mapping for first form
     const dataRow1 = worksheet1.addRow([
@@ -280,6 +359,25 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
 
     // Style the data row for second form
     dataRow2.eachCell((cell) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'left' };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+    });
+    
+    // Add the row with explicit field mapping for third form
+    const dataRow3 = worksheet3.addRow([
+      thirdFormData['b_01.03.0010'],
+      thirdFormData['b_01.03.0020'],
+      thirdFormData['b_01.03.0030'],
+      thirdFormData['b_01.03.0040'] // Keep ID for country
+    ]);
+
+    // Style the data row for third form
+    dataRow3.eachCell((cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'left' };
       cell.border = {
         top: { style: 'thin' },

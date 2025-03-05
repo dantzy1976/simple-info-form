@@ -5,6 +5,7 @@ import EntityNameEditor from './EntityNameEditor';
 import EntityFormFields from './EntityFormFields';
 import EntityExportHandler from './EntityExportHandler';
 import EntityFormSecond from './EntityFormSecond';
+import EntityFormThird from './EntityFormThird';
 import { entityFormFields } from '../constants/formConstants';
 import { useEntityForm } from '@/hooks/useEntityForm';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -13,6 +14,7 @@ import { Plus, ArrowDown, ArrowUp } from 'lucide-react';
 
 const EntityForm = () => {
   const [showSecondForm, setShowSecondForm] = useState(false);
+  const [showThirdForm, setShowThirdForm] = useState(false);
   
   const {
     formValues,
@@ -97,7 +99,7 @@ const EntityForm = () => {
         </div>
       </div>
       
-      <div className="flex justify-center mb-8">
+      <div className="flex flex-col gap-4 mb-8">
         <Button
           type="button"
           onClick={() => setShowSecondForm(!showSecondForm)}
@@ -115,10 +117,37 @@ const EntityForm = () => {
             </>
           )}
         </Button>
+        
+        {showSecondForm && (
+          <Button
+            type="button"
+            onClick={() => setShowThirdForm(!showThirdForm)}
+            className="bg-purple-500 text-white hover:bg-purple-600 flex items-center gap-2"
+          >
+            {showThirdForm ? (
+              <>
+                <ArrowUp size={16} />
+                Hide Branch Information
+              </>
+            ) : (
+              <>
+                <ArrowDown size={16} />
+                Show Branch Information
+              </>
+            )}
+          </Button>
+        )}
       </div>
       
       {showSecondForm && (
         <EntityFormSecond 
+          formValues={formValues}
+          onChange={handleFieldChange}
+        />
+      )}
+      
+      {showSecondForm && showThirdForm && (
+        <EntityFormThird 
           formValues={formValues}
           onChange={handleFieldChange}
         />
