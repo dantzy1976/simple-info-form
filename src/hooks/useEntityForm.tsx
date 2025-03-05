@@ -124,6 +124,17 @@ export function useEntityForm() {
     handleSaveName(formValues, setFormValues);
   };
 
+  // Update the second form when entityName changes
+  useEffect(() => {
+    if (entityName) {
+      setFormValues(prev => ({
+        ...prev,
+        'b_01_01_0020': entityName,
+        'b_01_02_0020': entityName,
+      }));
+    }
+  }, [entityName]);
+
   return {
     formValues,
     entityName,
