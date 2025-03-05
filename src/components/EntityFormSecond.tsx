@@ -1,7 +1,7 @@
 
 import React from 'react';
 import EntityFormFields from './EntityFormFields';
-import { entityFormFields2 } from '../constants/formConstants';
+import { entityFormFields2 } from '../constants/entityFormFields2';
 import { FormValues } from '@/types/entity.types';
 
 interface EntityFormSecondProps {
