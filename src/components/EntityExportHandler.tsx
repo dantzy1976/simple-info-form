@@ -35,8 +35,8 @@ const EntityExportHandler = ({
       }
       
       if (data && data.length > 0) {
-        // Extract just the data portion from each entity
-        const allEntityData = data.map(entity => entity.data);
+        // Extract just the data portion from each entity and ensure it's properly typed
+        const allEntityData = data.map(entity => entity.data as Record<string, any>);
         
         // Export all entity data
         exportToExcel(allEntityData);

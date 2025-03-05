@@ -2,6 +2,7 @@
 import { useState, useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Json } from '@/integrations/supabase/types';
 
 interface FormValues {
   [key: string]: any;
@@ -32,9 +33,10 @@ export function useEntityForm() {
       }
       
       if (data) {
+        // Convert Json to FormValues by ensuring it's an object
         const entities: SavedEntity[] = data.map(item => ({
           name: item.name,
-          data: item.data
+          data: item.data as FormValues
         }));
         setSavedEntities(entities);
       }
@@ -146,7 +148,8 @@ export function useEntityForm() {
       if (error) throw error;
       
       if (data) {
-        setFormValues(data.data);
+        // Cast the JSON data to FormValues type
+        setFormValues(data.data as FormValues);
         setEntityName(data.name);
         
         toast({
