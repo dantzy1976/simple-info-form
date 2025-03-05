@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
@@ -115,6 +116,24 @@ const EntityForm = () => {
             </>
           )}
         </Button>
+        
+        <Button
+          type="button"
+          onClick={() => setShowThirdForm(!showThirdForm)}
+          className="bg-purple-500 text-white hover:bg-purple-600 flex items-center gap-2"
+        >
+          {showThirdForm ? (
+            <>
+              <ArrowUp size={16} />
+              b_01.03
+            </>
+          ) : (
+            <>
+              <ArrowDown size={16} />
+              b_01.03
+            </>
+          )}
+        </Button>
       </div>
       
       {showSecondForm && (
@@ -124,29 +143,7 @@ const EntityForm = () => {
         />
       )}
       
-      {showSecondForm && (
-        <div className="mt-4 mb-8">
-          <Button
-            type="button"
-            onClick={() => setShowThirdForm(!showThirdForm)}
-            className="bg-purple-500 text-white hover:bg-purple-600 flex items-center gap-2"
-          >
-            {showThirdForm ? (
-              <>
-                <ArrowUp size={16} />
-                b_01.03
-              </>
-            ) : (
-              <>
-                <ArrowDown size={16} />
-                b_01.03
-              </>
-            )}
-          </Button>
-        </div>
-      )}
-      
-      {showSecondForm && showThirdForm && (
+      {showThirdForm && (
         <EntityFormThird 
           formValues={formValues}
           onChange={handleFieldChange}
