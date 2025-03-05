@@ -3,6 +3,7 @@ import React from 'react';
 import { toast } from '@/hooks/use-toast';
 import { exportToExcel } from '../utils/excelExport';
 import EntityFormActions from './EntityFormActions';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SavedEntity {
   name: string;
@@ -22,24 +23,33 @@ const EntityExportHandler = ({
   onSave, 
   submitting 
 }: EntityExportHandlerProps) => {
-  const handleExport = () => {
+  const handleExport = async () => {
     try {
-      // Export all saved entities
-      const allEntityData = savedEntities.map(entity => entity.data);
+      // Get fresh data from Supabase to ensure we have the latest
+      const { data, error } = await supabase
+        .from('entities')
+        .select('data');
+        
+      if (error) {
+        throw error;
+      }
       
-      if (allEntityData.length === 0) {
-        // If no saved entities, export current form values
-        exportToExcel(formValues);
-        toast({
-          title: "Export successful",
-          description: "Current entity information has been exported to Excel.",
-        });
-      } else {
-        // Export all saved entities
+      if (data && data.length > 0) {
+        // Extract just the data portion from each entity
+        const allEntityData = data.map(entity => entity.data);
+        
+        // Export all entity data
         exportToExcel(allEntityData);
         toast({
           title: "Export successful",
           description: `All ${allEntityData.length} entities have been exported to Excel.`,
+        });
+      } else {
+        // If no saved entities in database, export current form values
+        exportToExcel(formValues);
+        toast({
+          title: "Export successful",
+          description: "Current entity information has been exported to Excel.",
         });
       }
     } catch (error) {
