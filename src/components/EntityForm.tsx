@@ -127,11 +127,11 @@ const EntityForm = () => {
                   </h2>
                   <Button
                     size="sm"
-                    variant="outline"
-                    className="border-white text-white hover:bg-blue-700"
+                    variant="secondary"
+                    className="bg-white text-black hover:bg-gray-100 text-xs px-2 py-1 h-7"
                     onClick={handleEditNameClick}
                   >
-                    <Pencil size={16} className="mr-1" /> Edit Name
+                    <Pencil size={14} className="mr-1" /> Edit
                   </Button>
                 </>
               )}
