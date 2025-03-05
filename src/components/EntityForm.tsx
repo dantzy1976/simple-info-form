@@ -42,8 +42,8 @@ const EntityForm = () => {
           {savedEntities.length > 0 && (
             <>
               <label className="text-gray-700 text-sm font-medium">Load saved entity:</label>
-              <Select onValueChange={handleLoadEntity} className="flex-1">
-                <SelectTrigger className="bg-white border-gray-300">
+              <Select onValueChange={handleLoadEntity}>
+                <SelectTrigger className="bg-white border-gray-300 flex-1">
                   <SelectValue placeholder="Select entity" />
                 </SelectTrigger>
                 <SelectContent>
