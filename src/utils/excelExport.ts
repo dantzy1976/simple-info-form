@@ -78,21 +78,36 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   
   // Add data rows for each entity
   dataArray.forEach((data) => {
-    const normalizedData = {};
+    // Create a normalized object to convert underscores back to dots 
+    // and ensure all expected fields are present
+    const normalizedData = {
+      'b_01.01.0010': '',
+      'b_01.01.0020': '',
+      'b_01.01.0030': '',
+      'b_01.01.0040': '',
+      'b_01.01.0050': '',
+      'b_01.01.0060': ''
+    };
     
-    // Normalize the keys - replace underscores with dots for Excel output
+    // Normalize all keys by replacing underscores with dots
     Object.keys(data).forEach(key => {
+      // Convert keys like b_01_01_0010 to b_01.01.0010 format
       const normalizedKey = key.replace(/_/g, '.');
-      normalizedData[normalizedKey] = data[key];
+      
+      // Only process keys that match our expected format
+      if (/^b_\d+\.\d+\.\d+$/.test(normalizedKey)) {
+        normalizedData[normalizedKey] = data[key];
+      }
     });
     
+    // Add the row with explicit field mapping
     const dataRow = worksheet.addRow([
-      normalizedData['b_01.01.0010'] || '',
-      normalizedData['b_01.01.0020'] || '',
-      normalizedData['b_01.01.0030'] || '',
-      normalizedData['b_01.01.0040'] || '',
-      normalizedData['b_01.01.0050'] || '',
-      normalizedData['b_01.01.0060'] || ''
+      normalizedData['b_01.01.0010'],
+      normalizedData['b_01.01.0020'],
+      normalizedData['b_01.01.0030'],
+      normalizedData['b_01.01.0040'],
+      normalizedData['b_01.01.0050'],
+      normalizedData['b_01.01.0060']
     ]);
 
     // Style the data row
