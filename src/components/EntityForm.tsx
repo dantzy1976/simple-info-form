@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import EntityFormHeader from './EntityFormHeader';
 import EntityNameEditor from './EntityNameEditor';
@@ -98,7 +97,7 @@ const EntityForm = () => {
         </div>
       </div>
       
-      <div className="flex flex-col gap-4 mb-8">
+      <div className="flex flex-col gap-4 mb-4">
         <Button
           type="button"
           onClick={() => setShowSecondForm(!showSecondForm)}
@@ -116,7 +115,16 @@ const EntityForm = () => {
             </>
           )}
         </Button>
-        
+      </div>
+      
+      {showSecondForm && (
+        <EntityFormSecond 
+          formValues={formValues}
+          onChange={handleFieldChange}
+        />
+      )}
+      
+      <div className="flex flex-col gap-4 mb-4 mt-4">
         <Button
           type="button"
           onClick={() => setShowThirdForm(!showThirdForm)}
@@ -135,13 +143,6 @@ const EntityForm = () => {
           )}
         </Button>
       </div>
-      
-      {showSecondForm && (
-        <EntityFormSecond 
-          formValues={formValues}
-          onChange={handleFieldChange}
-        />
-      )}
       
       {showThirdForm && (
         <EntityFormThird 
