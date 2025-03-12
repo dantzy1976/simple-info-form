@@ -5,7 +5,7 @@ import { Download, Save } from 'lucide-react';
 
 interface EntityFormActionsProps {
   onExport: () => void;
-  onSave: () => void;
+  onSave: () => boolean | Promise<boolean>;
   submitting: boolean;
 }
 
