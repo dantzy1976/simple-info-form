@@ -1,4 +1,3 @@
-
 import ExcelJS from 'exceljs';
 
 /**
@@ -8,12 +7,14 @@ export const processEntityData = (
   data: Record<string, any>, 
   worksheet1: ExcelJS.Worksheet, 
   worksheet2: ExcelJS.Worksheet, 
-  worksheet3: ExcelJS.Worksheet
+  worksheet3: ExcelJS.Worksheet,
+  providerSheet?: ExcelJS.Worksheet
 ) => {
   // Create normalized objects for each form
   const firstFormData = createEmptyFirstFormData();
   const secondFormData = createEmptySecondFormData();
   const thirdFormData = createEmptyThirdFormData();
+  const providerFormData = createEmptyProviderFormData();
   
   // Process all keys in the data object
   Object.keys(data).forEach(key => {
@@ -25,7 +26,7 @@ export const processEntityData = (
     console.log(`exportToExcel - Converted key "${key}" to "${normalizedKey}"`);
     
     // Assign data to the appropriate form
-    assignDataToForms(normalizedKey, key, data, firstFormData, secondFormData, thirdFormData);
+    assignDataToForms(normalizedKey, key, data, firstFormData, secondFormData, thirdFormData, providerFormData);
   });
   
   console.log('exportToExcel - Final normalized data for first form:', firstFormData);
@@ -36,6 +37,11 @@ export const processEntityData = (
   addDataToWorksheet(worksheet1, firstFormData, Object.keys(firstFormData));
   addDataToWorksheet(worksheet2, secondFormData, Object.keys(secondFormData));
   addDataToWorksheet(worksheet3, thirdFormData, Object.keys(thirdFormData));
+  
+  // Add provider data if provider sheet exists
+  if (providerSheet) {
+    addDataToWorksheet(providerSheet, providerFormData, Object.keys(providerFormData));
+  }
 };
 
 /**
@@ -78,6 +84,15 @@ const createEmptyThirdFormData = () => ({
 });
 
 /**
+ * Helper function to create an empty data object for the provider form
+ */
+const createEmptyProviderFormData = () => ({
+  'b_02.03.0010': '',
+  'b_02.03.0020': '',
+  'b_02.03.0030': 'true'
+});
+
+/**
  * Helper function to normalize keys (convert from form format to export format)
  */
 const normalizeKey = (key: string): string => {
@@ -105,7 +120,8 @@ const assignDataToForms = (
   data: Record<string, any>,
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
-  thirdFormData: Record<string, string>
+  thirdFormData: Record<string, string>,
+  providerFormData?: Record<string, string>
 ) => {
   // Check if this belongs to first form
   if (normalizedKey && normalizedKey.includes('01.01') && Object.keys(firstFormData).includes(normalizedKey)) {
@@ -122,9 +138,14 @@ const assignDataToForms = (
     thirdFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched third form field "${normalizedKey}" with value:`, data[originalKey]);
   }
+  // Check if this belongs to provider form
+  else if (providerFormData && normalizedKey && normalizedKey.includes('02.03') && Object.keys(providerFormData).includes(normalizedKey)) {
+    providerFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched provider form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
   // Try direct mapping for keys that weren't converted properly
   else {
-    tryDirectMapping(originalKey, data, firstFormData, secondFormData, thirdFormData);
+    tryDirectMapping(originalKey, data, firstFormData, secondFormData, thirdFormData, providerFormData);
   }
 };
 
@@ -136,7 +157,8 @@ const tryDirectMapping = (
   data: Record<string, any>,
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
-  thirdFormData: Record<string, string>
+  thirdFormData: Record<string, string>,
+  providerFormData?: Record<string, string>
 ) => {
   // First form direct mapping
   if (key.includes('01_01')) {
@@ -160,6 +182,14 @@ const tryDirectMapping = (
     if (Object.keys(thirdFormData).includes(directKey)) {
       thirdFormData[directKey] = data[key];
       console.log(`exportToExcel - Direct matched third form field "${directKey}" with value:`, data[key]);
+    }
+  }
+  // Provider form direct mapping
+  else if (providerFormData && key.includes('02_03')) {
+    const directKey = `b_02.03.${key.split('_').pop()}`;
+    if (Object.keys(providerFormData).includes(directKey)) {
+      providerFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched provider form field "${directKey}" with value:`, data[key]);
     }
   }
 };

@@ -46,5 +46,10 @@ export interface ProviderFormData {
   b_02_02_0170?: string; // Sensitiveness of the data
   b_02_02_0180?: string; // Level of reliance
   
+  // b_02.03 fields
+  b_02_03_0010?: string; // Contractual arrangement reference number
+  b_02_03_0020?: string; // Contractual arrangement linked to the contractual arrangement referred in RT.02.03.0010
+  b_02_03_0030?: string; // Link
+  
   [key: string]: string | number | boolean | null | undefined; // Allow other properties
 }

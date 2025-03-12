@@ -1,4 +1,3 @@
-
 import ExcelJS from 'exceljs';
 
 /**
@@ -133,6 +132,39 @@ export const createThirdWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksh
 
   // Format the header rows
   formatHeaderRows(worksheet, 'FFE0D1EB'); // Light purple
+
+  return worksheet;
+};
+
+/**
+ * Creates and configures the provider arrangements worksheet
+ */
+export const createProviderArrangementWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Provider Arrangements');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_02.03.0010', key: 'b_02.03.0010', width: 50 },
+    { header: 'b_02.03.0020', key: 'b_02.03.0020', width: 50 },
+    { header: 'b_02.03.0030', key: 'b_02.03.0030', width: 20 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'Contractual arrangement linked to the contractual arrangement referred in RT.02.03.0010',
+    'Link'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Fill with "true" for each populated row'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFB3E5FC'); // Light blue
 
   return worksheet;
 };
