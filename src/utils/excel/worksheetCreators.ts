@@ -404,6 +404,60 @@ export const createIctServicesInfoWorksheet = (workbook: ExcelJS.Workbook): Exce
 };
 
 /**
+ * Creates and configures the Function Information worksheet
+ */
+export const createFunctionInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Function Information');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_06.01.0010', key: 'b_06.01.0010', width: 40 },
+    { header: 'b_06.01.0020', key: 'b_06.01.0020', width: 40 },
+    { header: 'b_06.01.0030', key: 'b_06.01.0030', width: 40 },
+    { header: 'b_06.01.0040', key: 'b_06.01.0040', width: 40 },
+    { header: 'b_06.01.0050', key: 'b_06.01.0050', width: 40 },
+    { header: 'b_06.01.0060', key: 'b_06.01.0060', width: 50 },
+    { header: 'b_06.01.0070', key: 'b_06.01.0070', width: 40 },
+    { header: 'b_06.01.0080', key: 'b_06.01.0080', width: 40 },
+    { header: 'b_06.01.0090', key: 'b_06.01.0090', width: 40 },
+    { header: 'b_06.01.0100', key: 'b_06.01.0100', width: 40 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Function Identifier',
+    'Licenced activity',
+    'Function name',
+    'LEI of the financial entity',
+    'Criticality or importance assessment',
+    'Reasons for criticality or importance',
+    'Date of the last assessment of criticality or importance',
+    'Recovery time objective of the function',
+    'Recovery point objective of the function',
+    'Impact of discontinuing the function'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Pattern',
+    'Closed set of options',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Closed set of options',
+    'Alphanumerical',
+    'Date',
+    'Natural number',
+    'Natural number',
+    'Closed set of options'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFE6E6FA');  // Light purple
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {
