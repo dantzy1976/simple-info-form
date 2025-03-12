@@ -1,6 +1,4 @@
 
-import { Json } from '@/integrations/supabase/types';
-
 export interface FormValues {
   [key: string]: any;
 }

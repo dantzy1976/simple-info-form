@@ -1,6 +1,5 @@
 
-import { FormField } from './types';
-import { countries } from './countries';
+import { FormField } from './formConstants';
 
 // Currency options
 const currencyOptions = [
