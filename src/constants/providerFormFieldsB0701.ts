@@ -1,5 +1,5 @@
-
 import { FormField } from './types';
+import { annexIII } from './annexIII';
 
 /**
  * Provider Form Fields for b_07.01 - ICT Service Provider Assessment
@@ -55,17 +55,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Type of ICT services',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'DATA CENTER OPERATION',
-      'SOFTWARE APPLICATIONS MANAGEMENT',
-      'APPLICATIONS INFRASTRUCTURE MANAGEMENT',
-      'SECURITY OPERATION CENTER',
-      'ENTERPRISE USER MANAGEMENT',
-      'HELP-DESK SERVICES',
-      'BUSINESS CONTINUITY MANAGEMENT',
-      'PAYMENT SERVICES',
-      'OTHER'
-    ],
+    options: annexIII,
     info: {
       title: 'ICT Services Type Information',
       type: 'Closed set of options',

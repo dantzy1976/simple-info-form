@@ -1,5 +1,5 @@
-
 import { FormField } from './types';
+import { annexIII } from './annexIII';
 
 export const providerFormFieldsB0502: FormField[] = [
   {
@@ -21,16 +21,7 @@ export const providerFormFieldsB0502: FormField[] = [
     label: 'Type of ICT services',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Cloud computing services',
-      'Software services',
-      'Hardware services',
-      'Network services',
-      'Data services',
-      'Security services',
-      'Digital payment services',
-      'Other ICT services'
-    ],
+    options: annexIII,
     description: 'Type of ICT services provided',
     info: {
       title: 'ICT Services Type Information',
