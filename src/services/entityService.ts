@@ -7,17 +7,17 @@ export async function loadEntities(): Promise<SavedEntity[]> {
   try {
     const { data, error } = await supabase
       .from('entities')
-      .select('name, data');
+      .select('name, data')
+      .eq('type', 'owner')
+      .order('updated_at', { ascending: false });
     
     if (error) {
       throw error;
     }
     
     if (data) {
-      // Convert Json type to FormValues type
       return data.map(item => ({
         name: item.name,
-        // Ensure data is treated as FormValues (it's a record/object structure)
         data: item.data as FormValues
       }));
     }
@@ -50,6 +50,7 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
       .from('entities')
       .select('id')
       .eq('name', entityName)
+      .eq('type', 'owner')
       .maybeSingle();
 
     if (existingEntities) {
@@ -60,7 +61,8 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
           data: formValues,
           updated_at: new Date().toISOString()
         })
-        .eq('name', entityName);
+        .eq('name', entityName)
+        .eq('type', 'owner');
 
       if (error) throw error;
     } else {
@@ -69,7 +71,8 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
         .from('entities')
         .insert({ 
           name: entityName, 
-          data: formValues 
+          data: formValues,
+          type: 'owner'
         });
 
       if (error) throw error;
@@ -98,6 +101,7 @@ export async function loadEntityByName(entityName: string): Promise<SavedEntity 
       .from('entities')
       .select('name, data')
       .eq('name', entityName)
+      .eq('type', 'owner')
       .maybeSingle();
     
     if (error) throw error;
