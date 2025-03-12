@@ -1,6 +1,15 @@
 import React from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
+import { Info } from 'lucide-react';
+import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface EntityFormFieldProps {
   field: FormField;
@@ -156,13 +165,58 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
     }
   };
 
+  const renderInfoDialog = () => {
+    if (!field.info) return null;
+
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="h-6 w-6 p-0 ml-2"
+          >
+            <Info className="h-4 w-4" />
+            <span className="sr-only">Info</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{field.info.title}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-slate-100">
+                  <th className="border p-2 text-left">Column Code</th>
+                  <th className="border p-2 text-left">Type</th>
+                  <th className="border p-2 text-left">Fill-in Instruction</th>
+                  <th className="border p-2 text-left">Fill-in Option</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border p-2">{field.id}</td>
+                  <td className="border p-2">{field.info.type}</td>
+                  <td className="border p-2">{field.info.instruction}</td>
+                  <td className="border p-2">{field.info.option}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   return (
     <div className="entity-form-field mb-6" style={style}>
       <label htmlFor={field.id} className="entity-form-label flex items-center">
-        <div className="flex-grow">
+        <div className="flex-grow flex items-center">
           <div>
             {field.label} <span className="text-gray-500 text-sm ml-2 font-bold">{field.id}</span>
           </div>
+          {renderInfoDialog()}
         </div>
         <span className="entity-field-type bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">
           {getFieldTypeLabel()}

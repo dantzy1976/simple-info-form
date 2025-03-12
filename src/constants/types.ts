@@ -7,4 +7,10 @@ export interface FormField {
   placeholder?: string;
   description?: string;
   options?: string[] | { id: string; label: string }[];
+  info?: {
+    title: string;
+    instruction: string;
+    type: string;
+    option: string;
+  };
 }

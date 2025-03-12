@@ -1,4 +1,3 @@
-
 import { FormField } from './types';
 import { countries } from './countries';
 
@@ -9,7 +8,13 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     required: true,
     placeholder: 'Enter LEI code',
-    description: 'b_01.01.0010'
+    description: 'b_01.01.0010',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Identify the entity maintaining and updating the register of information using the LEI, 20-character, alpha-numeric code based on the ISO 17442 standard',
+      type: 'Alphanumerical',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.01.0020',
