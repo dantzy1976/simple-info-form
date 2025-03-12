@@ -1,29 +1,6 @@
 
 import { FormField } from './types';
 
-// Currency options
-const currencyOptions = [
-  'EUR\tEuro',
-  'USD\tUS Dollar',
-  'GBP\tBritish Pound',
-  'JPY\tJapanese Yen',
-  'CHF\tSwiss Franc',
-  'CAD\tCanadian Dollar',
-  'AUD\tAustralian Dollar',
-  'CNY\tChinese Yuan',
-  'SEK\tSwedish Krona',
-  'NZD\tNew Zealand Dollar',
-  'MXN\tMexican Peso',
-  'SGD\tSingapore Dollar',
-  'HKD\tHong Kong Dollar',
-  'NOK\tNorwegian Krone',
-  'KRW\tSouth Korean Won',
-  'TRY\tTurkish Lira',
-  'INR\tIndian Rupee',
-  'BRL\tBrazilian Real',
-  'ZAR\tSouth African Rand'
-];
-
 // Contract type options
 const contractTypeOptions = [
   '01\tIT Hardware',
@@ -90,7 +67,6 @@ export const providerFormFieldsB0201: FormField[] = [
     label: 'Currency of the amount reported in RT.02.01.0050',
     fieldType: 'currency',
     required: true,
-    options: currencyOptions,
     description: 'Select the currency for the reported amount',
     info: {
       title: 'Currency Information',

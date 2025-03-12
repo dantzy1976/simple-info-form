@@ -88,15 +88,6 @@ export const providerFormFieldsB0501: FormField[] = [
     label: 'Currency of the amount reported in RT.05.01.0070',
     fieldType: 'currency',
     required: true,
-    options: [
-      'EUR',
-      'USD',
-      'GBP',
-      'JPY',
-      'CHF',
-      'CNY',
-      'OTHER'
-    ],
     description: 'Currency used for the reported cost',
     info: {
       title: 'Currency Information',

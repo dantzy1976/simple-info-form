@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
+import { currencies } from '../constants/currencies';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -134,17 +134,11 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           >
             <option value="">Select currency</option>
-            {field.options?.map((option) => {
-              const parts = typeof option === 'string' ? option.split('\t') : [];
-              const id = typeof option === 'object' ? option.id : parts[0];
-              const label = typeof option === 'object' ? option.label : (parts.length > 1 ? parts[1] : option);
-              
-              return (
-                <option key={id} value={id}>
-                  {id} - {label}
-                </option>
-              );
-            })}
+            {currencies.map((currency) => (
+              <option key={currency.id} value={currency.id}>
+                {currency.id} - {currency.label}
+              </option>
+            ))}
           </select>
         );
       case 'monetary':
