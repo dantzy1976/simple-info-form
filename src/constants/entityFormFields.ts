@@ -1,3 +1,4 @@
+
 import { FormField } from './types';
 import { countries } from './countries';
 
@@ -22,14 +23,27 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     required: true,
     placeholder: 'Enter entity name',
-    description: 'b_01.01.0020'
+    description: 'b_01.01.0020',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Legal name of the entity maintaining and updating the register of information',
+      type: 'Alphanumerical',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.01.0030',
     label: 'Country of the entity',
     fieldType: 'country',
     required: true,
-    description: 'b_01.01.0030'
+    description: 'b_01.01.0030',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Identify the ISO 3166–1 alpha–2 code of the country where the license or the registration of the entity reported in the Register on Information has been issued.',
+      type: 'Country',
+      option: 'Mandatory',
+      reference: 'LISTCOUNTRY'
+    }
   },
   {
     id: 'b_01.01.0040',
@@ -37,6 +51,13 @@ export const entityFormFields: FormField[] = [
     fieldType: 'closedOptions',
     required: true,
     description: 'b_01.01.0040',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Identify the type of entity using one of the options in the corresponding dropdown list',
+      type: 'Closed set of options',
+      option: 'Mandatory',
+      reference: 'LIST0101040'
+    },
     options: [
       { id: 'eba_CT:x12', label: 'Credit institutions' },
       { id: 'eba_CT:x599', label: 'Investment firms' },
@@ -69,13 +90,25 @@ export const entityFormFields: FormField[] = [
     fieldType: 'alphanumerical',
     required: true,
     placeholder: 'Enter authority name',
-    description: 'b_01.01.0050'
+    description: 'b_01.01.0050',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Identify the competent authority according to Article 46 of Regulation (EU) 2022/2554 to which the register of information is reported.',
+      type: 'Alphanumerical',
+      option: 'Mandatory in case of reporting'
+    }
   },
   {
     id: 'b_01.01.0060',
     label: 'Date of the reporting',
     fieldType: 'date',
     required: true,
-    description: 'b_01.01.0060'
+    description: 'b_01.01.0060',
+    info: {
+      title: 'TEMPLATE RT.01.01: Entity maintaining the register of information',
+      instruction: 'Identify the ISO 8601 (yyyy–mm–dd) code of the date of reporting',
+      type: 'Date',
+      option: 'Mandatory in case of reporting'
+    }
   }
 ];

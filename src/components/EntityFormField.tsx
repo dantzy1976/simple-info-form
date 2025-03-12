@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
@@ -177,6 +178,9 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               <th className="border p-2 text-left">Type</th>
               <th className="border p-2 text-left">Fill-in Instruction</th>
               <th className="border p-2 text-left">Fill-in Option</th>
+              {field.info.reference && (
+                <th className="border p-2 text-left">Drop down reference</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -185,6 +189,9 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               <td className="border p-2">{field.info.type}</td>
               <td className="border p-2">{field.info.instruction}</td>
               <td className="border p-2">{field.info.option}</td>
+              {field.info.reference && (
+                <td className="border p-2">{field.info.reference}</td>
+              )}
             </tr>
           </tbody>
         </table>
