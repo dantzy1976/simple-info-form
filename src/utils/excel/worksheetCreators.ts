@@ -272,6 +272,42 @@ export const createIctEntityProviderWorksheet = (workbook: ExcelJS.Workbook): Ex
 };
 
 /**
+ * Creates and configures the entity using ICT services worksheet
+ */
+export const createEntityUsingIctServicesWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Entity Using ICT Services');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_04.01.0010', key: 'b_04.01.0010', width: 50 },
+    { header: 'b_04.01.0020', key: 'b_04.01.0020', width: 50 },
+    { header: 'b_04.01.0030', key: 'b_04.01.0030', width: 50 },
+    { header: 'b_04.01.0040', key: 'b_04.01.0040', width: 30 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'LEI of the entity making use of the ICT service(s)',
+    'Nature of the entity making use of the ICT service(s)',
+    'Identification code of the branch'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Closed set of options',
+    'Alphanumerical'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFD8F8E0');  // Light green
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {

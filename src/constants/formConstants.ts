@@ -10,4 +10,5 @@ export { providerFormFieldsB0203 } from './providerFormFields3';
 export { providerFormFieldsB0301 } from './providerFormFieldsB0301';
 export { providerFormFieldsB0302 } from './providerFormFieldsB0302';
 export { providerFormFieldsB0303 } from './providerFormFieldsB0303';
+export { providerFormFieldsB0401 } from './providerFormFieldsB0401';
 export { countries } from './countries';

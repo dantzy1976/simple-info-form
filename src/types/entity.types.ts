@@ -56,5 +56,22 @@ export interface ProviderFormData {
   b_03_01_0020?: string; // LEI of the entity signing the contractual arrangement
   b_03_01_0030?: string; // Link
   
+  // b_03.02 fields
+  b_03_02_0010?: string; // Contractual arrangement reference number
+  b_03_02_0020?: string; // Identification code of ICT third-party service provider
+  b_03_02_0030?: string; // Type of code to identify the ICT third-party service provider
+  b_03_02_0045?: string; // Link
+  
+  // b_03.03 fields
+  b_03_03_0010?: string; // Contractual arrangement reference number
+  b_03_03_0020?: string; // LEI of the entity providing ICT services
+  b_03_03_0031?: string; // Link
+  
+  // b_04.01 fields
+  b_04_01_0010?: string; // Contractual arrangement reference number
+  b_04_01_0020?: string; // LEI of the entity making use of the ICT service(s)
+  b_04_01_0030?: string; // Nature of the entity making use of the ICT service(s)
+  b_04_01_0040?: string; // Identification code of the branch
+  
   [key: string]: string | number | boolean | null | undefined; // Allow other properties
 }
