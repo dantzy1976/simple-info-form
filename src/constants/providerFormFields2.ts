@@ -1,4 +1,5 @@
 import { FormField } from './types';
+import { binaryOptions } from './binaryOptions';
 
 // Service type options
 const serviceTypeOptions = [
@@ -264,7 +265,7 @@ export const providerFormFieldsB0202: FormField[] = [
     label: 'Storage of data',
     fieldType: 'closedOptions',
     required: true,
-    options: ['Yes', 'No'],
+    options: binaryOptions,
     description: 'Whether data is stored by the service provider',
     info: {
       title: 'Data Storage Information',

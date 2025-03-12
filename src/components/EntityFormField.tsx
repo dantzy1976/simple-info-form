@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
 import { currencies } from '../constants/currencies';
 import { annexIII } from '../constants/annexIII';
+import { binaryOptions } from '../constants/binaryOptions';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -95,7 +95,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {isObjectOptions ? (
                 (field.options as { id: string; label: string }[]).map((option) => (
                   <option key={option.id} value={option.id}>
-                    {option.id} - {option.label}
+                    {option.label}
                   </option>
                 ))
               ) : (
@@ -106,7 +106,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
                   
                   return (
                     <option key={id} value={id}>
-                      {id} - {label}
+                      {label}
                     </option>
                   );
                 })

@@ -1,9 +1,7 @@
 import { FormField } from './types';
 import { annexIII } from './annexIII';
+import { binaryOptions } from './binaryOptions';
 
-/**
- * Provider Form Fields for b_07.01 - ICT Service Provider Assessment
- */
 export const providerFormFieldsB0701: FormField[] = [
   {
     id: 'b_07.01.0010',
@@ -120,10 +118,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Existence of an exit plan',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Yes',
-      'No'
-    ],
+    options: binaryOptions,
     info: {
       title: 'Exit Plan Information',
       type: '[Yes/No]',
