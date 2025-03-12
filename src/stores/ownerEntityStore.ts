@@ -2,7 +2,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { FormValues, SavedEntity } from '@/types/entity.types';
-import { loadEntities, saveEntity, loadEntityByName as loadEntityByNameService } from '@/services/entityService';
 
 interface OwnerEntityState {
   formValues: FormValues;
@@ -20,10 +19,10 @@ interface OwnerEntityState {
   setSavedEntities: (entities: SavedEntity[]) => void;
   
   // Operations
-  loadSavedEntities: () => Promise<void>;
-  loadEntityByName: (entityName: string) => Promise<void>;
+  loadSavedEntities: () => void;
+  loadEntityByName: (entityName: string) => void;
   createNewEntity: () => void;
-  saveEntityData: () => Promise<boolean>;
+  saveEntityData: () => boolean;
   handleEditNameClick: () => void;
   handleSaveName: () => void;
   handleCancelEdit: () => void;
@@ -83,13 +82,15 @@ export const useOwnerEntityStore = create<OwnerEntityState>()(
       setTempEntityName: (name) => set({ tempEntityName: name }),
       setSavedEntities: (entities) => set({ savedEntities: entities }),
       
-      loadSavedEntities: async () => {
-        const entities = await loadEntities();
-        set({ savedEntities: entities });
+      loadSavedEntities: () => {
+        // No need to load from anywhere - the persisted state is already loaded
+        // This is just kept for API compatibility
       },
       
-      loadEntityByName: async (entityNameToLoad) => {
-        const entity = await loadEntityByNameService(entityNameToLoad);
+      loadEntityByName: (entityNameToLoad) => {
+        const { savedEntities } = get();
+        const entity = savedEntities.find(entity => entity.name === entityNameToLoad);
+        
         if (entity) {
           set({ 
             formValues: entity.data,
@@ -105,13 +106,38 @@ export const useOwnerEntityStore = create<OwnerEntityState>()(
         });
       },
       
-      saveEntityData: async () => {
-        const { entityName, formValues } = get();
-        const success = await saveEntity(entityName, formValues);
-        if (success) {
-          await get().loadSavedEntities();
+      saveEntityData: () => {
+        try {
+          const { entityName, formValues, savedEntities } = get();
+          
+          if (!entityName) {
+            return false;
+          }
+
+          // Check if entity with this name already exists
+          const existingEntityIndex = savedEntities.findIndex(entity => entity.name === entityName);
+          const updatedEntities = [...savedEntities];
+          
+          if (existingEntityIndex >= 0) {
+            // Update existing entity
+            updatedEntities[existingEntityIndex] = {
+              name: entityName,
+              data: { ...formValues }
+            };
+          } else {
+            // Add new entity
+            updatedEntities.push({
+              name: entityName,
+              data: { ...formValues }
+            });
+          }
+          
+          set({ savedEntities: updatedEntities });
+          return true;
+        } catch (error) {
+          console.error('Error saving entity data:', error);
+          return false;
         }
-        return success;
       },
       
       handleEditNameClick: () => {

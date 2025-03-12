@@ -24,5 +24,5 @@ export interface ProviderFormData {
   b_02_01_0030?: string; // Overarching contractual arrangement reference number
   b_02_01_0040?: string; // Currency
   b_02_01_0050?: string | number; // Annual expense or estimated cost
-  [key: string]: any; // Allow other properties
+  [key: string]: string | number | boolean | null | undefined; // Allow other properties
 }

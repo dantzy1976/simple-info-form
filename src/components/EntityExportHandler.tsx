@@ -6,8 +6,8 @@ import { SavedEntity } from '@/types/entity.types';
 
 interface EntityExportHandlerProps {
   savedEntities: SavedEntity[];
-  formValues: Record<string, any>;
-  onSave: () => void;
+  formValues: Record<string, string | number | boolean | null | undefined>;
+  onSave: () => boolean | Promise<boolean>;
   submitting: boolean;
 }
 

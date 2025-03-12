@@ -21,15 +21,12 @@ const OwnerEntityForms = () => {
     entityName,
     savedEntities,
     setEntityName,
-    loadSavedEntities,
     loadEntityByName,
     createNewEntity,
     saveEntityData
   } = useOwnerEntityStore();
   
-  useEffect(() => {
-    loadSavedEntities();
-  }, []);
+  // No need to load entities on mount as they're already available via zustand
 
   const handleNewEntity = () => {
     createNewEntity();

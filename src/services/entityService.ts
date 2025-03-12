@@ -1,28 +1,14 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import { SavedEntity, FormValues } from '@/types/entity.types';
 import { toast } from '@/hooks/use-toast';
+import { SavedEntity, FormValues } from '@/types/entity.types';
+import { useOwnerEntityStore } from '@/stores/ownerEntityStore';
 
+// Local storage implementation that will replace Supabase
 export async function loadEntities(): Promise<SavedEntity[]> {
   try {
-    const { data, error } = await supabase
-      .from('entities')
-      .select('name, data')
-      .eq('type', 'owner')
-      .order('updated_at', { ascending: false });
-    
-    if (error) {
-      throw error;
-    }
-    
-    if (data) {
-      return data.map(item => ({
-        name: item.name,
-        data: item.data as Record<string, any>
-      }));
-    }
-    
-    return [];
+    // Get entities directly from Zustand store
+    const savedEntities = useOwnerEntityStore.getState().savedEntities;
+    return savedEntities;
   } catch (error) {
     console.error('Error loading entities:', error);
     toast({
@@ -45,37 +31,29 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
   }
 
   try {
+    // Get current state from Zustand
+    const { savedEntities, setSavedEntities } = useOwnerEntityStore.getState();
+    
     // Check if entity with this name already exists
-    const { data: existingEntities } = await supabase
-      .from('entities')
-      .select('id')
-      .eq('name', entityName)
-      .eq('type', 'owner')
-      .maybeSingle();
-
-    if (existingEntities) {
+    const existingEntityIndex = savedEntities.findIndex(entity => entity.name === entityName);
+    
+    if (existingEntityIndex >= 0) {
       // Update existing entity
-      const { error } = await supabase
-        .from('entities')
-        .update({ 
-          data: formValues,
-          updated_at: new Date().toISOString()
-        })
-        .eq('name', entityName)
-        .eq('type', 'owner');
-
-      if (error) throw error;
+      const updatedEntities = [...savedEntities];
+      updatedEntities[existingEntityIndex] = {
+        name: entityName,
+        data: { ...formValues }
+      };
+      
+      setSavedEntities(updatedEntities);
     } else {
       // Insert new entity
-      const { error } = await supabase
-        .from('entities')
-        .insert({ 
-          name: entityName, 
-          data: formValues,
-          type: 'owner'
-        });
-
-      if (error) throw error;
+      const newEntity: SavedEntity = {
+        name: entityName,
+        data: { ...formValues }
+      };
+      
+      setSavedEntities([...savedEntities, newEntity]);
     }
 
     toast({
@@ -97,19 +75,16 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
 
 export async function loadEntityByName(entityName: string): Promise<SavedEntity | null> {
   try {
-    const { data, error } = await supabase
-      .from('entities')
-      .select('name, data')
-      .eq('name', entityName)
-      .eq('type', 'owner')
-      .maybeSingle();
+    // Get entities from Zustand store
+    const { savedEntities } = useOwnerEntityStore.getState();
     
-    if (error) throw error;
+    // Find entity by name
+    const entity = savedEntities.find(entity => entity.name === entityName);
     
-    if (data) {
+    if (entity) {
       return {
-        name: data.name,
-        data: data.data as FormValues
+        name: entity.name,
+        data: entity.data
       };
     }
     
