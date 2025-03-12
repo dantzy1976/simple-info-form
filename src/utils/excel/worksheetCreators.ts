@@ -458,6 +458,66 @@ export const createFunctionInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS
 };
 
 /**
+ * Creates and configures the ICT Service Provider Assessment worksheet
+ */
+export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('ICT Service Provider Assessment');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_07.01.0010', key: 'b_07.01.0010', width: 50 },
+    { header: 'b_07.01.0020', key: 'b_07.01.0020', width: 50 },
+    { header: 'b_07.01.0030', key: 'b_07.01.0030', width: 40 },
+    { header: 'b_07.01.0040', key: 'b_07.01.0040', width: 40 },
+    { header: 'b_07.01.0050', key: 'b_07.01.0050', width: 40 },
+    { header: 'b_07.01.0060', key: 'b_07.01.0060', width: 60 },
+    { header: 'b_07.01.0070', key: 'b_07.01.0070', width: 40 },
+    { header: 'b_07.01.0080', key: 'b_07.01.0080', width: 30 },
+    { header: 'b_07.01.0090', key: 'b_07.01.0090', width: 40 },
+    { header: 'b_07.01.0100', key: 'b_07.01.0100', width: 40 },
+    { header: 'b_07.01.0110', key: 'b_07.01.0110', width: 40 },
+    { header: 'b_07.01.0120', key: 'b_07.01.0120', width: 50 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'Identification code of the ICT third-party service provider',
+    'Type of code to identify the ICT third-party service provider',
+    'Type of ICT services',
+    'Substitutability of the ICT third-party service provider',
+    'Reason if the ICT third-party service provider is considered not substitutable or difficult to be substitutable',
+    'Date of the last audit on the ICT third-party service provider',
+    'Existence of an exit plan',
+    'Possibility of reintegration of the contracted ICT service',
+    'Impact of discontinuing the ICT services',
+    'Are there alternative ICT third-party service providers identified?',
+    'Identification of alternative ICT TPP'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Pattern',
+    'Closed set of options',
+    'Closed set of options',
+    'Closed set of options',
+    'Date',
+    'Yes/No',
+    'Closed set of options',
+    'Closed set of options',
+    'Closed set of options',
+    'Alphanumerical'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFD8EFDB');  // Light green
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {

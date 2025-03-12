@@ -13,7 +13,8 @@ import {
   createEntityUsingIctServicesWorksheet,
   createIctThirdPartyProviderInfoWorksheet,
   createIctServicesInfoWorksheet,
-  createFunctionInfoWorksheet
+  createFunctionInfoWorksheet,
+  createIctServiceProviderAssessmentWorksheet
 } from './worksheetCreators';
 import { processEntityData } from './dataProcessor';
 
@@ -42,6 +43,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   const ictThirdPartyProviderInfoSheet = createIctThirdPartyProviderInfoWorksheet(workbook);
   const ictServicesInfoSheet = createIctServicesInfoWorksheet(workbook);
   const functionInfoSheet = createFunctionInfoWorksheet(workbook);
+  const ictServiceProviderAssessmentSheet = createIctServiceProviderAssessmentWorksheet(workbook);
   
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
@@ -63,7 +65,8 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       entityUsingIctServicesSheet,
       ictThirdPartyProviderInfoSheet,
       ictServicesInfoSheet,
-      functionInfoSheet
+      functionInfoSheet,
+      ictServiceProviderAssessmentSheet
     );
   });
 
