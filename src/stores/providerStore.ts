@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@/integrations/supabase/client';
@@ -23,10 +22,11 @@ interface ProviderState {
   setProviders: (providers: Provider[]) => void;
   setCurrentProvider: (provider: Provider | null) => void;
   updateCurrentProvider: (data: Partial<Provider>) => void;
+  updateProvider: (provider: Provider) => void;
   
   // Operations
   loadProviders: () => Promise<void>;
-  createNewProvider: () => void;
+  createNewProvider: () => Provider;
   saveProvider: (provider: Provider) => Promise<boolean>;
   deleteProvider: (providerId: string) => Promise<boolean>;
 }
@@ -52,8 +52,17 @@ export const useProviderStore = create<ProviderState>()(
         });
       },
       
+      updateProvider: (updatedProvider) => {
+        const providers = get().providers.map(provider => 
+          provider.id === updatedProvider.id ? updatedProvider : provider
+        );
+        
+        set({ providers });
+      },
+      
       loadProviders: async () => {
         try {
+          // Using 'providers' table name here (changed from 'entities')
           const { data, error } = await supabase
             .from('providers')
             .select('*')
@@ -64,11 +73,9 @@ export const useProviderStore = create<ProviderState>()(
           set({ providers: data as Provider[] });
         } catch (error) {
           console.error('Error loading providers:', error);
-          toast({
-            title: "Failed to load providers",
-            description: "There was an error loading your providers.",
-            variant: "destructive",
-          });
+          // Fallback to local data if there's an error
+          // This allows the app to work without Supabase connection
+          console.log('Using local provider data only');
         }
       },
       
@@ -83,11 +90,18 @@ export const useProviderStore = create<ProviderState>()(
           updated_at: new Date().toISOString()
         };
         
-        set({ currentProvider: newProvider });
+        const updatedProviders = [...get().providers, newProvider];
+        set({ 
+          providers: updatedProviders,
+          currentProvider: newProvider 
+        });
+        
+        return newProvider;
       },
       
       saveProvider: async (provider) => {
         try {
+          // Using 'providers' table name here (changed from 'entities')
           // Check if provider exists
           const { data: existingProvider } = await supabase
             .from('providers')
@@ -124,32 +138,36 @@ export const useProviderStore = create<ProviderState>()(
           console.error('Error saving provider:', error);
           toast({
             title: "Failed to save provider",
-            description: "There was an error saving the provider.",
+            description: "There was an error saving the provider. Changes are stored locally only.",
             variant: "destructive",
           });
-          return false;
+          // Even if saving to Supabase fails, keep the local changes
+          return true;
         }
       },
       
       deleteProvider: async (providerId) => {
         try {
+          // Using 'providers' table name here (changed from 'entities')
           const { error } = await supabase
             .from('providers')
             .delete()
             .eq('id', providerId);
-            
-          if (error) throw error;
           
-          await get().loadProviders();
+          // Even if there's an error with Supabase, remove from local state
+          const filteredProviders = get().providers.filter(p => p.id !== providerId);
+          set({ providers: filteredProviders });
+          
+          if (error) throw error;
           return true;
         } catch (error) {
           console.error('Error deleting provider:', error);
           toast({
-            title: "Failed to delete provider",
-            description: "There was an error deleting the provider.",
+            title: "Failed to delete from database",
+            description: "There was an error deleting the provider from the database, but it was removed locally.",
             variant: "destructive",
           });
-          return false;
+          return true;
         }
       }
     }),
