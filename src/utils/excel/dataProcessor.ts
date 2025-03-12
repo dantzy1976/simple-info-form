@@ -10,7 +10,8 @@ export const processEntityData = (
   worksheet3: ExcelJS.Worksheet,
   providerSheet?: ExcelJS.Worksheet,
   entitySigningSheet?: ExcelJS.Worksheet,
-  ictProviderSheet?: ExcelJS.Worksheet
+  ictProviderSheet?: ExcelJS.Worksheet,
+  ictEntityProviderSheet?: ExcelJS.Worksheet
 ) => {
   // Create normalized objects for each form
   const firstFormData = createEmptyFirstFormData();
@@ -19,6 +20,7 @@ export const processEntityData = (
   const providerFormData = createEmptyProviderFormData();
   const entitySigningFormData = createEmptyEntitySigningFormData();
   const ictProviderFormData = createEmptyIctProviderFormData();
+  const ictEntityProviderFormData = createEmptyIctEntityProviderFormData();
   
   // Process all keys in the data object
   Object.keys(data).forEach(key => {
@@ -39,7 +41,8 @@ export const processEntityData = (
       thirdFormData, 
       providerFormData, 
       entitySigningFormData,
-      ictProviderFormData
+      ictProviderFormData,
+      ictEntityProviderFormData
     );
   });
   
@@ -65,6 +68,11 @@ export const processEntityData = (
   // Add ICT provider data if ICT provider sheet exists
   if (ictProviderSheet) {
     addDataToWorksheet(ictProviderSheet, ictProviderFormData, Object.keys(ictProviderFormData));
+  }
+  
+  // Add ICT entity provider data if ICT entity provider sheet exists
+  if (ictEntityProviderSheet) {
+    addDataToWorksheet(ictEntityProviderSheet, ictEntityProviderFormData, Object.keys(ictEntityProviderFormData));
   }
 };
 
@@ -136,6 +144,15 @@ const createEmptyIctProviderFormData = () => ({
 });
 
 /**
+ * Helper function to create an empty data object for the ICT entity provider form
+ */
+const createEmptyIctEntityProviderFormData = () => ({
+  'b_03.03.0010': '',
+  'b_03.03.0020': '',
+  'b_03.03.0031': 'true'
+});
+
+/**
  * Helper function to normalize keys (convert from form format to export format)
  */
 const normalizeKey = (key: string): string => {
@@ -166,7 +183,8 @@ const assignDataToForms = (
   thirdFormData: Record<string, string>,
   providerFormData?: Record<string, string>,
   entitySigningFormData?: Record<string, string>,
-  ictProviderFormData?: Record<string, string>
+  ictProviderFormData?: Record<string, string>,
+  ictEntityProviderFormData?: Record<string, string>
 ) => {
   // Check if this belongs to first form
   if (normalizedKey && normalizedKey.includes('01.01') && Object.keys(firstFormData).includes(normalizedKey)) {
@@ -198,6 +216,11 @@ const assignDataToForms = (
     ictProviderFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT provider form field "${normalizedKey}" with value:`, data[originalKey]);
   }
+  // Check if this belongs to ICT entity provider form
+  else if (ictEntityProviderFormData && normalizedKey && normalizedKey.includes('03.03') && Object.keys(ictEntityProviderFormData).includes(normalizedKey)) {
+    ictEntityProviderFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched ICT entity provider form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
   // Try direct mapping for keys that weren't converted properly
   else {
     tryDirectMapping(
@@ -208,7 +231,8 @@ const assignDataToForms = (
       thirdFormData, 
       providerFormData, 
       entitySigningFormData,
-      ictProviderFormData
+      ictProviderFormData,
+      ictEntityProviderFormData
     );
   }
 };
@@ -224,7 +248,8 @@ const tryDirectMapping = (
   thirdFormData: Record<string, string>,
   providerFormData?: Record<string, string>,
   entitySigningFormData?: Record<string, string>,
-  ictProviderFormData?: Record<string, string>
+  ictProviderFormData?: Record<string, string>,
+  ictEntityProviderFormData?: Record<string, string>
 ) => {
   // First form direct mapping
   if (key.includes('01_01')) {
@@ -272,6 +297,14 @@ const tryDirectMapping = (
     if (Object.keys(ictProviderFormData).includes(directKey)) {
       ictProviderFormData[directKey] = data[key];
       console.log(`exportToExcel - Direct matched ICT provider form field "${directKey}" with value:`, data[key]);
+    }
+  }
+  // ICT entity provider form direct mapping
+  else if (ictEntityProviderFormData && key.includes('03_03')) {
+    const directKey = `b_03.03.${key.split('_').pop()}`;
+    if (Object.keys(ictEntityProviderFormData).includes(directKey)) {
+      ictEntityProviderFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched ICT entity provider form field "${directKey}" with value:`, data[key]);
     }
   }
 };

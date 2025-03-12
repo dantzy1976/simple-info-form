@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import ProviderFormB0202 from './ProviderFormB0202';
 import ProviderFormB0203 from './ProviderFormB0203';
 import ProviderFormB0301 from './ProviderFormB0301';
 import ProviderFormB0302 from './ProviderFormB0302';
+import ProviderFormB0303 from './ProviderFormB0303';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
@@ -141,6 +143,7 @@ const ProviderEditor = ({ providerId }: { providerId: string }) => {
       <ProviderFormB0203 providerId={providerId} />
       <ProviderFormB0301 providerId={providerId} />
       <ProviderFormB0302 providerId={providerId} />
+      <ProviderFormB0303 providerId={providerId} />
     </div>
   );
 };

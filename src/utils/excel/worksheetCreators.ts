@@ -239,6 +239,39 @@ export const createIctProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.
 };
 
 /**
+ * Creates and configures the entity providing ICT services worksheet
+ */
+export const createIctEntityProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Entity Providing ICT Services');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_03.03.0010', key: 'b_03.03.0010', width: 50 },
+    { header: 'b_03.03.0020', key: 'b_03.03.0020', width: 50 },
+    { header: 'b_03.03.0031', key: 'b_03.03.0031', width: 20 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'LEI of the entity providing ICT services',
+    'Link'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Fill with "true" for each populated row'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFD1F0FF');  // Light blue-purple
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {
