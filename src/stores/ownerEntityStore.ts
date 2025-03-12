@@ -22,7 +22,7 @@ interface OwnerEntityState {
   loadSavedEntities: () => void;
   loadEntityByName: (entityName: string) => void;
   createNewEntity: () => void;
-  saveEntityData: () => boolean;
+  saveEntityData: () => boolean; // Ensure this returns boolean
   handleEditNameClick: () => void;
   handleSaveName: () => void;
   handleCancelEdit: () => void;

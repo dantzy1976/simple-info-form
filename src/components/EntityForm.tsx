@@ -38,13 +38,12 @@ const EntityForm = () => {
     loadSavedEntities();
   }, []);
 
-  // Create a wrapper function that ensures saveEntityData returns a boolean or Promise<boolean>
+  // Modified to explicitly return a boolean
   const handleSaveEntity = () => {
     const result = saveEntityData();
-    // Ensure the return type matches what EntityExportHandler expects
-    return result === undefined ? true : result;
+    return result;
   };
-
+  
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12 form-container">
       <div className="mb-4 flex items-center justify-between gap-4 bg-slate-100 p-4 rounded-lg">

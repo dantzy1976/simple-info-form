@@ -1,14 +1,19 @@
-
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { FormValues, SavedEntity } from '@/types/entity.types';
-import { loadEntities, saveEntity, loadEntityByName } from '@/services/entityService';
 import { useEntityName } from '@/hooks/useEntityName';
+import { useOwnerEntityStore } from '@/stores/ownerEntityStore';
 
 export function useEntityForm() {
   const [formValues, setFormValues] = useState<FormValues>({});
   const [submitting, setSubmitting] = useState(false);
   const [savedEntities, setSavedEntities] = useState<SavedEntity[]>([]);
+  
+  // Get store methods
+  const storeFormValues = useOwnerEntityStore(state => state.formValues);
+  const storeSavedEntities = useOwnerEntityStore(state => state.savedEntities);
+  const storeSetFormValues = useOwnerEntityStore(state => state.setFormValues);
+  const storeSaveEntityData = useOwnerEntityStore(state => state.saveEntityData);
   
   const {
     entityName,
@@ -21,11 +26,11 @@ export function useEntityForm() {
     handleCancelEdit
   } = useEntityName();
 
-  // Load saved entities from Supabase
-  const loadSavedEntities = useCallback(async () => {
-    const entities = await loadEntities();
-    setSavedEntities(entities);
-  }, []);
+  // Load saved entities from store
+  const loadSavedEntities = useCallback(() => {
+    setSavedEntities(storeSavedEntities);
+    return true;
+  }, [storeSavedEntities]);
 
   // Handle field changes
   const handleFieldChange = (id: string, value: any) => {
@@ -101,12 +106,13 @@ export function useEntityForm() {
     }, 1000);
   };
 
-  // Save entity data to Supabase
-  const saveEntityData = async () => {
-    const success = await saveEntity(entityName, formValues);
+  // Save entity data - ensure it returns a boolean
+  const saveEntityData = (): boolean => {
+    const success = storeSaveEntityData();
     if (success) {
       loadSavedEntities();
     }
+    return success;
   };
 
   // Handle loading entity from Supabase
