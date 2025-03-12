@@ -16,14 +16,27 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'alphanumerical',
     required: true,
     placeholder: 'Enter entity name',
-    description: 'b_01.02.0020'
+    description: 'b_01.02.0020',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Legal name of the entity reported in the register of information.',
+      type: 'Alphanumerical',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.02.0030',
     label: 'Country of the entity',
     fieldType: 'country',
     required: true,
-    description: 'b_01.02.0030'
+    description: 'b_01.02.0030',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the ISO 3166–1 alpha–2 code of the country where the license or the registration of the entity reported in the Register on Information has been issued.',
+      type: 'Country',
+      option: 'Mandatory',
+      reference: 'LISTCOUNTRY'
+    }
   },
   {
     id: 'b_01.02.0040',
@@ -31,6 +44,13 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'closedOptions',
     required: true,
     description: 'b_01.02.0040',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the type of entity using one of the options in the corresponding dropdown list',
+      type: 'Closed set of options',
+      option: 'Mandatory',
+      reference: 'LIST0101040'
+    },
     options: [
       { id: 'eba_CT:x12', label: 'Credit institutions' },
       { id: 'eba_CT:x599', label: 'Investment firms' },
@@ -63,6 +83,13 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'closedOptions',
     required: true,
     description: 'b_01.02.0050',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the hierarchy of the entity within the scope of consolidation using one of the options in the corresponding dropdown list',
+      type: 'Closed set of options',
+      option: 'Mandatory',
+      reference: 'LIST0102050'
+    },
     options: [
       'eba_RP:x53\tUltimate parent',
       'eba_RP:x551\tParent other than ultimate parent',
@@ -77,28 +104,52 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'alphanumerical',
     required: false,
     placeholder: 'Enter parent LEI code',
-    description: 'b_01.02.0060'
+    description: 'b_01.02.0060',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the direct parent undertaking of the entity reported in the Register on Information using the LEI, 20-character, alpha-numeric code based on the ISO 17442 standard',
+      type: 'Alphanumerical',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.02.0070',
     label: 'Date of last update',
     fieldType: 'date',
     required: true,
-    description: 'b_01.02.0070'
+    description: 'b_01.02.0070',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the ISO 8601 (yyyy–mm–dd) code of the date of the last update made on the Register of information in relation to the entity.',
+      type: 'Date',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.02.0080',
     label: 'Date of integration in the Register of information',
     fieldType: 'date',
     required: true,
-    description: 'b_01.02.0080'
+    description: 'b_01.02.0080',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the ISO 8601 (yyyy–mm–dd) code of the date of integration in the Register of information',
+      type: 'Date',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.02.0090',
     label: 'Date of deletion in the Register of information',
     fieldType: 'date',
     required: false,
-    description: 'b_01.02.0090'
+    description: 'b_01.02.0090',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the ISO 8601 (yyyy–mm–dd) code of the date of deletion in the Register of information. If the entity has not been deleted, \'9999-12-31\' shall be reported',
+      type: 'Date',
+      option: 'Mandatory'
+    }
   },
   {
     id: 'b_01.02.0100',
@@ -106,6 +157,13 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'currency',
     required: true,
     description: 'b_01.02.0100',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Identify the ISO 4217 alphabetic code of the currency used for the preparation of the financial entity\'s financial statements',
+      type: 'Currency',
+      option: 'Mandatory',
+      reference: 'LISTCURRENCY'
+    },
     options: [
       { id: 'eba_CU:AED', label: 'UAE Dirham' },
       { id: 'eba_CU:AFN', label: 'Afghani' },
@@ -281,6 +339,12 @@ export const entityFormFields2: FormField[] = [
     fieldType: 'monetary',
     required: true,
     placeholder: 'Enter value',
-    description: 'b_01.02.0110'
+    description: 'b_01.02.0110',
+    info: {
+      title: 'TEMPLATE RT.01.02: Entity reported in the register of information',
+      instruction: 'Monetary value of total assets of the entity making use of the ICT services as reported in the entity\'s annual financial statement of the year before the date of the last update of the register of information. Refer to Annex IV for the approach to be followed when filling in this column.',
+      type: 'Monetary',
+      option: 'Mandatory if the entity is a financial entity'
+    }
   }
 ];
