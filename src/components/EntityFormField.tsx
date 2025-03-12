@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
@@ -95,7 +96,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {isObjectOptions ? (
                 (field.options as { id: string; label: string }[]).map((option) => (
                   <option key={option.id} value={option.id}>
-                    {option.label}
+                    {option.id} - {option.label}
                   </option>
                 ))
               ) : (
@@ -106,7 +107,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
                   
                   return (
                     <option key={id} value={id}>
-                      {label}
+                      {id} - {label}
                     </option>
                   );
                 })
