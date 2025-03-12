@@ -359,6 +359,51 @@ export const createIctThirdPartyProviderInfoWorksheet = (workbook: ExcelJS.Workb
 };
 
 /**
+ * Creates and configures the ICT services information worksheet
+ */
+export const createIctServicesInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('ICT Services Info');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_05.02.0010', key: 'b_05.02.0010', width: 50 },
+    { header: 'b_05.02.0020', key: 'b_05.02.0020', width: 40 },
+    { header: 'b_05.02.0030', key: 'b_05.02.0030', width: 50 },
+    { header: 'b_05.02.0040', key: 'b_05.02.0040', width: 30 },
+    { header: 'b_05.02.0050', key: 'b_05.02.0050', width: 20 },
+    { header: 'b_05.02.0060', key: 'b_05.02.0060', width: 50 },
+    { header: 'b_05.02.0070', key: 'b_05.02.0070', width: 30 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'Type of ICT services',
+    'Identification code of the ICT third-party service provider',
+    'Type of code to identify the ICT third-party service provider',
+    'Rank',
+    'Identification code of the recipient of sub-contracted ICT services',
+    'Type of code to identify the recipient of sub-contracted ICT services'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Closed set of options',
+    'Alphanumerical',
+    'Pattern',
+    'Natural number',
+    'Alphanumerical',
+    'Pattern'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFE5D8CC');  // Light brown
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {

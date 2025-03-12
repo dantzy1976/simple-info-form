@@ -13,7 +13,8 @@ export const processEntityData = (
   ictProviderSheet?: ExcelJS.Worksheet,
   ictEntityProviderSheet?: ExcelJS.Worksheet,
   entityUsingIctServicesSheet?: ExcelJS.Worksheet,
-  ictThirdPartyProviderInfoSheet?: ExcelJS.Worksheet
+  ictThirdPartyProviderInfoSheet?: ExcelJS.Worksheet,
+  ictServicesInfoSheet?: ExcelJS.Worksheet
 ) => {
   // Create normalized objects for each form
   const firstFormData = createEmptyFirstFormData();
@@ -25,6 +26,7 @@ export const processEntityData = (
   const ictEntityProviderFormData = createEmptyIctEntityProviderFormData();
   const entityUsingIctServicesFormData = createEmptyEntityUsingIctServicesFormData();
   const ictThirdPartyProviderInfoFormData = createEmptyIctThirdPartyProviderInfoFormData();
+  const ictServicesInfoFormData = createEmptyIctServicesInfoFormData();
   
   // Process all keys in the data object
   Object.keys(data).forEach(key => {
@@ -48,7 +50,8 @@ export const processEntityData = (
       ictProviderFormData,
       ictEntityProviderFormData,
       entityUsingIctServicesFormData,
-      ictThirdPartyProviderInfoFormData
+      ictThirdPartyProviderInfoFormData,
+      ictServicesInfoFormData
     );
   });
   
@@ -89,6 +92,11 @@ export const processEntityData = (
   // Add ICT third-party provider info data if that sheet exists
   if (ictThirdPartyProviderInfoSheet) {
     addDataToWorksheet(ictThirdPartyProviderInfoSheet, ictThirdPartyProviderInfoFormData, Object.keys(ictThirdPartyProviderInfoFormData));
+  }
+  
+  // Add ICT services info data if that sheet exists
+  if (ictServicesInfoSheet) {
+    addDataToWorksheet(ictServicesInfoSheet, ictServicesInfoFormData, Object.keys(ictServicesInfoFormData));
   }
 };
 
@@ -194,6 +202,19 @@ const createEmptyIctThirdPartyProviderInfoFormData = () => ({
 });
 
 /**
+ * Helper function to create an empty data object for the ICT services info form
+ */
+const createEmptyIctServicesInfoFormData = () => ({
+  'b_05.02.0010': '',
+  'b_05.02.0020': '',
+  'b_05.02.0030': '',
+  'b_05.02.0040': '',
+  'b_05.02.0050': '',
+  'b_05.02.0060': '',
+  'b_05.02.0070': ''
+});
+
+/**
  * Helper function to normalize keys (convert from form format to export format)
  */
 const normalizeKey = (key: string): string => {
@@ -227,7 +248,8 @@ const assignDataToForms = (
   ictProviderFormData?: Record<string, string>,
   ictEntityProviderFormData?: Record<string, string>,
   entityUsingIctServicesFormData?: Record<string, string>,
-  ictThirdPartyProviderInfoFormData?: Record<string, string>
+  ictThirdPartyProviderInfoFormData?: Record<string, string>,
+  ictServicesInfoFormData?: Record<string, string>
 ) => {
   // Check if this belongs to first form
   if (normalizedKey && normalizedKey.includes('01.01') && Object.keys(firstFormData).includes(normalizedKey)) {
@@ -274,6 +296,11 @@ const assignDataToForms = (
     ictThirdPartyProviderInfoFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT third-party provider info form field "${normalizedKey}" with value:`, data[originalKey]);
   }
+  // Check if this belongs to ICT services info form
+  else if (ictServicesInfoFormData && normalizedKey && normalizedKey.includes('05.02') && Object.keys(ictServicesInfoFormData).includes(normalizedKey)) {
+    ictServicesInfoFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched ICT services info form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
   // Try direct mapping for keys that weren't converted properly
   else {
     tryDirectMapping(
@@ -287,7 +314,8 @@ const assignDataToForms = (
       ictProviderFormData,
       ictEntityProviderFormData,
       entityUsingIctServicesFormData,
-      ictThirdPartyProviderInfoFormData
+      ictThirdPartyProviderInfoFormData,
+      ictServicesInfoFormData
     );
   }
 };
@@ -306,7 +334,8 @@ const tryDirectMapping = (
   ictProviderFormData?: Record<string, string>,
   ictEntityProviderFormData?: Record<string, string>,
   entityUsingIctServicesFormData?: Record<string, string>,
-  ictThirdPartyProviderInfoFormData?: Record<string, string>
+  ictThirdPartyProviderInfoFormData?: Record<string, string>,
+  ictServicesInfoFormData?: Record<string, string>
 ) => {
   // First form direct mapping
   if (key.includes('01_01')) {
@@ -378,6 +407,14 @@ const tryDirectMapping = (
     if (Object.keys(ictThirdPartyProviderInfoFormData).includes(directKey)) {
       ictThirdPartyProviderInfoFormData[directKey] = data[key];
       console.log(`exportToExcel - Direct matched ICT third-party provider info form field "${directKey}" with value:`, data[key]);
+    }
+  }
+  // ICT services info form direct mapping
+  else if (ictServicesInfoFormData && key.includes('05_02')) {
+    const directKey = `b_05.02.${key.split('_').pop()}`;
+    if (Object.keys(ictServicesInfoFormData).includes(directKey)) {
+      ictServicesInfoFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched ICT services info form field "${directKey}" with value:`, data[key]);
     }
   }
 };
