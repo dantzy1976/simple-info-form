@@ -518,6 +518,87 @@ export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Wo
 };
 
 /**
+ * Creates and configures the Additional Provider Information worksheet
+ */
+export const createAdditionalProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Additional Provider Information');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_99.01.0010', key: 'b_99.01.0010', width: 40 },
+    { header: 'b_99.01.0020', key: 'b_99.01.0020', width: 40 },
+    { header: 'b_99.01.0030', key: 'b_99.01.0030', width: 40 },
+    { header: 'b_99.01.0040', key: 'b_99.01.0040', width: 40 },
+    { header: 'b_99.01.0050', key: 'b_99.01.0050', width: 40 },
+    { header: 'b_99.01.0060', key: 'b_99.01.0060', width: 40 },
+    { header: 'b_99.01.0070', key: 'b_99.01.0070', width: 40 },
+    { header: 'b_99.01.0080', key: 'b_99.01.0080', width: 40 },
+    { header: 'b_99.01.0090', key: 'b_99.01.0090', width: 40 },
+    { header: 'b_99.01.0100', key: 'b_99.01.0100', width: 40 },
+    { header: 'b_99.01.0110', key: 'b_99.01.0110', width: 40 },
+    { header: 'b_99.01.0120', key: 'b_99.01.0120', width: 40 },
+    { header: 'b_99.01.0130', key: 'b_99.01.0130', width: 40 },
+    { header: 'b_99.01.0140', key: 'b_99.01.0140', width: 40 },
+    { header: 'b_99.01.0150', key: 'b_99.01.0150', width: 40 },
+    { header: 'b_99.01.0160', key: 'b_99.01.0160', width: 40 },
+    { header: 'b_99.01.0170', key: 'b_99.01.0170', width: 40 },
+    { header: 'b_99.01.0180', key: 'b_99.01.0180', width: 40 },
+    { header: 'b_99.01.0190', key: 'b_99.01.0190', width: 40 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Standalone arrangement',
+    'Overarching arrangement',
+    'Subsequent or associated arrangement',
+    'Low',
+    'Medium',
+    'High',
+    'Low',
+    'Medium',
+    'High',
+    'Not substitutable',
+    'Highly complex substitutability',
+    'Medium complexity in terms of substitutability',
+    'Easily substitutable',
+    'Easy',
+    'Difficult',
+    'Highly complex',
+    'Low',
+    'Medium',
+    'High'
+  ]);
+
+  // Add the field type row - all are alphanumerical
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFF0E6FF');  // Light purple
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {

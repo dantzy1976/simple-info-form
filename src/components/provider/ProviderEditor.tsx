@@ -17,6 +17,7 @@ import ProviderFormB0501 from './ProviderFormB0501';
 import ProviderFormB0502 from './ProviderFormB0502';
 import ProviderFormB0601 from './ProviderFormB0601';
 import ProviderFormB0701 from './ProviderFormB0701';
+import ProviderFormB9901 from './ProviderFormB9901';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
@@ -154,6 +155,7 @@ const ProviderEditor = ({ providerId }: { providerId: string }) => {
       <ProviderFormB0502 providerId={providerId} />
       <ProviderFormB0601 providerId={providerId} />
       <ProviderFormB0701 providerId={providerId} />
+      <ProviderFormB9901 providerId={providerId} />
     </div>
   );
 };
