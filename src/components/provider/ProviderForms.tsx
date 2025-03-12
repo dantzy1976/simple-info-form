@@ -16,7 +16,6 @@ const ProviderForms = () => {
   const [providerToDelete, setProviderToDelete] = useState<string | null>(null);
   
   useEffect(() => {
-    // Still call loadProviders to ensure we're using the latest state
     loadProviders();
   }, []);
   

@@ -1,12 +1,37 @@
 
+import { supabase } from '@/integrations/supabase/client';
 import { SavedEntity, FormValues } from '@/types/entity.types';
 import { toast } from '@/hooks/use-toast';
 
-// In-memory storage for entities (will be persisted via Zustand)
-let localEntities: SavedEntity[] = [];
-
 export async function loadEntities(): Promise<SavedEntity[]> {
-  return localEntities;
+  try {
+    const { data, error } = await supabase
+      .from('entities')
+      .select('name, data')
+      .eq('type', 'owner')
+      .order('updated_at', { ascending: false });
+    
+    if (error) {
+      throw error;
+    }
+    
+    if (data) {
+      return data.map(item => ({
+        name: item.name,
+        data: item.data as FormValues
+      }));
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error loading entities:', error);
+    toast({
+      title: "Error loading entities",
+      description: "There was a problem loading your saved entities.",
+      variant: "destructive",
+    });
+    return [];
+  }
 }
 
 export async function saveEntity(entityName: string, formValues: FormValues): Promise<boolean> {
@@ -21,20 +46,36 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
 
   try {
     // Check if entity with this name already exists
-    const existingEntityIndex = localEntities.findIndex(e => e.name === entityName);
+    const { data: existingEntities } = await supabase
+      .from('entities')
+      .select('id')
+      .eq('name', entityName)
+      .eq('type', 'owner')
+      .maybeSingle();
 
-    if (existingEntityIndex >= 0) {
+    if (existingEntities) {
       // Update existing entity
-      localEntities[existingEntityIndex] = {
-        name: entityName,
-        data: formValues
-      };
+      const { error } = await supabase
+        .from('entities')
+        .update({ 
+          data: formValues,
+          updated_at: new Date().toISOString()
+        })
+        .eq('name', entityName)
+        .eq('type', 'owner');
+
+      if (error) throw error;
     } else {
       // Insert new entity
-      localEntities.push({
-        name: entityName,
-        data: formValues
-      });
+      const { error } = await supabase
+        .from('entities')
+        .insert({ 
+          name: entityName, 
+          data: formValues,
+          type: 'owner'
+        });
+
+      if (error) throw error;
     }
 
     toast({
@@ -56,8 +97,23 @@ export async function saveEntity(entityName: string, formValues: FormValues): Pr
 
 export async function loadEntityByName(entityName: string): Promise<SavedEntity | null> {
   try {
-    const entity = localEntities.find(e => e.name === entityName);
-    return entity || null;
+    const { data, error } = await supabase
+      .from('entities')
+      .select('name, data')
+      .eq('name', entityName)
+      .eq('type', 'owner')
+      .maybeSingle();
+    
+    if (error) throw error;
+    
+    if (data) {
+      return {
+        name: data.name,
+        data: data.data as FormValues
+      };
+    }
+    
+    return null;
   } catch (error) {
     console.error('Error loading entity:', error);
     toast({
