@@ -308,6 +308,57 @@ export const createEntityUsingIctServicesWorksheet = (workbook: ExcelJS.Workbook
 };
 
 /**
+ * Creates and configures the ICT third-party service provider information worksheet
+ */
+export const createIctThirdPartyProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('ICT Third-Party Provider Info');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_05.01.0010', key: 'b_05.01.0010', width: 50 },
+    { header: 'b_05.01.0020', key: 'b_05.01.0020', width: 40 },
+    { header: 'b_05.01.0030', key: 'b_05.01.0030', width: 50 },
+    { header: 'b_05.01.0040', key: 'b_05.01.0040', width: 30 },
+    { header: 'b_05.01.0050', key: 'b_05.01.0050', width: 30 },
+    { header: 'b_05.01.0060', key: 'b_05.01.0060', width: 30 },
+    { header: 'b_05.01.0070', key: 'b_05.01.0070', width: 50 },
+    { header: 'b_05.01.0080', key: 'b_05.01.0080', width: 50 },
+    { header: 'b_05.01.0090', key: 'b_05.01.0090', width: 50 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Identification code of ICT third-party service provider',
+    'Type of code to identify the ICT third-party service provider',
+    'Name of the ICT third-party service provider',
+    'Type of person of the ICT third-party service provider',
+    'Country of the ICT third-party service provider\'s headquarters',
+    'Currency of the amount reported in RT.05.01.0070',
+    'Total annual expense or estimated cost of the ICT third-party service provider',
+    'Identification code of the ICT third-party service provider\'s ultimate parent undertaking',
+    'Type of code to identify the ICT third-party service provider\'s ultimate parent undertaking'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Pattern',
+    'Alphanumerical',
+    'Closed set of options',
+    'Country',
+    'Currency',
+    'Monetary',
+    'Alphanumerical',
+    'Pattern'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFFBE5CC');  // Light orange
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {
