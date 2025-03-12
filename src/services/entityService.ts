@@ -18,7 +18,7 @@ export async function loadEntities(): Promise<SavedEntity[]> {
     if (data) {
       return data.map(item => ({
         name: item.name,
-        data: item.data as FormValues
+        data: item.data as Record<string, any>
       }));
     }
     

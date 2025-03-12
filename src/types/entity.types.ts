@@ -1,6 +1,6 @@
 
 export interface FormValues {
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 export interface SavedEntity {
@@ -13,7 +13,7 @@ export interface Provider {
   name: string;
   type: string;
   status: 'draft' | 'active' | 'inactive';
-  data: Record<string, any>;
+  data: Record<string, string | number | boolean | null | undefined>;
   created_at: string;
   updated_at: string;
 }
