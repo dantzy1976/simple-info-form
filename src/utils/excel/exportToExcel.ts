@@ -6,7 +6,8 @@ import {
   createFirstWorksheet, 
   createSecondWorksheet, 
   createThirdWorksheet,
-  createProviderArrangementWorksheet
+  createProviderArrangementWorksheet,
+  createEntitySigningWorksheet
 } from './worksheetCreators';
 import { processEntityData } from './dataProcessor';
 
@@ -28,6 +29,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   const worksheet2 = createSecondWorksheet(workbook);
   const worksheet3 = createThirdWorksheet(workbook);
   const providerSheet = createProviderArrangementWorksheet(workbook);
+  const entitySigningSheet = createEntitySigningWorksheet(workbook);
   
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
@@ -37,7 +39,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Process each entity
   dataArray.forEach((data, index) => {
     console.log(`exportToExcel - Processing entity ${index}:`, data);
-    processEntityData(data, worksheet1, worksheet2, worksheet3, providerSheet);
+    processEntityData(data, worksheet1, worksheet2, worksheet3, providerSheet, entitySigningSheet);
   });
 
   console.log('exportToExcel - Generating Excel file with multiple sheets');

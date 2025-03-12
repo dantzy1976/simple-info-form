@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ProviderFormB0201 from './ProviderFormB0201';
 import ProviderFormB0202 from './ProviderFormB0202';
 import ProviderFormB0203 from './ProviderFormB0203';
+import ProviderFormB0301 from './ProviderFormB0301';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
@@ -138,6 +139,7 @@ const ProviderEditor = ({ providerId }: { providerId: string }) => {
       <ProviderFormB0201 providerId={providerId} />
       <ProviderFormB0202 providerId={providerId} />
       <ProviderFormB0203 providerId={providerId} />
+      <ProviderFormB0301 providerId={providerId} />
     </div>
   );
 };

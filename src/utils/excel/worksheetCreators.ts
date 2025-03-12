@@ -170,6 +170,39 @@ export const createProviderArrangementWorksheet = (workbook: ExcelJS.Workbook): 
 };
 
 /**
+ * Creates and configures the entity signing contractual arrangement worksheet
+ */
+export const createEntitySigningWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('Entity Signing Arrangements');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_03.01.0010', key: 'b_03.01.0010', width: 50 },
+    { header: 'b_03.01.0020', key: 'b_03.01.0020', width: 50 },
+    { header: 'b_03.01.0030', key: 'b_03.01.0030', width: 20 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'LEI of the entity signing the contractual arrangement',
+    'Link'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Fill with "true" for each populated row'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFE5CC');  // Light orange
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {

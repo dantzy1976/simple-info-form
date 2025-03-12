@@ -51,5 +51,10 @@ export interface ProviderFormData {
   b_02_03_0020?: string; // Contractual arrangement linked to the contractual arrangement referred in RT.02.03.0010
   b_02_03_0030?: string; // Link
   
+  // b_03.01 fields
+  b_03_01_0010?: string; // Contractual arrangement reference number
+  b_03_01_0020?: string; // LEI of the entity signing the contractual arrangement
+  b_03_01_0030?: string; // Link
+  
   [key: string]: string | number | boolean | null | undefined; // Allow other properties
 }

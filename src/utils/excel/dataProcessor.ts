@@ -8,13 +8,15 @@ export const processEntityData = (
   worksheet1: ExcelJS.Worksheet, 
   worksheet2: ExcelJS.Worksheet, 
   worksheet3: ExcelJS.Worksheet,
-  providerSheet?: ExcelJS.Worksheet
+  providerSheet?: ExcelJS.Worksheet,
+  entitySigningSheet?: ExcelJS.Worksheet
 ) => {
   // Create normalized objects for each form
   const firstFormData = createEmptyFirstFormData();
   const secondFormData = createEmptySecondFormData();
   const thirdFormData = createEmptyThirdFormData();
   const providerFormData = createEmptyProviderFormData();
+  const entitySigningFormData = createEmptyEntitySigningFormData();
   
   // Process all keys in the data object
   Object.keys(data).forEach(key => {
@@ -26,7 +28,7 @@ export const processEntityData = (
     console.log(`exportToExcel - Converted key "${key}" to "${normalizedKey}"`);
     
     // Assign data to the appropriate form
-    assignDataToForms(normalizedKey, key, data, firstFormData, secondFormData, thirdFormData, providerFormData);
+    assignDataToForms(normalizedKey, key, data, firstFormData, secondFormData, thirdFormData, providerFormData, entitySigningFormData);
   });
   
   console.log('exportToExcel - Final normalized data for first form:', firstFormData);
@@ -41,6 +43,11 @@ export const processEntityData = (
   // Add provider data if provider sheet exists
   if (providerSheet) {
     addDataToWorksheet(providerSheet, providerFormData, Object.keys(providerFormData));
+  }
+  
+  // Add entity signing data if entity signing sheet exists
+  if (entitySigningSheet) {
+    addDataToWorksheet(entitySigningSheet, entitySigningFormData, Object.keys(entitySigningFormData));
   }
 };
 
@@ -93,6 +100,15 @@ const createEmptyProviderFormData = () => ({
 });
 
 /**
+ * Helper function to create an empty data object for the entity signing form
+ */
+const createEmptyEntitySigningFormData = () => ({
+  'b_03.01.0010': '',
+  'b_03.01.0020': '',
+  'b_03.01.0030': 'true'
+});
+
+/**
  * Helper function to normalize keys (convert from form format to export format)
  */
 const normalizeKey = (key: string): string => {
@@ -121,7 +137,8 @@ const assignDataToForms = (
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
   thirdFormData: Record<string, string>,
-  providerFormData?: Record<string, string>
+  providerFormData?: Record<string, string>,
+  entitySigningFormData?: Record<string, string>
 ) => {
   // Check if this belongs to first form
   if (normalizedKey && normalizedKey.includes('01.01') && Object.keys(firstFormData).includes(normalizedKey)) {
@@ -143,9 +160,14 @@ const assignDataToForms = (
     providerFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched provider form field "${normalizedKey}" with value:`, data[originalKey]);
   }
+  // Check if this belongs to entity signing form
+  else if (entitySigningFormData && normalizedKey && normalizedKey.includes('03.01') && Object.keys(entitySigningFormData).includes(normalizedKey)) {
+    entitySigningFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched entity signing form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
   // Try direct mapping for keys that weren't converted properly
   else {
-    tryDirectMapping(originalKey, data, firstFormData, secondFormData, thirdFormData, providerFormData);
+    tryDirectMapping(originalKey, data, firstFormData, secondFormData, thirdFormData, providerFormData, entitySigningFormData);
   }
 };
 
@@ -158,7 +180,8 @@ const tryDirectMapping = (
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
   thirdFormData: Record<string, string>,
-  providerFormData?: Record<string, string>
+  providerFormData?: Record<string, string>,
+  entitySigningFormData?: Record<string, string>
 ) => {
   // First form direct mapping
   if (key.includes('01_01')) {
@@ -190,6 +213,14 @@ const tryDirectMapping = (
     if (Object.keys(providerFormData).includes(directKey)) {
       providerFormData[directKey] = data[key];
       console.log(`exportToExcel - Direct matched provider form field "${directKey}" with value:`, data[key]);
+    }
+  }
+  // Entity signing form direct mapping
+  else if (entitySigningFormData && key.includes('03_01')) {
+    const directKey = `b_03.01.${key.split('_').pop()}`;
+    if (Object.keys(entitySigningFormData).includes(directKey)) {
+      entitySigningFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched entity signing form field "${directKey}" with value:`, data[key]);
     }
   }
 };
