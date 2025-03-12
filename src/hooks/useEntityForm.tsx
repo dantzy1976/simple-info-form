@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { FormValues, SavedEntity } from '@/types/entity.types';
@@ -14,6 +15,7 @@ export function useEntityForm() {
   const storeSavedEntities = useOwnerEntityStore(state => state.savedEntities);
   const storeSetFormValues = useOwnerEntityStore(state => state.setFormValues);
   const storeSaveEntityData = useOwnerEntityStore(state => state.saveEntityData);
+  const storeLoadEntityByName = useOwnerEntityStore(state => state.loadEntityByName);
   
   const {
     entityName,
@@ -115,14 +117,28 @@ export function useEntityForm() {
     return success;
   };
 
-  // Handle loading entity from Supabase
-  const handleLoadEntity = async (entityNameToLoad: string) => {
-    const entity = await loadEntityByName(entityNameToLoad);
+  // Handle loading entity from storage
+  const loadEntityByName = (entityNameToLoad: string) => {
+    // Use the store method to load entity
+    storeLoadEntityByName(entityNameToLoad);
+    
+    // Find the loaded entity in the saved entities
+    const entity = storeSavedEntities.find(entity => entity.name === entityNameToLoad);
     
     if (entity) {
       setFormValues(entity.data);
       setEntityName(entity.name);
-      
+      return entity;
+    }
+    
+    return null;
+  };
+
+  // Handle loading entity
+  const handleLoadEntity = (entityNameToLoad: string) => {
+    const entity = loadEntityByName(entityNameToLoad);
+    
+    if (entity) {
       toast({
         title: "Entity loaded",
         description: `Entity "${entityNameToLoad}" has been loaded successfully.`,
