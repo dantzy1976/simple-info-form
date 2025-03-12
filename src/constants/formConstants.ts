@@ -8,4 +8,5 @@ export { providerFormFieldsB0201 } from './providerFormFields';
 export { providerFormFieldsB0202 } from './providerFormFields2';
 export { providerFormFieldsB0203 } from './providerFormFields3';
 export { providerFormFieldsB0301 } from './providerFormFieldsB0301';
+export { providerFormFieldsB0302 } from './providerFormFieldsB0302';
 export { countries } from './countries';

@@ -203,6 +203,42 @@ export const createEntitySigningWorksheet = (workbook: ExcelJS.Workbook): ExcelJ
 };
 
 /**
+ * Creates and configures the ICT service provider worksheet
+ */
+export const createIctProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('ICT Service Providers');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_03.02.0010', key: 'b_03.02.0010', width: 50 },
+    { header: 'b_03.02.0020', key: 'b_03.02.0020', width: 50 },
+    { header: 'b_03.02.0030', key: 'b_03.02.0030', width: 50 },
+    { header: 'b_03.02.0045', key: 'b_03.02.0045', width: 20 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'Identification code of ICT third-party service provider',
+    'Type of code to identify the ICT third-party service provider',
+    'Link'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Pattern',
+    'Fill with "true" for each populated row'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFE0F0FF');  // Light purple-blue
+
+  return worksheet;
+};
+
+/**
  * Helper function to format header rows in worksheets
  */
 const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {
