@@ -1,18 +1,9 @@
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { supabase } from '@/integrations/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from '@/hooks/use-toast';
-
-export interface Provider {
-  id: string;
-  name: string;
-  type: string;
-  status: 'draft' | 'active' | 'inactive';
-  data: Record<string, any>;
-  created_at: string;
-  updated_at: string;
-}
+import { Provider } from '@/types/entity.types';
 
 interface ProviderState {
   providers: Provider[];
@@ -25,10 +16,10 @@ interface ProviderState {
   updateProvider: (provider: Provider) => void;
   
   // Operations
-  loadProviders: () => Promise<void>;
+  loadProviders: () => void;
   createNewProvider: () => Provider;
-  saveProvider: (provider: Provider) => Promise<boolean>;
-  deleteProvider: (providerId: string) => Promise<boolean>;
+  saveProvider: (provider: Provider) => boolean;
+  deleteProvider: (providerId: string) => boolean;
 }
 
 export const useProviderStore = create<ProviderState>()(
@@ -60,23 +51,10 @@ export const useProviderStore = create<ProviderState>()(
         set({ providers });
       },
       
-      loadProviders: async () => {
-        try {
-          // Using 'providers' table name here (changed from 'entities')
-          const { data, error } = await supabase
-            .from('providers')
-            .select('*')
-            .order('created_at', { ascending: false });
-            
-          if (error) throw error;
-          
-          set({ providers: data as Provider[] });
-        } catch (error) {
-          console.error('Error loading providers:', error);
-          // Fallback to local data if there's an error
-          // This allows the app to work without Supabase connection
-          console.log('Using local provider data only');
-        }
+      loadProviders: () => {
+        // When using only local storage, this function just returns
+        // as the data is already loaded via Zustand's persist middleware
+        console.log('Providers loaded from local storage');
       },
       
       createNewProvider: () => {
@@ -99,75 +77,59 @@ export const useProviderStore = create<ProviderState>()(
         return newProvider;
       },
       
-      saveProvider: async (provider) => {
+      saveProvider: (provider) => {
         try {
-          // Using 'providers' table name here (changed from 'entities')
-          // Check if provider exists
-          const { data: existingProvider } = await supabase
-            .from('providers')
-            .select('id')
-            .eq('id', provider.id)
-            .maybeSingle();
-            
-          if (existingProvider) {
-            // Update
-            const { error } = await supabase
-              .from('providers')
-              .update({
-                name: provider.name,
-                type: provider.type,
-                status: provider.status,
-                data: provider.data,
-                updated_at: new Date().toISOString()
-              })
-              .eq('id', provider.id);
-              
-            if (error) throw error;
+          // Check if the provider already exists in the local array
+          const existingIndex = get().providers.findIndex(p => p.id === provider.id);
+          let updatedProviders;
+          
+          if (existingIndex >= 0) {
+            // Update existing provider
+            updatedProviders = [...get().providers];
+            updatedProviders[existingIndex] = {
+              ...provider,
+              updated_at: new Date().toISOString()
+            };
           } else {
-            // Insert
-            const { error } = await supabase
-              .from('providers')
-              .insert(provider);
-              
-            if (error) throw error;
+            // Add new provider
+            updatedProviders = [...get().providers, provider];
           }
           
-          await get().loadProviders();
+          set({ providers: updatedProviders });
+          toast({
+            title: "Provider saved",
+            description: "The provider has been saved successfully.",
+          });
           return true;
         } catch (error) {
           console.error('Error saving provider:', error);
           toast({
             title: "Failed to save provider",
-            description: "There was an error saving the provider. Changes are stored locally only.",
+            description: "There was an error saving the provider.",
             variant: "destructive",
           });
-          // Even if saving to Supabase fails, keep the local changes
-          return true;
+          return false;
         }
       },
       
-      deleteProvider: async (providerId) => {
+      deleteProvider: (providerId) => {
         try {
-          // Using 'providers' table name here (changed from 'entities')
-          const { error } = await supabase
-            .from('providers')
-            .delete()
-            .eq('id', providerId);
-          
-          // Even if there's an error with Supabase, remove from local state
           const filteredProviders = get().providers.filter(p => p.id !== providerId);
           set({ providers: filteredProviders });
           
-          if (error) throw error;
+          toast({
+            title: "Provider deleted",
+            description: "The provider has been deleted successfully.",
+          });
           return true;
         } catch (error) {
           console.error('Error deleting provider:', error);
           toast({
-            title: "Failed to delete from database",
-            description: "There was an error deleting the provider from the database, but it was removed locally.",
+            title: "Failed to delete provider",
+            description: "There was an error deleting the provider.",
             variant: "destructive",
           });
-          return true;
+          return false;
         }
       }
     }),
