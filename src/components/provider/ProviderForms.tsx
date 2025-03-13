@@ -11,8 +11,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { exportToExcel } from '@/utils/excel';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from 'react-router-dom';
 
 const ProviderForms = () => {
+  const navigate = useNavigate();
   const { providers, loadProviders, createNewProvider, deleteProvider } = useProviderStore();
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
   const [providerToDelete, setProviderToDelete] = useState<string | null>(null);
