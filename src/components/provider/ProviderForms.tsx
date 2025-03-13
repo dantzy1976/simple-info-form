@@ -1,19 +1,22 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, FileDown } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, Edit, Trash2, FileDown, List, Search } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProviderStore } from '@/stores/providerStore';
 import { toast } from '@/hooks/use-toast';
 import ProviderEditor from './ProviderEditor';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { exportToExcel } from '@/utils/excel';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 
 const ProviderForms = () => {
   const { providers, loadProviders, createNewProvider, deleteProvider } = useProviderStore();
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
   const [providerToDelete, setProviderToDelete] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
     loadProviders();
@@ -57,6 +60,16 @@ const ProviderForms = () => {
       description: "Exporting provider data to Excel",
     });
   };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredProviders = providers.filter(provider => 
+    provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    provider.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (provider.data?.b_02_01_0010 && provider.data.b_02_01_0010.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
   
   // If a provider is selected, show the editor
   if (selectedProviderId) {
@@ -66,7 +79,10 @@ const ProviderForms = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Provider Management</h2>
+        <div className="flex items-center">
+          <List className="h-6 w-6 mr-2 text-blue-500" />
+          <h2 className="text-2xl font-bold">Provider Management</h2>
+        </div>
         <Button
           onClick={handleCreateNewProvider}
           className="bg-blue-500 text-white hover:bg-blue-600"
@@ -85,83 +101,115 @@ const ProviderForms = () => {
           </CardHeader>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {providers.map((provider) => (
-            <Card key={provider.id}>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>{provider.name || "Unnamed Provider"}</CardTitle>
-                    <CardDescription>{provider.type || "No type specified"}</CardDescription>
-                  </div>
-                  <Badge
-                    className={
-                      provider.status === 'active' ? 'bg-green-500' :
-                      provider.status === 'inactive' ? 'bg-red-500' :
-                      'bg-yellow-500'
-                    }
-                  >
-                    {provider.status || "Draft"}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500">
-                  Last updated: {new Date(provider.updated_at).toLocaleDateString()}
-                </p>
-                {provider.data && provider.data.b_02_01_0010 && (
-                  <p className="text-sm font-medium mt-2">
-                    Contract Ref: {provider.data.b_02_01_0010}
-                  </p>
+        <div className="mt-6 space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Input 
+              placeholder="Search providers..." 
+              className="pl-10" 
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
+          
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[200px]">Provider Name</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Contract Ref</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Last Updated</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredProviders.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center">
+                      No providers found matching your search.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredProviders.map((provider) => (
+                    <TableRow key={provider.id}>
+                      <TableCell className="font-medium">
+                        {provider.name || "Unnamed Provider"}
+                      </TableCell>
+                      <TableCell>{provider.type || "No type specified"}</TableCell>
+                      <TableCell>
+                        {provider.data && provider.data.b_02_01_0010 
+                          ? provider.data.b_02_01_0010 
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={
+                            provider.status === 'active' ? 'bg-green-500' :
+                            provider.status === 'inactive' ? 'bg-red-500' :
+                            'bg-yellow-500'
+                          }
+                        >
+                          {provider.status || "Draft"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(provider.updated_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-2">
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleExportProvider(provider)}
+                          >
+                            <FileDown className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditProvider(provider.id)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Dialog open={providerToDelete === provider.id} onOpenChange={(open) => {
+                            if (!open) setProviderToDelete(null);
+                          }}>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => setProviderToDelete(provider.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Confirm Deletion</DialogTitle>
+                                <DialogDescription>
+                                  Are you sure you want to delete this provider? This action cannot be undone.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <Button variant="outline" onClick={() => setProviderToDelete(null)}>
+                                  Cancel
+                                </Button>
+                                <Button variant="destructive" onClick={handleDeleteConfirm}>
+                                  Delete
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
                 )}
-              </CardContent>
-              <CardFooter className="flex justify-end space-x-2">
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleExportProvider(provider)}
-                >
-                  <FileDown className="h-4 w-4 mr-1" /> Export
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEditProvider(provider.id)}
-                >
-                  <Edit className="h-4 w-4 mr-1" /> Edit
-                </Button>
-                <Dialog open={providerToDelete === provider.id} onOpenChange={(open) => {
-                  if (!open) setProviderToDelete(null);
-                }}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => setProviderToDelete(provider.id)}
-                    >
-                      <Trash2 className="h-4 w-4 mr-1" /> Delete
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Confirm Deletion</DialogTitle>
-                      <DialogDescription>
-                        Are you sure you want to delete this provider? This action cannot be undone.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setProviderToDelete(null)}>
-                        Cancel
-                      </Button>
-                      <Button variant="destructive" onClick={handleDeleteConfirm}>
-                        Delete
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </CardFooter>
-            </Card>
-          ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       )}
     </div>
