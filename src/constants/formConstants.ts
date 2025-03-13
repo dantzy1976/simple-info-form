@@ -24,6 +24,7 @@ export { criticalityOptions } from './criticalityOptions';
 export { impactOptions } from './impactOptions';
 export { substitutabilityOptions } from './substitutabilityOptions';
 export { difficultSubstitutionReasons } from './difficultSubstitutionReasons';
+export { reintegrationOptions } from './reintegrationOptions';
 export { entityTypes } from './entityTypes';
 export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';

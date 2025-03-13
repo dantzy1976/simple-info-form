@@ -1,3 +1,4 @@
+
 import { FormField } from './types';
 import { annexIII } from './annexIII';
 import { binaryOptions } from './binaryOptions';
@@ -5,6 +6,7 @@ import { criticalityOptions } from './criticalityOptions';
 import { impactOptions } from './impactOptions';
 import { substitutabilityOptions } from './substitutabilityOptions';
 import { difficultSubstitutionReasons } from './difficultSubstitutionReasons';
+import { reintegrationOptions } from './reintegrationOptions';
 
 export const providerFormFieldsB0701: FormField[] = [
   {
@@ -127,11 +129,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Possibility of reintegration of the contracted ICT service',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'REINTEGRATION POSSIBLE',
-      'REINTEGRATION DIFFICULT',
-      'REINTEGRATION NOT POSSIBLE'
-    ],
+    options: reintegrationOptions,
     info: {
       title: 'Reintegration Possibility Information',
       type: 'Closed set of options',
