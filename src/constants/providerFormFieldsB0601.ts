@@ -1,7 +1,7 @@
-
 import { FormField } from './types';
 import { criticalityOptions } from './criticalityOptions';
 import { licensedActivities } from './licensedActivities';
+import { impactOptions } from './impactOptions';
 
 export const providerFormFieldsB0601: FormField[] = [
   {
@@ -136,11 +136,7 @@ export const providerFormFieldsB0601: FormField[] = [
     label: 'Impact of discontinuing the function',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'High',
-      'Medium',
-      'Low'
-    ],
+    options: impactOptions,
     description: 'Severity of impact if the function is discontinued',
     info: {
       title: 'Impact Assessment Information',

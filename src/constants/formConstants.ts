@@ -21,6 +21,7 @@ export { currencies } from './currencies';
 export { annexIII } from './annexIII';
 export { binaryOptions } from './binaryOptions';
 export { criticalityOptions } from './criticalityOptions';
+export { impactOptions } from './impactOptions';
 export { entityTypes } from './entityTypes';
 export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';

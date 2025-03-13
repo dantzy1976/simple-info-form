@@ -2,6 +2,7 @@ import { FormField } from './types';
 import { annexIII } from './annexIII';
 import { binaryOptions } from './binaryOptions';
 import { criticalityOptions } from './criticalityOptions';
+import { impactOptions } from './impactOptions';
 
 export const providerFormFieldsB0701: FormField[] = [
   {
@@ -151,12 +152,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Impact of discontinuing the ICT services',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'LOW IMPACT',
-      'MEDIUM IMPACT',
-      'HIGH IMPACT',
-      'VERY HIGH IMPACT'
-    ],
+    options: impactOptions,
     info: {
       title: 'Discontinuing Impact Information',
       type: 'Closed set of options',

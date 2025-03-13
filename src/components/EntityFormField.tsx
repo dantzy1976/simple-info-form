@@ -5,6 +5,7 @@ import { currencies } from '../constants/currencies';
 import { annexIII } from '../constants/annexIII';
 import { binaryOptions } from '../constants/binaryOptions';
 import { criticalityOptions } from '../constants/criticalityOptions';
+import { impactOptions } from '../constants/impactOptions';
 import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
@@ -255,6 +256,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             >
               <option value="">Select option</option>
               {criticalityOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.id} - {option.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_06.01.0100' || field.id === 'b_07.01.0100') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select impact level</option>
+              {impactOptions.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.id} - {option.label}
                 </option>
