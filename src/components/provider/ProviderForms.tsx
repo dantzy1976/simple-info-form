@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash2, FileDown, List, Search } from "lucide-react";
@@ -11,10 +10,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { exportToExcel } from '@/utils/excel';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ProviderForms = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { providers, loadProviders, createNewProvider, deleteProvider } = useProviderStore();
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(null);
   const [providerToDelete, setProviderToDelete] = useState<string | null>(null);
@@ -22,7 +22,12 @@ const ProviderForms = () => {
   
   useEffect(() => {
     loadProviders();
-  }, []);
+    
+    // Reset selected provider when returning to this component
+    if (location.pathname === '/providers') {
+      setSelectedProviderId(null);
+    }
+  }, [location.pathname]);
   
   const handleCreateNewProvider = () => {
     const newProvider = createNewProvider();

@@ -75,8 +75,8 @@ const ProviderEditor = ({ providerId }: { providerId: string }) => {
   };
   
   const handleBack = () => {
-    // Navigate to the main page instead of providers page to show the tabs
-    navigate('/');
+    // Navigate back to the providers page and ensure it shows the list of providers
+    navigate('/providers');
   };
   
   return (
