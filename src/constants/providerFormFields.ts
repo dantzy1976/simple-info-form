@@ -2,22 +2,6 @@
 import { FormField } from './types';
 import { annexIII } from './annexIII';
 
-// Contract type options
-const contractTypeOptions = [
-  '01\tIT Hardware',
-  '02\tSoftware licensing',
-  '03\tSoftware development and customization',
-  '04\tSoftware maintenance and support',
-  '05\tIT consultancy',
-  '06\tIT outsourcing',
-  '07\tNetwork services',
-  '08\tCloud services',
-  '09\tData processing',
-  '10\tData storage',
-  '11\tIT security',
-  '12\tOther IT services'
-];
-
 // Form fields for b_02.01
 export const providerFormFieldsB0201: FormField[] = [
   {
@@ -39,7 +23,6 @@ export const providerFormFieldsB0201: FormField[] = [
     label: 'Type of contractual arrangement',
     fieldType: 'closedOptions',
     required: true,
-    options: contractTypeOptions,
     description: 'Select the type of contractual arrangement',
     info: {
       title: 'Type of Contractual Arrangement Information',
