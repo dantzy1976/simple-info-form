@@ -1,5 +1,6 @@
 
 import { FormField } from './types';
+import { annexIII } from './annexIII';
 
 export const providerFormFieldsB0501: FormField[] = [
   {
@@ -21,20 +22,14 @@ export const providerFormFieldsB0501: FormField[] = [
     label: 'Type of code to identify the ICT third-party service provider',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'LEI',
-      'MIC',
-      'ISIN',
-      'BIC',
-      'NATID',
-      'OTHER'
-    ],
+    options: annexIII,
     description: 'Pattern/type of the identification code',
     info: {
       title: 'Service Provider Code Type Information',
       type: 'Pattern',
       instruction: "Identify the type of code to identify the ICT third-party service provider in b_05.01.0010\n\n1.\t'LEI' for LEI\n2.\t'Country Code'+Underscore+'Type of Code' for non LEI code\n\nCountry Code: Identify the ISO 3166–1 alpha–2 code of the country of issuance of the other code to identify the ICT third-party service provider\n\nType of Code:\n1.\tCRN for Corporate registration number\n2.\tVAT for VAT number\n3.\tPNR for Passport Number\n4.\tNIN for National Identity Number",
-      option: "Mandatory"
+      option: "Mandatory",
+      reference: "LISTANNEXIII"
     }
   },
   {
