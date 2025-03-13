@@ -64,14 +64,7 @@ export const entityFormFields2: FormField[] = [
       type: 'Closed set of options',
       option: 'Mandatory',
       reference: 'LIST0102050'
-    },
-    options: [
-      'eba_RP:x53\tUltimate parent',
-      'eba_RP:x551\tParent other than ultimate parent',
-      'eba_RP:x56\tSubsidiary',
-      'eba_RP:x21\tEntities other than entities of the group',
-      'eba_RP:x210\tOutsourcing'
-    ]
+    }
   },
   {
     id: 'b_01.02.0060',
