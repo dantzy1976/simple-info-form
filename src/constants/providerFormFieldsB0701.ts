@@ -3,6 +3,7 @@ import { annexIII } from './annexIII';
 import { binaryOptions } from './binaryOptions';
 import { criticalityOptions } from './criticalityOptions';
 import { impactOptions } from './impactOptions';
+import { substitutabilityOptions } from './substitutabilityOptions';
 
 export const providerFormFieldsB0701: FormField[] = [
   {
@@ -69,11 +70,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Substitutability of the ICT third-party service provider',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'SUBSTITUTABLE',
-      'DIFFICULT TO SUBSTITUTE',
-      'NOT SUBSTITUTABLE'
-    ],
+    options: substitutabilityOptions,
     info: {
       title: 'Substitutability Assessment Information',
       type: 'Closed set of options',

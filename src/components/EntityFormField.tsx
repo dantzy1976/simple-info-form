@@ -6,6 +6,7 @@ import { annexIII } from '../constants/annexIII';
 import { binaryOptions } from '../constants/binaryOptions';
 import { criticalityOptions } from '../constants/criticalityOptions';
 import { impactOptions } from '../constants/impactOptions';
+import { substitutabilityOptions } from '../constants/substitutabilityOptions';
 import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
@@ -245,7 +246,25 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               ))}
             </select>
           );
-        } else if (field.id === 'b_06.01.0050' || field.id === 'b_07.01.0110') {
+        } else if (field.id === 'b_07.01.0050') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select substitutability option</option>
+              {substitutabilityOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.id} - {option.label}
+                </option>
+              ))}
+            </select>
+          );
+        }
+        else if (field.id === 'b_06.01.0050' || field.id === 'b_07.01.0110') {
           return (
             <select
               id={field.id}
@@ -262,7 +281,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               ))}
             </select>
           );
-        } else if (field.id === 'b_06.01.0100' || field.id === 'b_07.01.0100') {
+        }
+        else if (field.id === 'b_06.01.0100' || field.id === 'b_07.01.0100') {
           return (
             <select
               id={field.id}
@@ -279,7 +299,8 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               ))}
             </select>
           );
-        } else if (field.options && Array.isArray(field.options)) {
+        }
+        else if (field.options && Array.isArray(field.options)) {
           const isObjectOptions = field.options.length > 0 && typeof field.options[0] === 'object';
           
           return (
