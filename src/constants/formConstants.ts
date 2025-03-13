@@ -25,3 +25,4 @@ export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';
 export { terminationReasons } from './terminationReasons';
 export { dataSensitivityLevels } from './dataSensitivityLevels';
+export { relianceLevels } from './relianceLevels';

@@ -9,6 +9,7 @@ import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
 import { terminationReasons } from '../constants/terminationReasons';
 import { dataSensitivityLevels } from '../constants/dataSensitivityLevels';
+import { relianceLevels } from '../constants/relianceLevels';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -165,6 +166,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             >
               <option value="">Select data sensitivity level</option>
               {dataSensitivityLevels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {level.id} - {level.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_02.02.0180') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select reliance level</option>
+              {relianceLevels.map((level) => (
                 <option key={level.id} value={level.id}>
                   {level.id} - {level.label}
                 </option>

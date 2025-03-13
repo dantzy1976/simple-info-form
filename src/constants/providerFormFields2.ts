@@ -321,7 +321,6 @@ export const providerFormFieldsB0202: FormField[] = [
     label: 'Level of reliance on the ICT service supporting the critical or important function',
     fieldType: 'closedOptions',
     required: true,
-    options: relianceLevelOptions,
     description: 'Level of reliance on the ICT service',
     info: {
       title: 'Reliance Level Information',
