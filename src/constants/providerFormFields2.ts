@@ -1,3 +1,4 @@
+
 import { FormField } from './types';
 import { binaryOptions } from './binaryOptions';
 
@@ -135,9 +136,9 @@ export const providerFormFieldsB0202: FormField[] = [
   {
     id: 'b_02.02.0050',
     label: 'Function identifier',
-    fieldType: 'closedOptions',
+    fieldType: 'alphanumerical',
     required: true,
-    options: functionIdentifierOptions,
+    placeholder: 'Enter function identifier',
     description: 'Identifier for the function being supported',
     info: {
       title: 'Function Identifier Information',
