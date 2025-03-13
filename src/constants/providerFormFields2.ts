@@ -307,7 +307,6 @@ export const providerFormFieldsB0202: FormField[] = [
     label: 'Sensitiveness of the data stored by the ICT third-party service provider',
     fieldType: 'closedOptions',
     required: true,
-    options: dataSensitivityOptions,
     description: 'Sensitivity level of the stored data',
     info: {
       title: 'Data Sensitivity Information',

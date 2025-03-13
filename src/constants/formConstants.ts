@@ -24,3 +24,4 @@ export { entityTypes } from './entityTypes';
 export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';
 export { terminationReasons } from './terminationReasons';
+export { dataSensitivityLevels } from './dataSensitivityLevels';

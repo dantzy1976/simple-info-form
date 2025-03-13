@@ -8,6 +8,7 @@ import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
 import { terminationReasons } from '../constants/terminationReasons';
+import { dataSensitivityLevels } from '../constants/dataSensitivityLevels';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -149,6 +150,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {terminationReasons.map((reason) => (
                 <option key={reason.id} value={reason.id}>
                   {reason.id} - {reason.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_02.02.0170') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select data sensitivity level</option>
+              {dataSensitivityLevels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {level.id} - {level.label}
                 </option>
               ))}
             </select>
