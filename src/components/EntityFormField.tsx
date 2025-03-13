@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
 import { currencies } from '../constants/currencies';
 import { annexIII } from '../constants/annexIII';
 import { binaryOptions } from '../constants/binaryOptions';
+import { entityTypes } from '../constants/entityTypes';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -63,6 +63,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
             required={field.required}
           />
         );
+      
       case 'country':
         return (
           <select
@@ -81,7 +82,24 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
           </select>
         );
       case 'closedOptions':
-        if (field.options && Array.isArray(field.options)) {
+        if (field.id === 'b_01.01.0040' || field.id === 'b_01.02.0040') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select entity type</option>
+              {entityTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.id} - {type.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.options && Array.isArray(field.options)) {
           const isObjectOptions = field.options.length > 0 && typeof field.options[0] === 'object';
           
           return (
@@ -116,6 +134,7 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
           );
         }
         return null;
+      
       case 'date':
         return (
           <input

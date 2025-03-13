@@ -1,3 +1,4 @@
+
 // Re-export all form constants and types
 export type { FormField } from './types';
 export { entityFormFields } from './entityFormFields';
@@ -19,3 +20,4 @@ export { countries } from './countries';
 export { currencies } from './currencies';
 export { annexIII } from './annexIII';
 export { binaryOptions } from './binaryOptions';
+export { entityTypes } from './entityTypes';
