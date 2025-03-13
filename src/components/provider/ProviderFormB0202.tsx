@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import EntityFormFields from '../EntityFormFields';
-import { providerFormFieldsB0202 } from '@/constants/formConstants';
+import { providerFormFieldsB0202 } from '@/constants/providerFormFields2';
 import { useProviderStore } from '@/stores/providerStore';
 
 const ProviderFormB0202 = ({ providerId }: { providerId: string }) => {

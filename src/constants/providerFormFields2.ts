@@ -1,6 +1,7 @@
 
 import { FormField } from './types';
 import { binaryOptions } from './binaryOptions';
+import { annexIII } from './annexIII';
 
 // Service type options
 const serviceTypeOptions = [
@@ -152,7 +153,7 @@ export const providerFormFieldsB0202: FormField[] = [
     label: 'Type of ICT services',
     fieldType: 'closedOptions',
     required: true,
-    options: serviceTypeOptions,
+    options: annexIII,
     description: 'Type of ICT services being provided',
     info: {
       title: 'Type of ICT Services Information',
