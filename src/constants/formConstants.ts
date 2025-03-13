@@ -28,3 +28,4 @@ export { dataSensitivityLevels } from './dataSensitivityLevels';
 export { relianceLevels } from './relianceLevels';
 export { branchStatusOptions } from './branchStatusOptions';
 export { providerPersonTypes } from './providerPersonTypes';
+export { licensedActivities } from './licensedActivities';

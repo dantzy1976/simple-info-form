@@ -1,4 +1,3 @@
-
 import { FormField } from './types';
 
 export const providerFormFieldsB0601: FormField[] = [
@@ -21,15 +20,6 @@ export const providerFormFieldsB0601: FormField[] = [
     label: 'Licenced activity',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Banking',
-      'Payment Services',
-      'Investment Services',
-      'Insurance',
-      'Asset Management',
-      'Credit Rating',
-      'Other'
-    ],
     description: 'Type of licenced activity',
     info: {
       title: 'Licensed Activity Information',

@@ -12,6 +12,7 @@ import { dataSensitivityLevels } from '../constants/dataSensitivityLevels';
 import { relianceLevels } from '../constants/relianceLevels';
 import { branchStatusOptions } from '../constants/branchStatusOptions';
 import { providerPersonTypes } from '../constants/providerPersonTypes';
+import { licensedActivities } from '../constants/licensedActivities';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -221,6 +222,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {providerPersonTypes.map((type) => (
                 <option key={type.id} value={type.id}>
                   {type.id} - {type.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_06.01.0020') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select licensed activity</option>
+              {licensedActivities.map((activity) => (
+                <option key={activity.id} value={activity.id}>
+                  {activity.id} - {activity.label}
                 </option>
               ))}
             </select>
