@@ -23,6 +23,7 @@ export { binaryOptions } from './binaryOptions';
 export { criticalityOptions } from './criticalityOptions';
 export { impactOptions } from './impactOptions';
 export { substitutabilityOptions } from './substitutabilityOptions';
+export { difficultSubstitutionReasons } from './difficultSubstitutionReasons';
 export { entityTypes } from './entityTypes';
 export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';

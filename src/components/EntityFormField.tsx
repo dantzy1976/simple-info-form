@@ -7,6 +7,7 @@ import { binaryOptions } from '../constants/binaryOptions';
 import { criticalityOptions } from '../constants/criticalityOptions';
 import { impactOptions } from '../constants/impactOptions';
 import { substitutabilityOptions } from '../constants/substitutabilityOptions';
+import { difficultSubstitutionReasons } from '../constants/difficultSubstitutionReasons';
 import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
@@ -259,6 +260,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {substitutabilityOptions.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.id} - {option.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_07.01.0060') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select reason</option>
+              {difficultSubstitutionReasons.map((reason) => (
+                <option key={reason.id} value={reason.id}>
+                  {reason.id} - {reason.label}
                 </option>
               ))}
             </select>

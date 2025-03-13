@@ -4,6 +4,7 @@ import { binaryOptions } from './binaryOptions';
 import { criticalityOptions } from './criticalityOptions';
 import { impactOptions } from './impactOptions';
 import { substitutabilityOptions } from './substitutabilityOptions';
+import { difficultSubstitutionReasons } from './difficultSubstitutionReasons';
 
 export const providerFormFieldsB0701: FormField[] = [
   {
@@ -84,12 +85,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Reason if the ICT third-party service provider is considered not substitutable or difficult to be substitutable',
     fieldType: 'closedOptions',
     required: false,
-    options: [
-      'LIMITED NUMBER OF AVAILABLE PROVIDERS ON THE MARKET',
-      'CONTRACTUAL CONSTRAINTS',
-      'DIFFICULTY TO ENSURE DATA PORTABILITY',
-      'OTHER'
-    ],
+    options: difficultSubstitutionReasons,
     description: 'Only required if provider is difficult to substitute or not substitutable',
     info: {
       title: 'Substitutability Reason Information',
