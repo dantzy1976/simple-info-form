@@ -1,4 +1,7 @@
+
 import { FormField } from './types';
+import { criticalityOptions } from './criticalityOptions';
+import { licensedActivities } from './licensedActivities';
 
 export const providerFormFieldsB0601: FormField[] = [
   {
@@ -20,6 +23,7 @@ export const providerFormFieldsB0601: FormField[] = [
     label: 'Licenced activity',
     fieldType: 'closedOptions',
     required: true,
+    options: licensedActivities,
     description: 'Type of licenced activity',
     info: {
       title: 'Licensed Activity Information',
@@ -62,11 +66,7 @@ export const providerFormFieldsB0601: FormField[] = [
     label: 'Criticality or importance assessment',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Critical',
-      'Important',
-      'Not critical or important'
-    ],
+    options: criticalityOptions,
     description: 'Assessment of the criticality or importance of the function',
     info: {
       title: 'Criticality Assessment Information',

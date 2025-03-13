@@ -1,6 +1,7 @@
 import { FormField } from './types';
 import { annexIII } from './annexIII';
 import { binaryOptions } from './binaryOptions';
+import { criticalityOptions } from './criticalityOptions';
 
 export const providerFormFieldsB0701: FormField[] = [
   {
@@ -169,11 +170,7 @@ export const providerFormFieldsB0701: FormField[] = [
     label: 'Are there alternative ICT third-party service providers identified?',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Yes, more than one',
-      'Yes, one',
-      'No'
-    ],
+    options: criticalityOptions,
     info: {
       title: 'Alternative Providers Information',
       type: 'Closed set of options',

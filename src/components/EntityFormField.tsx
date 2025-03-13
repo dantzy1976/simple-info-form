@@ -4,6 +4,7 @@ import { countries } from '../constants/countries';
 import { currencies } from '../constants/currencies';
 import { annexIII } from '../constants/annexIII';
 import { binaryOptions } from '../constants/binaryOptions';
+import { criticalityOptions } from '../constants/criticalityOptions';
 import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
@@ -239,6 +240,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {licensedActivities.map((activity) => (
                 <option key={activity.id} value={activity.id}>
                   {activity.id} - {activity.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_06.01.0050' || field.id === 'b_07.01.0110') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select option</option>
+              {criticalityOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.id} - {option.label}
                 </option>
               ))}
             </select>
