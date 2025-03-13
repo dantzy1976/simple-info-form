@@ -1,3 +1,4 @@
+
 import { FormField } from './types';
 import { annexIII } from './annexIII';
 
@@ -48,16 +49,9 @@ export const providerFormFieldsB0502: FormField[] = [
   {
     id: 'b_05.02.0040',
     label: 'Type of code to identify the ICT third-party service provider',
-    fieldType: 'closedOptions',
+    fieldType: 'alphanumerical',
     required: true,
-    options: [
-      'LEI',
-      'MIC',
-      'ISIN',
-      'BIC',
-      'NATID',
-      'OTHER'
-    ],
+    placeholder: 'Enter code type',
     description: 'Pattern/type of the identification code',
     info: {
       title: 'Service Provider Code Type Information',
