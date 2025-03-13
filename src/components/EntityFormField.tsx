@@ -10,6 +10,7 @@ import { contractTypes } from '../constants/contractTypes';
 import { terminationReasons } from '../constants/terminationReasons';
 import { dataSensitivityLevels } from '../constants/dataSensitivityLevels';
 import { relianceLevels } from '../constants/relianceLevels';
+import { branchStatusOptions } from '../constants/branchStatusOptions';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -185,6 +186,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {relianceLevels.map((level) => (
                 <option key={level.id} value={level.id}>
                   {level.id} - {level.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_04.01.0030') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select branch status</option>
+              {branchStatusOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.id} - {option.label}
                 </option>
               ))}
             </select>

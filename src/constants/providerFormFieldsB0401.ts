@@ -35,18 +35,6 @@ export const providerFormFieldsB0401: FormField[] = [
     label: 'Nature of the entity making use of the ICT service(s)',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Credit institution',
-      'Investment firm',
-      'Payment institution',
-      'Electronic money institution',
-      'Insurance undertaking',
-      'Reinsurance undertaking',
-      'Central counterparty',
-      'Trading venue',
-      'Central securities depository',
-      'Other'
-    ],
     description: 'Nature of the financial entity making use of the ICT services',
     info: {
       title: 'Entity Nature Information',
