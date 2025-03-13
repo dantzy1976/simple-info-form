@@ -194,7 +194,6 @@ export const providerFormFieldsB0202: FormField[] = [
     label: 'Reason of the termination or ending of the contractual arrangement',
     fieldType: 'closedOptions',
     required: false,
-    options: terminationReasonOptions,
     description: 'Reason for contract termination',
     info: {
       title: 'Termination Reason Information',

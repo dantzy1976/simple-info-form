@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FormField } from '../constants/formConstants';
 import { countries } from '../constants/countries';
@@ -8,6 +7,7 @@ import { binaryOptions } from '../constants/binaryOptions';
 import { entityTypes } from '../constants/entityTypes';
 import { entityHierarchyTypes } from '../constants/entityHierarchyTypes';
 import { contractTypes } from '../constants/contractTypes';
+import { terminationReasons } from '../constants/terminationReasons';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -132,6 +132,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {contractTypes.map((type) => (
                 <option key={type.id} value={type.id}>
                   {type.id} - {type.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_02.02.0090') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select termination reason</option>
+              {terminationReasons.map((reason) => (
+                <option key={reason.id} value={reason.id}>
+                  {reason.id} - {reason.label}
                 </option>
               ))}
             </select>

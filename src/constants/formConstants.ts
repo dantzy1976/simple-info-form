@@ -23,3 +23,4 @@ export { binaryOptions } from './binaryOptions';
 export { entityTypes } from './entityTypes';
 export { entityHierarchyTypes } from './entityHierarchyTypes';
 export { contractTypes } from './contractTypes';
+export { terminationReasons } from './terminationReasons';
