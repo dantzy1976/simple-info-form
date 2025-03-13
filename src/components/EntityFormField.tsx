@@ -11,6 +11,7 @@ import { terminationReasons } from '../constants/terminationReasons';
 import { dataSensitivityLevels } from '../constants/dataSensitivityLevels';
 import { relianceLevels } from '../constants/relianceLevels';
 import { branchStatusOptions } from '../constants/branchStatusOptions';
+import { providerPersonTypes } from '../constants/providerPersonTypes';
 import { Info } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -203,6 +204,23 @@ const EntityFormField = ({ field, value, onChange, style }: EntityFormFieldProps
               {branchStatusOptions.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.id} - {option.label}
+                </option>
+              ))}
+            </select>
+          );
+        } else if (field.id === 'b_05.01.0040') {
+          return (
+            <select
+              id={field.id}
+              value={value || ''}
+              onChange={handleChange}
+              className="entity-form-input w-full p-2 border border-gray-300 rounded"
+              required={field.required}
+            >
+              <option value="">Select person type</option>
+              {providerPersonTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.id} - {type.label}
                 </option>
               ))}
             </select>

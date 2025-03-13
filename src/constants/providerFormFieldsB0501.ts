@@ -56,10 +56,6 @@ export const providerFormFieldsB0501: FormField[] = [
     label: 'Type of person of the ICT third-party service provider',
     fieldType: 'closedOptions',
     required: true,
-    options: [
-      'Natural person',
-      'Legal person'
-    ],
     description: 'Type of person of the ICT service provider',
     info: {
       title: 'Service Provider Person Type Information',

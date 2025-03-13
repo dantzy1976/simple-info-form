@@ -27,3 +27,4 @@ export { terminationReasons } from './terminationReasons';
 export { dataSensitivityLevels } from './dataSensitivityLevels';
 export { relianceLevels } from './relianceLevels';
 export { branchStatusOptions } from './branchStatusOptions';
+export { providerPersonTypes } from './providerPersonTypes';
