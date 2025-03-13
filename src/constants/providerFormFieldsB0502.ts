@@ -1,4 +1,3 @@
-
 import { FormField } from './types';
 import { annexIII } from './annexIII';
 
@@ -91,16 +90,9 @@ export const providerFormFieldsB0502: FormField[] = [
   {
     id: 'b_05.02.0070',
     label: 'Type of code to identify the recipient of sub-contracted ICT services',
-    fieldType: 'closedOptions',
+    fieldType: 'alphanumerical',
     required: false,
-    options: [
-      'LEI',
-      'MIC',
-      'ISIN',
-      'BIC',
-      'NATID',
-      'OTHER'
-    ],
+    placeholder: 'Enter code type',
     description: 'Pattern/type of the identification code for the recipient',
     info: {
       title: 'Recipient Code Type Information',
