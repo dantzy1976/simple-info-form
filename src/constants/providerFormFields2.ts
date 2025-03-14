@@ -123,9 +123,9 @@ export const providerFormFieldsB0202: FormField[] = [
   {
     id: 'b_02.02.0040',
     label: 'Type of code to identify the ICT third-party service provider',
-    fieldType: 'closedOptions',
+    fieldType: 'alphanumerical',
     required: true,
-    options: codeTypeOptions,
+    placeholder: 'Enter code type',
     description: 'The type of code used to identify the service provider',
     info: {
       title: 'Service Provider Code Type Information',
