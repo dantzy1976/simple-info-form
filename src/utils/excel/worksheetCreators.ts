@@ -1,11 +1,12 @@
+
 import ExcelJS from 'exceljs';
 
 /**
  * Creates and configures the first worksheet
  */
 export const createFirstWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  // Create the first worksheet for b_01.01 data
-  const worksheet = workbook.addWorksheet('First Form Data');
+  // Create the first worksheet with form identifier as name
+  const worksheet = workbook.addWorksheet('b_01.01');
 
   // Define the header structure for the first form
   worksheet.columns = [
@@ -47,7 +48,7 @@ export const createFirstWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksh
  * Creates and configures the second worksheet
  */
 export const createSecondWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Second Form Data');
+  const worksheet = workbook.addWorksheet('b_01.02');
 
   // Define the header structure for the second form
   worksheet.columns = [
@@ -104,7 +105,7 @@ export const createSecondWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Works
  * Creates and configures the third worksheet
  */
 export const createThirdWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Branch Form Data');
+  const worksheet = workbook.addWorksheet('b_01.03');
 
   // Define the header structure for the third form
   worksheet.columns = [
@@ -140,7 +141,7 @@ export const createThirdWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksh
  * Creates and configures the provider arrangements worksheet
  */
 export const createProviderArrangementWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Provider Arrangements');
+  const worksheet = workbook.addWorksheet('b_02.03');
 
   // Define the header structure
   worksheet.columns = [
@@ -173,7 +174,7 @@ export const createProviderArrangementWorksheet = (workbook: ExcelJS.Workbook): 
  * Creates and configures the entity signing contractual arrangement worksheet
  */
 export const createEntitySigningWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Entity Signing Arrangements');
+  const worksheet = workbook.addWorksheet('b_03.01');
 
   // Define the header structure
   worksheet.columns = [
@@ -206,7 +207,7 @@ export const createEntitySigningWorksheet = (workbook: ExcelJS.Workbook): ExcelJ
  * Creates and configures the ICT service provider worksheet
  */
 export const createIctProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('ICT Service Providers');
+  const worksheet = workbook.addWorksheet('b_03.02');
 
   // Define the header structure
   worksheet.columns = [
@@ -242,7 +243,7 @@ export const createIctProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.
  * Creates and configures the entity providing ICT services worksheet
  */
 export const createIctEntityProviderWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Entity Providing ICT Services');
+  const worksheet = workbook.addWorksheet('b_03.03');
 
   // Define the header structure
   worksheet.columns = [
@@ -275,7 +276,7 @@ export const createIctEntityProviderWorksheet = (workbook: ExcelJS.Workbook): Ex
  * Creates and configures the entity using ICT services worksheet
  */
 export const createEntityUsingIctServicesWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Entity Using ICT Services');
+  const worksheet = workbook.addWorksheet('b_04.01');
 
   // Define the header structure
   worksheet.columns = [
@@ -311,7 +312,7 @@ export const createEntityUsingIctServicesWorksheet = (workbook: ExcelJS.Workbook
  * Creates and configures the ICT third-party service provider information worksheet
  */
 export const createIctThirdPartyProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('ICT Third-Party Provider Info');
+  const worksheet = workbook.addWorksheet('b_05.01');
 
   // Define the header structure
   worksheet.columns = [
@@ -362,7 +363,7 @@ export const createIctThirdPartyProviderInfoWorksheet = (workbook: ExcelJS.Workb
  * Creates and configures the ICT services information worksheet
  */
 export const createIctServicesInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('ICT Services Info');
+  const worksheet = workbook.addWorksheet('b_05.02');
 
   // Define the header structure
   worksheet.columns = [
@@ -407,7 +408,7 @@ export const createIctServicesInfoWorksheet = (workbook: ExcelJS.Workbook): Exce
  * Creates and configures the Function Information worksheet
  */
 export const createFunctionInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Function Information');
+  const worksheet = workbook.addWorksheet('b_06.01');
 
   // Define the header structure
   worksheet.columns = [
@@ -461,7 +462,7 @@ export const createFunctionInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS
  * Creates and configures the ICT Service Provider Assessment worksheet
  */
 export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('ICT Service Provider Assessment');
+  const worksheet = workbook.addWorksheet('b_07.01');
 
   // Define the header structure
   worksheet.columns = [
@@ -521,7 +522,7 @@ export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Wo
  * Creates and configures the Additional Provider Information worksheet
  */
 export const createAdditionalProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
-  const worksheet = workbook.addWorksheet('Additional Provider Information');
+  const worksheet = workbook.addWorksheet('b_99.01');
 
   // Define the header structure
   worksheet.columns = [
