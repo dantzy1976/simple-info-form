@@ -15,8 +15,7 @@ import {
   createIctServicesInfoWorksheet,
   createFunctionInfoWorksheet,
   createIctServiceProviderAssessmentWorksheet,
-  createAdditionalProviderInfoWorksheet,
-  createMetadataWorksheet
+  createAdditionalProviderInfoWorksheet
 } from './worksheetCreators';
 import { processEntityData } from './dataProcessor';
 
@@ -33,7 +32,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Create a new workbook
   const workbook = new ExcelJS.Workbook();
   
-  // Create all worksheets
+  // Create worksheets
   const worksheet1 = createFirstWorksheet(workbook);
   const worksheet2 = createSecondWorksheet(workbook);
   const worksheet3 = createThirdWorksheet(workbook);
@@ -47,7 +46,6 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   const functionInfoSheet = createFunctionInfoWorksheet(workbook);
   const ictServiceProviderAssessmentSheet = createIctServiceProviderAssessmentWorksheet(workbook);
   const additionalProviderInfoSheet = createAdditionalProviderInfoWorksheet(workbook);
-  const metadataSheet = createMetadataWorksheet(workbook);
   
   // Handle both single entity and multiple entities
   const dataArray = Array.isArray(entities) ? entities : [entities];
@@ -71,8 +69,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       ictServicesInfoSheet,
       functionInfoSheet,
       ictServiceProviderAssessmentSheet,
-      additionalProviderInfoSheet,
-      metadataSheet
+      additionalProviderInfoSheet
     );
   });
 
