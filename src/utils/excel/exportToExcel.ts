@@ -6,6 +6,8 @@ import {
   createFirstWorksheet, 
   createSecondWorksheet, 
   createThirdWorksheet,
+  createProviderContractWorksheet,
+  createIctServicesWorksheet,
   createProviderArrangementWorksheet,
   createEntitySigningWorksheet,
   createIctProviderWorksheet,
@@ -36,6 +38,8 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   const worksheet1 = createFirstWorksheet(workbook);
   const worksheet2 = createSecondWorksheet(workbook);
   const worksheet3 = createThirdWorksheet(workbook);
+  const providerContractSheet = createProviderContractWorksheet(workbook);
+  const ictServicesSheet = createIctServicesWorksheet(workbook);
   const providerSheet = createProviderArrangementWorksheet(workbook);
   const entitySigningSheet = createEntitySigningWorksheet(workbook);
   const ictProviderSheet = createIctProviderWorksheet(workbook);
@@ -59,7 +63,9 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
       data, 
       worksheet1, 
       worksheet2, 
-      worksheet3, 
+      worksheet3,
+      providerContractSheet,
+      ictServicesSheet,
       providerSheet, 
       entitySigningSheet, 
       ictProviderSheet,

@@ -14,7 +14,7 @@ export const handleEntityExport = async (data: Record<string, any>[] | Record<st
         
         toast({
           title: "Export successful",
-          description: `All ${data.length} entities have been exported to Excel.`,
+          description: `All ${data.length} entities have been exported to Excel with all form sheets included.`,
         });
         return;
       } else if (!Array.isArray(data) && Object.keys(data).length > 0) {
@@ -23,7 +23,7 @@ export const handleEntityExport = async (data: Record<string, any>[] | Record<st
         
         toast({
           title: "Export successful",
-          description: "Current entity information has been exported to Excel.",
+          description: "Current entity information has been exported to Excel with all form sheets included.",
         });
         return;
       }
@@ -39,7 +39,7 @@ export const handleEntityExport = async (data: Record<string, any>[] | Record<st
     console.error('Export error:', error);
     toast({
       title: "Export failed",
-      description: "There was an error exporting the data.",
+      description: "There was an error exporting the data. Please check the console for details.",
       variant: "destructive",
     });
   }

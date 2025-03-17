@@ -1,4 +1,3 @@
-
 import ExcelJS from 'exceljs';
 
 /**
@@ -133,6 +132,123 @@ export const createThirdWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksh
 
   // Format the header rows
   formatHeaderRows(worksheet, 'FFE0D1EB'); // Light purple
+
+  return worksheet;
+};
+
+/**
+ * Creates and configures the b_02.01 worksheet
+ */
+export const createProviderContractWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('b_02.01');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_02.01.0010', key: 'b_02.01.0010', width: 50 },
+    { header: 'b_02.01.0020', key: 'b_02.01.0020', width: 30 },
+    { header: 'b_02.01.0030', key: 'b_02.01.0030', width: 50 },
+    { header: 'b_02.01.0040', key: 'b_02.01.0040', width: 30 },
+    { header: 'b_02.01.0050', key: 'b_02.01.0050', width: 40 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'Type of contractual arrangement',
+    'Overarching contractual arrangement reference number',
+    'Currency of the amount reported in b_02.01.0050',
+    'Annual expense or estimated cost of the contractual arrangement for the past year'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Closed set of options',
+    'Alphanumerical',
+    'Currency',
+    'Monetary'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFD1E8FF'); // Light blue
+
+  return worksheet;
+};
+
+/**
+ * Creates and configures the b_02.02 worksheet
+ */
+export const createIctServicesWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
+  const worksheet = workbook.addWorksheet('b_02.02');
+
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_02.02.0010', key: 'b_02.02.0010', width: 50 },
+    { header: 'b_02.02.0020', key: 'b_02.02.0020', width: 50 },
+    { header: 'b_02.02.0030', key: 'b_02.02.0030', width: 50 },
+    { header: 'b_02.02.0040', key: 'b_02.02.0040', width: 30 },
+    { header: 'b_02.02.0050', key: 'b_02.02.0050', width: 40 },
+    { header: 'b_02.02.0060', key: 'b_02.02.0060', width: 40 },
+    { header: 'b_02.02.0070', key: 'b_02.02.0070', width: 30 },
+    { header: 'b_02.02.0080', key: 'b_02.02.0080', width: 30 },
+    { header: 'b_02.02.0090', key: 'b_02.02.0090', width: 40 },
+    { header: 'b_02.02.0100', key: 'b_02.02.0100', width: 40 },
+    { header: 'b_02.02.0110', key: 'b_02.02.0110', width: 40 },
+    { header: 'b_02.02.0120', key: 'b_02.02.0120', width: 40 },
+    { header: 'b_02.02.0130', key: 'b_02.02.0130', width: 40 },
+    { header: 'b_02.02.0140', key: 'b_02.02.0140', width: 30 },
+    { header: 'b_02.02.0150', key: 'b_02.02.0150', width: 40 },
+    { header: 'b_02.02.0160', key: 'b_02.02.0160', width: 40 },
+    { header: 'b_02.02.0170', key: 'b_02.02.0170', width: 40 },
+    { header: 'b_02.02.0180', key: 'b_02.02.0180', width: 40 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Contractual arrangement reference number',
+    'LEI of the entity making use of the ICT service(s)',
+    'Identification code of the ICT third-party service provider',
+    'Type of code to identify the ICT third-party service provider',
+    'Function identifier',
+    'Type of ICT services',
+    'Start date of the contractual arrangement',
+    'End date of the contractual arrangement',
+    'Reason of the termination or ending of the contractual arrangement',
+    'Notice period for the financial entity making use of the ICT service(s)',
+    'Notice period for the ICT third-party service provider',
+    'Country of the governing law of the contractual arrangement',
+    'Country of provision of the ICT services',
+    'Storage of data',
+    'Location of the data at rest (storage)',
+    'Location of management of the data (processing)',
+    'Sensitiveness of the data stored by the ICT third-party service provider',
+    'Level of reliance on the ICT service supporting the critical or important function'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Closed set of options',
+    'Date',
+    'Date',
+    'Closed set of options',
+    'Alphanumerical',
+    'Alphanumerical',
+    'Country',
+    'Country',
+    'Closed set of options',
+    'Country',
+    'Country',
+    'Closed set of options',
+    'Closed set of options'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFEBCFDF'); // Light pink
 
   return worksheet;
 };
@@ -524,112 +640,4 @@ export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Wo
 export const createAdditionalProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
   const worksheet = workbook.addWorksheet('b_99.01');
 
-  // Define the header structure
-  worksheet.columns = [
-    { header: 'b_99.01.0010', key: 'b_99.01.0010', width: 40 },
-    { header: 'b_99.01.0020', key: 'b_99.01.0020', width: 40 },
-    { header: 'b_99.01.0030', key: 'b_99.01.0030', width: 40 },
-    { header: 'b_99.01.0040', key: 'b_99.01.0040', width: 40 },
-    { header: 'b_99.01.0050', key: 'b_99.01.0050', width: 40 },
-    { header: 'b_99.01.0060', key: 'b_99.01.0060', width: 40 },
-    { header: 'b_99.01.0070', key: 'b_99.01.0070', width: 40 },
-    { header: 'b_99.01.0080', key: 'b_99.01.0080', width: 40 },
-    { header: 'b_99.01.0090', key: 'b_99.01.0090', width: 40 },
-    { header: 'b_99.01.0100', key: 'b_99.01.0100', width: 40 },
-    { header: 'b_99.01.0110', key: 'b_99.01.0110', width: 40 },
-    { header: 'b_99.01.0120', key: 'b_99.01.0120', width: 40 },
-    { header: 'b_99.01.0130', key: 'b_99.01.0130', width: 40 },
-    { header: 'b_99.01.0140', key: 'b_99.01.0140', width: 40 },
-    { header: 'b_99.01.0150', key: 'b_99.01.0150', width: 40 },
-    { header: 'b_99.01.0160', key: 'b_99.01.0160', width: 40 },
-    { header: 'b_99.01.0170', key: 'b_99.01.0170', width: 40 },
-    { header: 'b_99.01.0180', key: 'b_99.01.0180', width: 40 },
-    { header: 'b_99.01.0190', key: 'b_99.01.0190', width: 40 },
-  ];
-
-  // Add the second header row with descriptions
-  worksheet.addRow([
-    'Standalone arrangement',
-    'Overarching arrangement',
-    'Subsequent or associated arrangement',
-    'Low',
-    'Medium',
-    'High',
-    'Low',
-    'Medium',
-    'High',
-    'Not substitutable',
-    'Highly complex substitutability',
-    'Medium complexity in terms of substitutability',
-    'Easily substitutable',
-    'Easy',
-    'Difficult',
-    'Highly complex',
-    'Low',
-    'Medium',
-    'High'
-  ]);
-
-  // Add the field type row - all are alphanumerical
-  worksheet.addRow([
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical',
-    'Alphanumerical'
-  ]);
-
-  // Format the header rows
-  formatHeaderRows(worksheet, 'FFF0E6FF');  // Light purple
-
-  return worksheet;
-};
-
-/**
- * Helper function to format header rows in worksheets
- */
-const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor = 'FFCCDAEB') => {
-  for (let i = 1; i <= 3; i++) {
-    const row = worksheet.getRow(i);
-    row.eachCell((cell) => {
-      cell.font = { bold: true };
-      cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
-      
-      // Set background colors based on row
-      if (i === 1) {
-        // Header row - use provided color
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: headerColor }
-        };
-      } else if (i === 3) {
-        // Field type row - light yellow
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'FFFFF2CC' }
-        };
-      }
-    });
-  }
-
-  // Set row heights for better readability
-  worksheet.getRow(1).height = 25;
-  worksheet.getRow(2).height = 40;
-  worksheet.getRow(3).height = 25;
-};
+  // Define the header

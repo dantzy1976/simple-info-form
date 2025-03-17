@@ -8,21 +8,25 @@ export const processEntityData = (
   worksheet1: ExcelJS.Worksheet, 
   worksheet2: ExcelJS.Worksheet, 
   worksheet3: ExcelJS.Worksheet,
-  providerSheet?: ExcelJS.Worksheet,
-  entitySigningSheet?: ExcelJS.Worksheet,
-  ictProviderSheet?: ExcelJS.Worksheet,
-  ictEntityProviderSheet?: ExcelJS.Worksheet,
-  entityUsingIctServicesSheet?: ExcelJS.Worksheet,
-  ictThirdPartyProviderInfoSheet?: ExcelJS.Worksheet,
-  ictServicesInfoSheet?: ExcelJS.Worksheet,
-  functionInfoSheet?: ExcelJS.Worksheet,
-  ictServiceProviderAssessmentSheet?: ExcelJS.Worksheet,
-  additionalProviderInfoSheet?: ExcelJS.Worksheet
+  providerContractSheet: ExcelJS.Worksheet,
+  ictServicesSheet: ExcelJS.Worksheet,
+  providerSheet: ExcelJS.Worksheet,
+  entitySigningSheet: ExcelJS.Worksheet,
+  ictProviderSheet: ExcelJS.Worksheet,
+  ictEntityProviderSheet: ExcelJS.Worksheet,
+  entityUsingIctServicesSheet: ExcelJS.Worksheet,
+  ictThirdPartyProviderInfoSheet: ExcelJS.Worksheet,
+  ictServicesInfoSheet: ExcelJS.Worksheet,
+  functionInfoSheet: ExcelJS.Worksheet,
+  ictServiceProviderAssessmentSheet: ExcelJS.Worksheet,
+  additionalProviderInfoSheet: ExcelJS.Worksheet
 ) => {
   // Create normalized objects for each form
   const firstFormData = createEmptyFirstFormData();
   const secondFormData = createEmptySecondFormData();
   const thirdFormData = createEmptyThirdFormData();
+  const providerContractFormData = createEmptyProviderContractFormData();
+  const ictServicesFormData = createEmptyIctServicesFormData();
   const providerFormData = createEmptyProviderFormData();
   const entitySigningFormData = createEmptyEntitySigningFormData();
   const ictProviderFormData = createEmptyIctProviderFormData();
@@ -50,7 +54,9 @@ export const processEntityData = (
       data, 
       firstFormData, 
       secondFormData, 
-      thirdFormData, 
+      thirdFormData,
+      providerContractFormData,
+      ictServicesFormData,
       providerFormData, 
       entitySigningFormData,
       ictProviderFormData,
@@ -67,11 +73,15 @@ export const processEntityData = (
   console.log('exportToExcel - Final normalized data for first form:', firstFormData);
   console.log('exportToExcel - Final normalized data for second form:', secondFormData);
   console.log('exportToExcel - Final normalized data for third form:', thirdFormData);
+  console.log('exportToExcel - Final normalized data for provider contract form:', providerContractFormData);
+  console.log('exportToExcel - Final normalized data for ICT services form:', ictServicesFormData);
   
   // Add data rows to each worksheet
   addDataToWorksheet(worksheet1, firstFormData, Object.keys(firstFormData));
   addDataToWorksheet(worksheet2, secondFormData, Object.keys(secondFormData));
   addDataToWorksheet(worksheet3, thirdFormData, Object.keys(thirdFormData));
+  addDataToWorksheet(providerContractSheet, providerContractFormData, Object.keys(providerContractFormData));
+  addDataToWorksheet(ictServicesSheet, ictServicesFormData, Object.keys(ictServicesFormData));
   
   // Add provider data if provider sheet exists
   if (providerSheet) {
@@ -161,6 +171,41 @@ const createEmptyThirdFormData = () => ({
   'b_01.03.0020': '',
   'b_01.03.0030': '',
   'b_01.03.0040': ''
+});
+
+/**
+ * Helper function to create an empty data object for the provider contract form (b_02.01)
+ */
+const createEmptyProviderContractFormData = () => ({
+  'b_02.01.0010': '',
+  'b_02.01.0020': '',
+  'b_02.01.0030': '',
+  'b_02.01.0040': '',
+  'b_02.01.0050': ''
+});
+
+/**
+ * Helper function to create an empty data object for the ICT services form (b_02.02)
+ */
+const createEmptyIctServicesFormData = () => ({
+  'b_02.02.0010': '',
+  'b_02.02.0020': '',
+  'b_02.02.0030': '',
+  'b_02.02.0040': '',
+  'b_02.02.0050': '',
+  'b_02.02.0060': '',
+  'b_02.02.0070': '',
+  'b_02.02.0080': '',
+  'b_02.02.0090': '',
+  'b_02.02.0100': '',
+  'b_02.02.0110': '',
+  'b_02.02.0120': '',
+  'b_02.02.0130': '',
+  'b_02.02.0140': '',
+  'b_02.02.0150': '',
+  'b_02.02.0160': '',
+  'b_02.02.0170': '',
+  'b_02.02.0180': ''
 });
 
 /**
@@ -326,16 +371,18 @@ const assignDataToForms = (
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
   thirdFormData: Record<string, string>,
-  providerFormData?: Record<string, string>,
-  entitySigningFormData?: Record<string, string>,
-  ictProviderFormData?: Record<string, string>,
-  ictEntityProviderFormData?: Record<string, string>,
-  entityUsingIctServicesFormData?: Record<string, string>,
-  ictThirdPartyProviderInfoFormData?: Record<string, string>,
-  ictServicesInfoFormData?: Record<string, string>,
-  functionInfoFormData?: Record<string, string>,
-  ictServiceProviderAssessmentFormData?: Record<string, string>,
-  additionalProviderInfoFormData?: Record<string, string>
+  providerContractFormData: Record<string, string>,
+  ictServicesFormData: Record<string, string>,
+  providerFormData: Record<string, string>,
+  entitySigningFormData: Record<string, string>,
+  ictProviderFormData: Record<string, string>,
+  ictEntityProviderFormData: Record<string, string>,
+  entityUsingIctServicesFormData: Record<string, string>,
+  ictThirdPartyProviderInfoFormData: Record<string, string>,
+  ictServicesInfoFormData: Record<string, string>,
+  functionInfoFormData: Record<string, string>,
+  ictServiceProviderAssessmentFormData: Record<string, string>,
+  additionalProviderInfoFormData: Record<string, string>
 ) => {
   // Check if this belongs to first form
   if (normalizedKey && normalizedKey.includes('01.01') && Object.keys(firstFormData).includes(normalizedKey)) {
@@ -352,53 +399,63 @@ const assignDataToForms = (
     thirdFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched third form field "${normalizedKey}" with value:`, data[originalKey]);
   }
+  // Check if this belongs to provider contract form (b_02.01)
+  else if (normalizedKey && normalizedKey.includes('02.01') && Object.keys(providerContractFormData).includes(normalizedKey)) {
+    providerContractFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched provider contract form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
+  // Check if this belongs to ICT services form (b_02.02)
+  else if (normalizedKey && normalizedKey.includes('02.02') && Object.keys(ictServicesFormData).includes(normalizedKey)) {
+    ictServicesFormData[normalizedKey] = data[originalKey];
+    console.log(`exportToExcel - Matched ICT services form field "${normalizedKey}" with value:`, data[originalKey]);
+  }
   // Check if this belongs to provider form
-  else if (providerFormData && normalizedKey && normalizedKey.includes('02.03') && Object.keys(providerFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('02.03') && Object.keys(providerFormData).includes(normalizedKey)) {
     providerFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched provider form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to entity signing form
-  else if (entitySigningFormData && normalizedKey && normalizedKey.includes('03.01') && Object.keys(entitySigningFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('03.01') && Object.keys(entitySigningFormData).includes(normalizedKey)) {
     entitySigningFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched entity signing form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to ICT provider form
-  else if (ictProviderFormData && normalizedKey && normalizedKey.includes('03.02') && Object.keys(ictProviderFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('03.02') && Object.keys(ictProviderFormData).includes(normalizedKey)) {
     ictProviderFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT provider form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to ICT entity provider form
-  else if (ictEntityProviderFormData && normalizedKey && normalizedKey.includes('03.03') && Object.keys(ictEntityProviderFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('03.03') && Object.keys(ictEntityProviderFormData).includes(normalizedKey)) {
     ictEntityProviderFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT entity provider form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to entity using ICT services form
-  else if (entityUsingIctServicesFormData && normalizedKey && normalizedKey.includes('04.01') && Object.keys(entityUsingIctServicesFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('04.01') && Object.keys(entityUsingIctServicesFormData).includes(normalizedKey)) {
     entityUsingIctServicesFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched entity using ICT services form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to ICT third-party provider info form
-  else if (ictThirdPartyProviderInfoFormData && normalizedKey && normalizedKey.includes('05.01') && Object.keys(ictThirdPartyProviderInfoFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('05.01') && Object.keys(ictThirdPartyProviderInfoFormData).includes(normalizedKey)) {
     ictThirdPartyProviderInfoFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT third-party provider info form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to ICT services info form
-  else if (ictServicesInfoFormData && normalizedKey && normalizedKey.includes('05.02') && Object.keys(ictServicesInfoFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('05.02') && Object.keys(ictServicesInfoFormData).includes(normalizedKey)) {
     ictServicesInfoFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT services info form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to function info form
-  else if (functionInfoFormData && normalizedKey && normalizedKey.includes('06.01') && Object.keys(functionInfoFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('06.01') && Object.keys(functionInfoFormData).includes(normalizedKey)) {
     functionInfoFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched function info form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to ICT service provider assessment form
-  else if (ictServiceProviderAssessmentFormData && normalizedKey && normalizedKey.includes('07.01') && Object.keys(ictServiceProviderAssessmentFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('07.01') && Object.keys(ictServiceProviderAssessmentFormData).includes(normalizedKey)) {
     ictServiceProviderAssessmentFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched ICT service provider assessment form field "${normalizedKey}" with value:`, data[originalKey]);
   }
   // Check if this belongs to additional provider info form
-  else if (additionalProviderInfoFormData && normalizedKey && normalizedKey.includes('99.01') && Object.keys(additionalProviderInfoFormData).includes(normalizedKey)) {
+  else if (normalizedKey && normalizedKey.includes('99.01') && Object.keys(additionalProviderInfoFormData).includes(normalizedKey)) {
     additionalProviderInfoFormData[normalizedKey] = data[originalKey];
     console.log(`exportToExcel - Matched additional provider info form field "${normalizedKey}" with value:`, data[originalKey]);
   }
@@ -409,7 +466,9 @@ const assignDataToForms = (
       data, 
       firstFormData, 
       secondFormData, 
-      thirdFormData, 
+      thirdFormData,
+      providerContractFormData,
+      ictServicesFormData,
       providerFormData, 
       entitySigningFormData,
       ictProviderFormData,
@@ -433,16 +492,18 @@ const tryDirectMapping = (
   firstFormData: Record<string, string>,
   secondFormData: Record<string, string>,
   thirdFormData: Record<string, string>,
-  providerFormData?: Record<string, string>,
-  entitySigningFormData?: Record<string, string>,
-  ictProviderFormData?: Record<string, string>,
-  ictEntityProviderFormData?: Record<string, string>,
-  entityUsingIctServicesFormData?: Record<string, string>,
-  ictThirdPartyProviderInfoFormData?: Record<string, string>,
-  ictServicesInfoFormData?: Record<string, string>,
-  functionInfoFormData?: Record<string, string>,
-  ictServiceProviderAssessmentFormData?: Record<string, string>,
-  additionalProviderInfoFormData?: Record<string, string>
+  providerContractFormData: Record<string, string>,
+  ictServicesFormData: Record<string, string>,
+  providerFormData: Record<string, string>,
+  entitySigningFormData: Record<string, string>,
+  ictProviderFormData: Record<string, string>,
+  ictEntityProviderFormData: Record<string, string>,
+  entityUsingIctServicesFormData: Record<string, string>,
+  ictThirdPartyProviderInfoFormData: Record<string, string>,
+  ictServicesInfoFormData: Record<string, string>,
+  functionInfoFormData: Record<string, string>,
+  ictServiceProviderAssessmentFormData: Record<string, string>,
+  additionalProviderInfoFormData: Record<string, string>
 ) => {
   // First form direct mapping
   if (key.includes('01_01')) {
@@ -468,8 +529,24 @@ const tryDirectMapping = (
       console.log(`exportToExcel - Direct matched third form field "${directKey}" with value:`, data[key]);
     }
   }
+  // Provider contract form direct mapping (b_02.01)
+  else if (key.includes('02_01')) {
+    const directKey = `b_02.01.${key.split('_').pop()}`;
+    if (Object.keys(providerContractFormData).includes(directKey)) {
+      providerContractFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched provider contract form field "${directKey}" with value:`, data[key]);
+    }
+  }
+  // ICT services form direct mapping (b_02.02)
+  else if (key.includes('02_02')) {
+    const directKey = `b_02.02.${key.split('_').pop()}`;
+    if (Object.keys(ictServicesFormData).includes(directKey)) {
+      ictServicesFormData[directKey] = data[key];
+      console.log(`exportToExcel - Direct matched ICT services form field "${directKey}" with value:`, data[key]);
+    }
+  }
   // Provider form direct mapping
-  else if (providerFormData && key.includes('02_03')) {
+  else if (key.includes('02_03')) {
     const directKey = `b_02.03.${key.split('_').pop()}`;
     if (Object.keys(providerFormData).includes(directKey)) {
       providerFormData[directKey] = data[key];
@@ -521,7 +598,7 @@ const tryDirectMapping = (
     const directKey = `b_05.02.${key.split('_').pop()}`;
     if (Object.keys(ictServicesInfoFormData).includes(directKey)) {
       ictServicesInfoFormData[directKey] = data[key];
-      console.log(`exportToExcel - Direct matched ICT services info form field "${directKey}" with value:`, data[key]);
+      console.log(`exportToExcel - Direct matched ICT services form field "${directKey}" with value:`, data[key]);
     }
   }
   // Function info form direct mapping
@@ -571,7 +648,4 @@ const addDataToWorksheet = (
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    };
-  });
-};
+      right: { style: 'thin'
