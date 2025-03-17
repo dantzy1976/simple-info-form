@@ -32,7 +32,7 @@ export const exportToExcel = async (entities: ExportData[] | ExportData) => {
   // Create a new workbook
   const workbook = new ExcelJS.Workbook();
   
-  // Create worksheets
+  // Create worksheets with form names as sheet names
   const worksheet1 = createFirstWorksheet(workbook);
   const worksheet2 = createSecondWorksheet(workbook);
   const worksheet3 = createThirdWorksheet(workbook);
