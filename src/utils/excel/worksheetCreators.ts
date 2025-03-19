@@ -1,3 +1,4 @@
+
 import ExcelJS from 'exceljs';
 
 /**
@@ -640,4 +641,136 @@ export const createIctServiceProviderAssessmentWorksheet = (workbook: ExcelJS.Wo
 export const createAdditionalProviderInfoWorksheet = (workbook: ExcelJS.Workbook): ExcelJS.Worksheet => {
   const worksheet = workbook.addWorksheet('b_99.01');
 
-  // Define the header
+  // Define the header structure
+  worksheet.columns = [
+    { header: 'b_99.01.0010', key: 'b_99.01.0010', width: 40 },
+    { header: 'b_99.01.0020', key: 'b_99.01.0020', width: 40 },
+    { header: 'b_99.01.0030', key: 'b_99.01.0030', width: 40 },
+    { header: 'b_99.01.0040', key: 'b_99.01.0040', width: 40 },
+    { header: 'b_99.01.0050', key: 'b_99.01.0050', width: 40 },
+    { header: 'b_99.01.0060', key: 'b_99.01.0060', width: 50 },
+    { header: 'b_99.01.0070', key: 'b_99.01.0070', width: 40 },
+    { header: 'b_99.01.0080', key: 'b_99.01.0080', width: 40 },
+    { header: 'b_99.01.0090', key: 'b_99.01.0090', width: 40 },
+    { header: 'b_99.01.0100', key: 'b_99.01.0100', width: 40 },
+    { header: 'b_99.01.0110', key: 'b_99.01.0110', width: 40 },
+    { header: 'b_99.01.0120', key: 'b_99.01.0120', width: 40 },
+    { header: 'b_99.01.0130', key: 'b_99.01.0130', width: 40 },
+    { header: 'b_99.01.0140', key: 'b_99.01.0140', width: 40 },
+    { header: 'b_99.01.0150', key: 'b_99.01.0150', width: 40 },
+    { header: 'b_99.01.0160', key: 'b_99.01.0160', width: 40 },
+    { header: 'b_99.01.0170', key: 'b_99.01.0170', width: 40 },
+    { header: 'b_99.01.0180', key: 'b_99.01.0180', width: 40 },
+    { header: 'b_99.01.0190', key: 'b_99.01.0190', width: 40 },
+  ];
+
+  // Add the second header row with descriptions
+  worksheet.addRow([
+    'Provider identifier',
+    'Provider name',
+    'Provider type',
+    'Provider country',
+    'Annual contract value',
+    'Contract reference',
+    'Contract start date',
+    'Contract end date',
+    'Services provided',
+    'Critical services flag',
+    'Risk assessment date',
+    'Risk assessment result',
+    'Exit strategy in place',
+    'Exit strategy tested date',
+    'Contingency plan in place',
+    'Contingency plan tested date',
+    'Incidents reported',
+    'Last audit date',
+    'Audit findings resolved'
+  ]);
+
+  // Add the field type row
+  worksheet.addRow([
+    'Alphanumerical',
+    'Alphanumerical',
+    'Closed set of options',
+    'Country',
+    'Monetary',
+    'Alphanumerical',
+    'Date',
+    'Date',
+    'Alphanumerical',
+    'Yes/No',
+    'Date',
+    'Closed set of options',
+    'Yes/No',
+    'Date',
+    'Yes/No',
+    'Date',
+    'Natural number',
+    'Date',
+    'Yes/No'
+  ]);
+
+  // Format the header rows
+  formatHeaderRows(worksheet, 'FFE2F0CB');  // Light yellow-green
+
+  return worksheet;
+};
+
+/**
+ * Helper function to format the header rows of worksheets
+ */
+const formatHeaderRows = (worksheet: ExcelJS.Worksheet, headerColor: string = 'FFD9D9D9') => {
+  // Style headers
+  worksheet.getRow(1).eachCell((cell) => {
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: headerColor }
+    };
+    cell.font = { bold: true };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+
+  // Style field descriptions
+  worksheet.getRow(2).eachCell((cell) => {
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFF2F2F2' }
+    };
+    cell.font = { italic: true };
+    cell.alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+
+  // Style field type row
+  worksheet.getRow(3).eachCell((cell) => {
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFE6E6E6' }
+    };
+    cell.font = { size: 9 };
+    cell.alignment = { vertical: 'middle', horizontal: 'left' };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  });
+
+  // Freeze first rows
+  worksheet.views = [{ state: 'frozen', xSplit: 0, ySplit: 3 }];
+};

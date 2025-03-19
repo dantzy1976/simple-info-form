@@ -1,3 +1,4 @@
+
 import ExcelJS from 'exceljs';
 
 /**
@@ -648,4 +649,7 @@ const addDataToWorksheet = (
       top: { style: 'thin' },
       left: { style: 'thin' },
       bottom: { style: 'thin' },
-      right: { style: 'thin'
+      right: { style: 'thin' }
+    };
+  });
+};
